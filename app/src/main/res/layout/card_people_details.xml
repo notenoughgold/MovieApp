@@ -1,119 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
-    android:orientation="vertical"
-    tools:context=".ui.People.PeopleFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="200dp">
-
-        <ImageView
-            android:id="@+id/people_photo_iv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:scaleType="centerCrop"
-            android:transitionName="people_photo_iv_transition"
-            tools:src="@tools:sample/backgrounds/scenic" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/people_birthday_tv_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Birthday"
-                android:textStyle="bold|italic" />
-
-            <TextView
-                android:id="@+id/people_birthday_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="1997/11/11"
-                />
-
-            <TextView
-                android:id="@+id/people_birthplace_tv_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Birthplace"
-                android:textStyle="bold|italic" />
-
-            <TextView
-                android:id="@+id/people_birthplace_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="@string/hello_blank_fragment" />
-
-            <TextView
-                android:id="@+id/people_homepageurl_tv_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/homepage"
-                android:textStyle="bold|italic" />
-
-            <TextView
-                android:id="@+id/people_homepageurl_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                tools:text="@string/hello_blank_fragment" />
-        </LinearLayout>
-    </LinearLayout>
 
 
-    <RelativeLayout
-        android:id="@+id/peopleBiographyContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        android:background="?selectableItemBackground"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        android:orientation="vertical"
+        tools:context=".ui.People.PeopleFragment">
 
-        <TextView
-            android:id="@+id/people_bio_tv"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/people_photo_iv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:transitionName="people_photo_iv_transition"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/people_birthday_tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Birthday"
+                    android:textStyle="bold|italic" />
+
+                <TextView
+                    android:id="@+id/people_birthday_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="1997/11/11" />
+
+                <TextView
+                    android:id="@+id/people_birthplace_tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Birthplace"
+                    android:textStyle="bold|italic" />
+
+                <TextView
+                    android:id="@+id/people_birthplace_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/people_homepageurl_tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/homepage"
+                    android:textStyle="bold|italic" />
+
+                <TextView
+                    android:id="@+id/people_homepageurl_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/peopleBiographyContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="5"
-            android:paddingBottom="24dp"
-            tools:text="@tools:sample/lorem" />
+            android:animateLayoutChanges="true"
+            android:background="?selectableItemBackground"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <TextView
-            android:id="@+id/peopleDescriptionMoreTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center_horizontal"
-            android:text="@string/show_more"
-            android:textSize="16sp"
-            android:textStyle="italic" />
+            <TextView
+                android:id="@+id/people_bio_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="5"
+                android:paddingBottom="24dp"
+                tools:text="@tools:sample/lorem" />
 
-        <TextView
-            android:id="@+id/peopleDescriptionLessTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center_horizontal"
-            android:text="@string/show_less"
-            android:textSize="16sp"
-            android:textStyle="italic"
-            android:visibility="invisible" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/peopleDescriptionMoreTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_horizontal"
+                android:text="@string/show_more"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/peopleDescriptionLessTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_horizontal"
+                android:text="@string/show_less"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:visibility="invisible" />
+        </RelativeLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
+</layout>

@@ -3,6 +3,7 @@ package altayiskender.movieapp.ui.Popular
 
 import altayiskender.movieapp.R
 import altayiskender.movieapp.R.id.*
+import altayiskender.movieapp.databinding.FragmentPopularBinding
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
@@ -51,14 +52,13 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
                               savedInstanceState: Bundle?): View? {
 
         // Inflate the layout for this fragment
-
-        val view = inflater.inflate(R.layout.fragment_popular, container, false)
+        val binding = FragmentPopularBinding.inflate(inflater, container, false)
 
         popularViewModel = ViewModelProviders.of(this, viewModelFactory).get(PopularViewModel::class.java)
 
         popularAdapter = PopularAdapter(layoutInflater, this)
 
-        popularRecyclerView = view.findViewById(R.id.popularRecyclerView)
+        popularRecyclerView = binding.popularRecyclerView
         popularRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, 2)
@@ -80,7 +80,7 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
 
         setHasOptionsMenu(true)
 
-        return view
+        return binding.root
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {

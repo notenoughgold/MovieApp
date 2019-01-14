@@ -5,6 +5,7 @@ import altayiskender.movieapp.Pojos.Movie
 import altayiskender.movieapp.R
 import altayiskender.movieapp.R.id.bookmarkItem
 import altayiskender.movieapp.R.id.removeBookmarkItem
+import altayiskender.movieapp.databinding.FragmentDetailBinding
 import android.content.Context
 import android.os.Bundle
 import android.view.*
@@ -16,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -43,7 +43,7 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_detail, container, false)
+        val binding = FragmentDetailBinding.inflate(inflater, container, false)
 
         setHasOptionsMenu(true)
 
@@ -59,9 +59,9 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
 
 
         if (detailsAdapter == null) {
-            detailsAdapter = DetailAdapter(layoutInflater, this)
+            detailsAdapter = DetailAdapter(this)
         }
-        val detailsRv = view.findViewById<RecyclerView>(R.id.detailsRv)
+        val detailsRv = binding.detailsRv
         detailsRv.layoutManager = LinearLayoutManager(context)
         detailsRv.adapter = detailsAdapter
 
@@ -77,7 +77,7 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
             it?.let { activity?.invalidateOptionsMenu() }
         })
 
-        return view
+        return binding.root
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {

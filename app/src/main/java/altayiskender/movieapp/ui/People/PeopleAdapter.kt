@@ -2,20 +2,19 @@ package altayiskender.movieapp.ui.People
 
 import altayiskender.movieapp.Pojos.CastAsPerson
 import altayiskender.movieapp.Pojos.PeopleResponse
-import altayiskender.movieapp.R
 import altayiskender.movieapp.Utils.getPosterUrl
 import altayiskender.movieapp.Utils.loadImage
+import altayiskender.movieapp.databinding.CardPeopleDetailsBinding
+import altayiskender.movieapp.databinding.CardPeopleWorksBinding
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 private const val VIEW_TYPE_PEOPLE_DETAIL = 0
 private const val VIEW_TYPE_PEOPLE_CAST = 1
 
-class PeopleAdapter(private val inflater: LayoutInflater, private val onInteractionListener: OnInteractionListener)
+class PeopleAdapter(private val onInteractionListener: OnInteractionListener)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var peopleResponse: PeopleResponse? = null
@@ -24,13 +23,14 @@ class PeopleAdapter(private val inflater: LayoutInflater, private val onInteract
         return when (viewType) {
             VIEW_TYPE_PEOPLE_DETAIL -> {
                 DetailsViewHolder(
-                        inflater.inflate(R.layout.card_people_details, parent, false)
+                        CardPeopleDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
                 )
             }
             VIEW_TYPE_PEOPLE_CAST -> {
                 CastViewHolder(
-                        inflater.inflate(R.layout.card_people_works, parent, false)
-                        , onInteractionListener
+                        CardPeopleWorksBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                        onInteractionListener
                 )
             }
             else -> {
@@ -73,105 +73,85 @@ class PeopleAdapter(private val inflater: LayoutInflater, private val onInteract
         notifyDataSetChanged()
     }
 
-    class DetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val peopleBirthdayTitleTv: TextView = itemView.findViewById(R.id.people_birthday_tv_title)
-        private val peopleBirthdayTv: TextView = itemView.findViewById(R.id.people_birthday_tv)
-        private val peopleBirthplaceTitleTv: TextView = itemView.findViewById(R.id.people_birthplace_tv_title)
-        private val peopleBirthplaceTv: TextView = itemView.findViewById(R.id.people_birthplace_tv)
-        private val peopleBioContainer: View = itemView.findViewById(R.id.peopleBiographyContainer)
-        private val peopleDescriptionMoreTv: TextView = itemView.findViewById(R.id.peopleDescriptionMoreTv)
-        private val peopleDescriptionLessTv: TextView = itemView.findViewById(R.id.peopleDescriptionLessTv)
-        private val peopleHomepageUrlTitleTv: TextView = itemView.findViewById(R.id.people_homepageurl_tv_title)
-        private val peopleHomepageUrlTv: TextView = itemView.findViewById(R.id.people_homepageurl_tv)
-        private val peopleBioTv: TextView = itemView.findViewById(R.id.people_bio_tv)
-        private val peoplePhoto: ImageView = itemView.findViewById(R.id.people_photo_iv)
-
+    class DetailsViewHolder(private var binding: CardPeopleDetailsBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(peopleResponse: PeopleResponse?) {
             if (peopleResponse == null) {
                 return
             }
             if (peopleResponse.profilePath?.isNotEmpty() == true) {
-                peoplePhoto.loadImage(getPosterUrl(peopleResponse.profilePath), peoplePhoto)
+                binding.peoplePhotoIv.loadImage(getPosterUrl(peopleResponse.profilePath))
             }
 
             if (peopleResponse.birthday?.isNotEmpty() == true) {
-                peopleBirthdayTv.visibility = View.VISIBLE
-                peopleBirthdayTv.text = peopleResponse.birthday
+                binding.peopleBirthdayTv.visibility = View.VISIBLE
+                binding.peopleBirthdayTv.text = peopleResponse.birthday
 
             } else {
-                peopleBirthdayTv.visibility = View.GONE
-                peopleBirthdayTitleTv.visibility = View.GONE
+                binding.peopleBirthdayTv.visibility = View.GONE
+                binding.peopleBirthdayTvTitle.visibility = View.GONE
             }
 
             if (peopleResponse.placeOfBirth?.isNotEmpty() == true) {
-                peopleBirthplaceTv.visibility = View.VISIBLE
-                peopleBirthplaceTv.text = peopleResponse.placeOfBirth
+                binding.peopleBirthplaceTv.visibility = View.VISIBLE
+                binding.peopleBirthplaceTv.text = peopleResponse.placeOfBirth
 
             } else {
-                peopleBirthplaceTv.visibility = View.GONE
-                peopleBirthplaceTitleTv.visibility = View.GONE
+                binding.peopleBirthplaceTv.visibility = View.GONE
+                binding.peopleBirthdayTvTitle.visibility = View.GONE
             }
 
 
             if (peopleResponse.homepage?.isNotEmpty() == true) {
-                peopleHomepageUrlTv.visibility = View.VISIBLE
-                peopleHomepageUrlTv.text = peopleResponse.homepage
+                binding.peopleHomepageurlTv.visibility = View.VISIBLE
+                binding.peopleHomepageurlTv.text = peopleResponse.homepage
 
 
             } else {
-                peopleHomepageUrlTv.visibility = View.GONE
-                peopleHomepageUrlTitleTv.visibility = View.GONE
+                binding.peopleHomepageurlTv.visibility = View.GONE
+                binding.peopleHomepageurlTvTitle.visibility = View.GONE
             }
 
             if (peopleResponse.biography?.isEmpty() == true) {
-                peopleBioContainer.visibility = View.GONE
+                binding.peopleBiographyContainer.visibility = View.GONE
             } else {
-                peopleBioContainer.visibility = View.VISIBLE
-                peopleBioTv.text = peopleResponse.biography
-                peopleBioContainer.setOnClickListener {
-                    if (peopleDescriptionMoreTv.visibility == View.INVISIBLE) {
-                        peopleDescriptionMoreTv.visibility = View.VISIBLE
-                        peopleDescriptionLessTv.visibility = View.INVISIBLE
-                        peopleBioTv.maxLines = 5
+                binding.peopleBiographyContainer.visibility = View.VISIBLE
+                binding.peopleBioTv.text = peopleResponse.biography
+                binding.peopleBiographyContainer.setOnClickListener {
+                    if (binding.peopleDescriptionMoreTv.visibility == View.INVISIBLE) {
+                        binding.peopleDescriptionMoreTv.visibility = View.VISIBLE
+                        binding.peopleDescriptionLessTv.visibility = View.INVISIBLE
+                        binding.peopleBioTv.maxLines = 5
                     } else {
-                        peopleBioTv.maxLines = 1000
-                        peopleDescriptionMoreTv.visibility = View.INVISIBLE
-                        peopleDescriptionLessTv.visibility = View.VISIBLE
+                        binding.peopleBioTv.maxLines = 30
+                        binding.peopleDescriptionMoreTv.visibility = View.INVISIBLE
+                        binding.peopleDescriptionLessTv.visibility = View.VISIBLE
                     }
                 }
             }
-
-
         }
     }
 
-    class CastViewHolder(itemView: View, private val onInteractionListener: OnInteractionListener)
-        : RecyclerView.ViewHolder(itemView) {
-
-        private val workPosterIv: ImageView = itemView.findViewById(R.id.workPosterIv)
-        private val workNameTv: TextView = itemView.findViewById(R.id.workNameTv)
-        private val castCharacterTv: TextView = itemView.findViewById(R.id.castCharacterTv)
-        private val workYearTv: TextView = itemView.findViewById(R.id.workYearTv)
+    class CastViewHolder(private val binding: CardPeopleWorksBinding, private val onInteractionListener: OnInteractionListener)
+        : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(cast: CastAsPerson?) {
             if (cast == null) {
                 return
             }
 
-            workPosterIv.loadImage(getPosterUrl(cast.posterPath), workPosterIv)
-            workNameTv.text = cast.title
-            castCharacterTv.text = cast.character
+            binding.workPosterIv.loadImage(getPosterUrl(cast.posterPath))
+            binding.workNameTv.text = cast.title
+            binding.castCharacterTv.text = cast.character
             var airDate: String? = null
             if (!cast.releaseDate.isNullOrEmpty()) {
                 airDate = cast.releaseDate
             } else if (!cast.firstAirDate.isNullOrEmpty()) {
                 airDate = cast.firstAirDate
             }
-            workYearTv.text = airDate
+            binding.workYearTv.text = airDate
 
-            itemView.apply { setOnClickListener { onInteractionListener.onItemClicked(cast.id!!, cast.title!!) } }
+            binding.root.apply { setOnClickListener { onInteractionListener.onItemClicked(cast.id!!, cast.title!!) } }
         }
 
     }

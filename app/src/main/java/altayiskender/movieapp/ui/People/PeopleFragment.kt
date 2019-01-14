@@ -3,6 +3,7 @@ package altayiskender.movieapp.ui.People
 
 import altayiskender.movieapp.Pojos.PeopleResponse
 import altayiskender.movieapp.R
+import altayiskender.movieapp.databinding.FragmentPeopleBinding
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -41,9 +41,8 @@ class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_people, container, false)
+        val binding = FragmentPeopleBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
-
 
         peopleViewModel = ViewModelProviders
                 .of(this, viewModelFactory)
@@ -54,10 +53,10 @@ class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
             peopleViewModel?.peopleName = arguments!!.getString(ARG_PEOPLE_NAME)
         }
         if (peopleAdapter == null) {
-            peopleAdapter = PeopleAdapter(layoutInflater, this)
+            peopleAdapter = PeopleAdapter(this)
 
         }
-        val peopleRv = view.findViewById<RecyclerView>(R.id.peopleRv)
+        val peopleRv = binding.peopleRv
         peopleRv.layoutManager = LinearLayoutManager(context)
         peopleRv.adapter = peopleAdapter
 
@@ -69,7 +68,7 @@ class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
                 })
         (activity as? AppCompatActivity)?.supportActionBar?.title = peopleViewModel?.peopleName
 
-        return view
+        return binding.root
     }
 
     private fun setPeopleDetails(peopleResponse: PeopleResponse) {

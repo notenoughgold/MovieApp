@@ -3,6 +3,7 @@ package altayiskender.movieapp.ui.Bookmarks
 
 import altayiskender.movieapp.Pojos.Movie
 import altayiskender.movieapp.R
+import altayiskender.movieapp.databinding.FragmentBookmarksBinding
 import altayiskender.movieapp.ui.Popular.ARG_MOVIE
 import altayiskender.movieapp.ui.Popular.ARG_MOVIE_NAME
 import android.content.Context
@@ -17,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -36,23 +36,21 @@ class BookmarksFragment : Fragment(),BookmarksAdapter.OnInteractionListener {
         AndroidSupportInjection.inject(this)
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_bookmarks, container, false)
-        emptyView = view.findViewById(R.id.empty_view)
+        val binding = FragmentBookmarksBinding.inflate(inflater, container, false)
+        emptyView = binding.emptyView
         setHasOptionsMenu(true)
 
         bookmarksViewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(BookmarksViewModel::class.java)
 
-
         if (bookmarksAdapter == null) {
-            bookmarksAdapter = BookmarksAdapter(layoutInflater,this)
+            bookmarksAdapter = BookmarksAdapter(this)
         }
-        val bookmarksRv = view.findViewById<RecyclerView>(R.id.bookmarksRv)
+        val bookmarksRv = binding.bookmarksRv
         bookmarksRv.layoutManager = LinearLayoutManager(context)
         bookmarksRv.adapter = bookmarksAdapter
 
@@ -62,7 +60,7 @@ class BookmarksFragment : Fragment(),BookmarksAdapter.OnInteractionListener {
                         setBookmarks(it)
                     }
                 })
-        return view
+        return binding.root
     }
 
     private fun setBookmarks(it: List<Movie>) {
