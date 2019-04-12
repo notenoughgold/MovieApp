@@ -31,7 +31,7 @@ class BookmarksFragment : Fragment(),BookmarksAdapter.OnInteractionListener {
     private var bookmarksAdapter: BookmarksAdapter? = null
     private var emptyView:TextView? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         AndroidSupportInjection.inject(this)
     }

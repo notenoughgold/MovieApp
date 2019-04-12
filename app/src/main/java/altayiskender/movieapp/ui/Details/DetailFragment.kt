@@ -34,7 +34,7 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
     private var detailsViewModel: DetailViewModel? = null
     private var detailsAdapter: DetailAdapter? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         AndroidSupportInjection.inject(this)
     }
@@ -80,11 +80,11 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
         return binding.root
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
+    override fun onPrepareOptionsMenu(menu: Menu) {
         if (detailsViewModel != null) {
             when (detailsViewModel?.movieSavedStatusLiveData?.value) {
-                true -> menu?.findItem(R.id.removeBookmarkItem)?.isVisible = true
-                false -> menu?.findItem(R.id.bookmarkItem)?.isVisible = true
+                true -> menu.findItem(R.id.removeBookmarkItem)?.isVisible = true
+                false -> menu.findItem(R.id.bookmarkItem)?.isVisible = true
             }
         }else{
             return
@@ -105,13 +105,13 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_details, menu)
+        inflater.inflate(R.menu.menu_details, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             bookmarkItem -> {
                 detailsViewModel?.saveMovieToBookmarks()
                 detailsViewModel?.movieSavedStatusLiveData?.value=true

@@ -32,7 +32,7 @@ class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
     private var peopleViewModel: PeopleViewModel? = null
     private var peopleAdapter: PeopleAdapter? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         AndroidSupportInjection.inject(this)
     }

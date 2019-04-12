@@ -43,7 +43,7 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
     private var popularAdapter: PopularAdapter? = null
     private lateinit var popularRecyclerView: RecyclerView
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         AndroidSupportInjection.inject(this)
     }
@@ -83,18 +83,18 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
         return binding.root
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?) {
+    override fun onPrepareOptionsMenu(menu: Menu) {
         when (popularViewModel?.sortBy) {
-            SORT_POPULAR -> menu?.findItem(R.id.popularItem)?.isEnabled = false
-            SORT_UPCOMING -> menu?.findItem(R.id.upcomingItem)?.isEnabled = false
-            SORT_PLAYING -> menu?.findItem(R.id.nowPlayingItem)?.isEnabled = false
+            SORT_POPULAR -> menu.findItem(R.id.popularItem)?.isEnabled = false
+            SORT_UPCOMING -> menu.findItem(R.id.upcomingItem)?.isEnabled = false
+            SORT_PLAYING -> menu.findItem(R.id.nowPlayingItem)?.isEnabled = false
         }
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
-        return when (item?.itemId) {
+        return when (item.itemId) {
             popularItem -> {
                 loadMoviesWhenClickingSortByMenuItem(SORT_POPULAR)
                 true
@@ -131,10 +131,10 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
 
     @UseExperimental(ExperimentalCoroutinesApi::class)
     @SuppressLint("CheckResult")
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_popular, menu)
-        val searchMenuItem = menu?.findItem(searchItem)
+        inflater.inflate(R.menu.menu_popular, menu)
+        val searchMenuItem = menu.findItem(searchItem)
         val searchView = searchMenuItem?.actionView as SearchView
 
         val channel = BroadcastChannel<String>(1)
