@@ -1,7 +1,9 @@
 package altayiskender.movieapp.ui.Popular
 
 import altayiskender.movieapp.Pojos.Movie
+import altayiskender.movieapp.Pojos.Movies
 import altayiskender.movieapp.Repository.Repository
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +22,7 @@ constructor(private val repository: Repository) : ViewModel() {
 
     var sortBy = SORT_POPULAR
     val moviesLiveData = MutableLiveData<List<Movie>>()
+    var hasError = MutableLiveData<Boolean>()
 
 
     fun searchMovie(query: String) {
@@ -33,36 +36,35 @@ constructor(private val repository: Repository) : ViewModel() {
 
 
     fun getHomepageMovies() {
-        when (sortBy) {
-            SORT_POPULAR -> CoroutineScope(Dispatchers.IO).launch {
-                val result = repository.getPopularMovies().await()
+        hasError.value = false
+        CoroutineScope(Dispatchers.IO).launch {
+            var result: Movies? = null
+            try {
+                when (sortBy) {
+                    SORT_POPULAR ->
+                        result = repository.getPopularMovies().await()
+                    SORT_PLAYING ->
+                        result = repository.getNowPlayingMovies().await()
+                    SORT_UPCOMING ->
+                        result = repository.getUpcomingMovies().await()
+                }
 
                 withContext(Dispatchers.Main) {
-                    moviesLiveData.value = result.results
+                    moviesLiveData.value = result?.results
+                }
+            } catch (e: Throwable) {
+                Log.d("PopularViewModel", "get $sortBy movies error", e)
+
+                withContext(Dispatchers.Main) {
+                    hasError.value = true
                 }
             }
 
-            SORT_PLAYING ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    val result = repository.getNowPlayingMovies().await()
 
-                    withContext(Dispatchers.Main) {
-                        moviesLiveData.value = result.results
-                    }
-                }
-
-            SORT_UPCOMING ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    val result = repository.getUpcomingMovies().await()
-
-                    withContext(Dispatchers.Main) {
-                        moviesLiveData.value = result.results
-                    }
-
-                }
         }
     }
 }
+
 
 
 

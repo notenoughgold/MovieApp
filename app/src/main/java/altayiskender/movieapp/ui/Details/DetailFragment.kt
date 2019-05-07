@@ -52,7 +52,7 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
                 .of(this, viewModelFactory)
                 .get(DetailViewModel::class.java)
 
-        if (detailsViewModel?.movieId == null || detailsViewModel?.movieTitle == null) {
+        if (detailsViewModel?.movieId == null && detailsViewModel?.movieTitle == null) {
             detailsViewModel?.movieId = arguments!!.getLong(ARG_MOVIE)
             detailsViewModel?.movieTitle = arguments!!.getString(ARG_MOVIE_NAME)
         }
@@ -66,10 +66,8 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
         detailsRv.adapter = detailsAdapter
 
         detailsViewModel?.getMovieDetails()
-                ?.observe(this, androidx.lifecycle.Observer {
-                    it?.let { it ->
+                ?.observe(this, Observer {
                         setMovieDetails(it)
-                    }
                 })
         (activity as? AppCompatActivity)?.supportActionBar?.title = detailsViewModel?.movieTitle
 

@@ -11,7 +11,7 @@ import java.io.Serializable
 data class Movie(
         @PrimaryKey
         @ColumnInfo(name = "id")
-        var id: Long?=0,
+        var id: Long? = 0,
         @SerializedName("vote_count")
         @Ignore
         var voteCount: Int?,
@@ -20,11 +20,11 @@ data class Movie(
         var voteAverage: Double?,
         @Ignore
         var runtime: Int?,
-        var title: String?="",
+        var title: String? = "",
         @SerializedName("release_date")
-        var releaseDate: String?="",
+        var releaseDate: String? = "",
         @SerializedName("poster_path")
-        var posterPath: String?="",
+        var posterPath: String? = "",
         @SerializedName("backdrop_path")
         @Ignore
         var backdropPath: String?,
@@ -33,9 +33,8 @@ data class Movie(
         @Ignore
         var overview: String?,
         @Ignore
-        var credits: Credits?,
-        @Ignore
-        var videos: VideosPage?
-) : Serializable{
-        constructor():this(0,0,0.0,0,"","","","",null,null,null,null)
+        var credits: Credits?
+
+) : Serializable {
+    constructor() : this(0, 0, 0.0, 0, "", "", "", "", null, null, null)
 }

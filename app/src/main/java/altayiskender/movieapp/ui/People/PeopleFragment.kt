@@ -48,7 +48,7 @@ class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
                 .of(this, viewModelFactory)
                 .get(PeopleViewModel::class.java)
 
-        if (peopleViewModel?.peopleId == null || peopleViewModel?.peopleName == null) {
+        if (peopleViewModel?.peopleId == null && peopleViewModel?.peopleName == null) {
             peopleViewModel?.peopleId = arguments!!.getLong(ARG_PEOPLE)
             peopleViewModel?.peopleName = arguments!!.getString(ARG_PEOPLE_NAME)
         }
@@ -62,9 +62,8 @@ class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
 
         peopleViewModel?.getPeopleDetails()
                 ?.observe(this, androidx.lifecycle.Observer {
-                    it?.let { it ->
                         setPeopleDetails(it)
-                    }
+
                 })
         (activity as? AppCompatActivity)?.supportActionBar?.title = peopleViewModel?.peopleName
 

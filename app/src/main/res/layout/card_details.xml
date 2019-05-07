@@ -18,19 +18,16 @@
             android:scaleType="centerCrop"
             android:src="@android:color/darker_gray" />
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/detailsGenresCg"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/margin_normal"
-                app:singleLine="true" />
-        </HorizontalScrollView>
+                app:chipSpacingVertical="4dp"
+                app:singleLine="false" />
 
 
         <RelativeLayout
@@ -92,14 +89,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="Release Date"
+                    android:text="@string/release_date"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/detailsReleaseTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Placeholder"
                     android:textAlignment="center"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -118,14 +114,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="Rating"
+                    android:text="@string/rating"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/detailsRatingTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Placeholder"
+                    tools:text="Placeholder"
                     android:textAlignment="center"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -142,14 +138,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="Runtime"
+                    android:text="@string/runtime"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/detailsRuntimeTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Placeholder"
+                    tools:text="Placeholder"
                     android:textAlignment="center"
                     android:textSize="14sp"
                     android:textStyle="bold" />

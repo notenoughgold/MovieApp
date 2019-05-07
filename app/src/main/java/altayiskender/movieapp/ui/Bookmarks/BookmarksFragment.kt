@@ -56,9 +56,8 @@ class BookmarksFragment : Fragment(),BookmarksAdapter.OnInteractionListener {
 
         bookmarksViewModel?.getAllBookmarkedMovies()
                 ?.observe(this, Observer  {
-                    it?.let { it ->
                         setBookmarks(it)
-                    }
+
                 })
         return binding.root
     }

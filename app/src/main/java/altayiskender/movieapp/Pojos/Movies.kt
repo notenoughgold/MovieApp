@@ -1,5 +1,5 @@
 package altayiskender.movieapp.Pojos
 
-data class MoviePage (
+data class Movies(
         val results: List<Movie>?
 )

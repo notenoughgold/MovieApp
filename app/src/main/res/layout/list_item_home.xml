@@ -21,7 +21,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="70dp"
             android:background="@drawable/gradient_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             android:paddingBottom="4dp"
             android:singleLine="true"
             android:textColor="@android:color/white"

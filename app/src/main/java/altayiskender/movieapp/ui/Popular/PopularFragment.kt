@@ -8,6 +8,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -23,11 +25,12 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
 import javax.inject.Inject
+import kotlin.UseExperimental as UseExperimental1
 
 private val TAG = PopularFragment::class.simpleName
 
 const val ARG_MOVIE = "arg_movie"
- const val ARG_MOVIE_NAME = "arg_movie_name"
+const val ARG_MOVIE_NAME = "arg_movie_name"
 
 private const val SORT_POPULAR = 0
 private const val SORT_UPCOMING = 1
@@ -42,6 +45,7 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
     private var popularViewModel: PopularViewModel? = null
     private var popularAdapter: PopularAdapter? = null
     private lateinit var popularRecyclerView: RecyclerView
+    private lateinit var errorView: LinearLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -57,6 +61,12 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
         popularViewModel = ViewModelProviders.of(this, viewModelFactory).get(PopularViewModel::class.java)
 
         popularAdapter = PopularAdapter(layoutInflater, this)
+        errorView = binding.errorView
+        val tryAgainButton: Button = binding.btnTryAgain
+        tryAgainButton.setOnClickListener { fetchMoviesAgain() }
+
+
+
 
         popularRecyclerView = binding.popularRecyclerView
         popularRecyclerView.apply {
@@ -69,11 +79,25 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
         popularViewModel?.moviesLiveData?.observe(this, Observer { it ->
             it?.let {
                 popularProgressBar.visibility = View.GONE
+                errorView.visibility = View.GONE
                 popularAdapter?.setMovies(it)
                 popularRecyclerView.scheduleLayoutAnimation()
             }
         })
+
+        popularViewModel?.hasError?.observe(this, Observer {
+            if (it) {
+                popularProgressBar.visibility = View.GONE
+                errorView.apply {
+                    visibility = View.VISIBLE
+                }
+            }
+
+
+        })
+
         popularViewModel?.getHomepageMovies()
+
 
         getSortByStringAndSetTitle(popularViewModel!!.sortBy)
 
@@ -83,11 +107,18 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
         return binding.root
     }
 
+    private fun fetchMoviesAgain() {
+        popularProgressBar.visibility = View.VISIBLE
+        errorView.visibility = View.GONE
+        popularViewModel?.getHomepageMovies()
+
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu) {
         when (popularViewModel?.sortBy) {
-            SORT_POPULAR -> menu.findItem(R.id.popularItem)?.isEnabled = false
-            SORT_UPCOMING -> menu.findItem(R.id.upcomingItem)?.isEnabled = false
-            SORT_PLAYING -> menu.findItem(R.id.nowPlayingItem)?.isEnabled = false
+            SORT_POPULAR -> menu.findItem(popularItem)?.isEnabled = false
+            SORT_UPCOMING -> menu.findItem(upcomingItem)?.isEnabled = false
+            SORT_PLAYING -> menu.findItem(nowPlayingItem)?.isEnabled = false
         }
 
     }
@@ -129,7 +160,7 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
         (activity as? AppCompatActivity)?.supportActionBar?.title = str
     }
 
-    @UseExperimental(ExperimentalCoroutinesApi::class)
+    @UseExperimental1(ExperimentalCoroutinesApi::class)
     @SuppressLint("CheckResult")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -166,7 +197,7 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
                 if (it.isEmpty()) {
                     popularViewModel?.getHomepageMovies()
                 } else {
-                    delay(500L)
+                    delay(1000)
                     popularViewModel?.searchMovie(it)
                 }
             }
