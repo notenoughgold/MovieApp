@@ -5,10 +5,10 @@
         android:icon="@drawable/ic_favorite"
         android:title="@string/bookmark"
         android:visible="false"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom" />
     <item android:id="@+id/removeBookmarkItem"
         android:icon="@drawable/ic_unfavorite"
         android:title="@string/remove_bookmark"
         android:visible="false"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom" />
 </menu>

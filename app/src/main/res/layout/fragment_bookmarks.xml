@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:paddingStart="@dimen/margin_small"
         android:paddingEnd="@dimen/margin_small"
-        tools:context=".ui.Details.DetailFragment">
+        tools:context=".ui.details.DetailFragment">
 
 
         <androidx.recyclerview.widget.RecyclerView

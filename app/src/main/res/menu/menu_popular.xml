@@ -11,7 +11,7 @@
 
 
     <item android:id="@+id/sortByItem"
-        android:icon="@drawable/ic_whatshot_black"
+        android:icon="@drawable/ic_whatshot"
         android:title="@string/sortBy"
         app:showAsAction="always">
         <menu>

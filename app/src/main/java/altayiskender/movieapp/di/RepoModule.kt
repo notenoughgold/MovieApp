@@ -1,10 +1,10 @@
 package altayiskender.movieapp.di
 
 import altayiskender.movieapp.BuildConfig
-import altayiskender.movieapp.Repository.AppDatabase
-import altayiskender.movieapp.Repository.MovieBookmarksDao
-import altayiskender.movieapp.Repository.Repository
-import altayiskender.movieapp.Repository.TmdbApi
+import altayiskender.movieapp.repository.AppDatabase
+import altayiskender.movieapp.repository.MovieBookmarksDao
+import altayiskender.movieapp.repository.Repository
+import altayiskender.movieapp.repository.TmdbApi
 import android.app.Application
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module

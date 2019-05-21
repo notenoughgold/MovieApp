@@ -1,10 +1,10 @@
 package altayiskender.movieapp.di
 
 
-import altayiskender.movieapp.ui.Bookmarks.BookmarksViewModel
-import altayiskender.movieapp.ui.Details.DetailViewModel
-import altayiskender.movieapp.ui.People.PeopleViewModel
-import altayiskender.movieapp.ui.Popular.PopularViewModel
+import altayiskender.movieapp.ui.bookmarks.BookmarksViewModel
+import altayiskender.movieapp.ui.details.DetailViewModel
+import altayiskender.movieapp.ui.people.PeopleViewModel
+import altayiskender.movieapp.ui.popular.PopularViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds

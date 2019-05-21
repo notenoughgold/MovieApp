@@ -2,10 +2,10 @@ package altayiskender.movieapp.di
 
 
 import altayiskender.movieapp.MainActivity
-import altayiskender.movieapp.ui.Bookmarks.BookmarksFragment
-import altayiskender.movieapp.ui.Details.DetailFragment
-import altayiskender.movieapp.ui.People.PeopleFragment
-import altayiskender.movieapp.ui.Popular.PopularFragment
+import altayiskender.movieapp.ui.bookmarks.BookmarksFragment
+import altayiskender.movieapp.ui.details.DetailFragment
+import altayiskender.movieapp.ui.people.PeopleFragment
+import altayiskender.movieapp.ui.popular.PopularFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

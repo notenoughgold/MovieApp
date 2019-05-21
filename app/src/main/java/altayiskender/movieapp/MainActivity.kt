@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             aboutItem -> {
                 Attribouter.from(this).withFile(R.xml.about).show()
                 true

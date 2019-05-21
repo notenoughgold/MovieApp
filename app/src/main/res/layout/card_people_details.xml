@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
         android:orientation="vertical"
-        tools:context=".ui.People.PeopleFragment">
+        tools:context=".ui.people.PeopleFragment">
 
         <LinearLayout
             android:id="@+id/linearLayout"
