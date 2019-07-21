@@ -164,43 +164,54 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_popular, menu)
+
         val searchMenuItem = menu.findItem(searchItem)
         val searchView = searchMenuItem?.actionView as SearchView
 
+        searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                popularViewModel?.getHomepageMovies()
+                return true
+            }
+
+        })
         val channel = BroadcastChannel<String>(1)
+        CoroutineScope(Dispatchers.IO).launch {
+            channel.consumeEach {
+
+                delay(1000)
+                popularViewModel?.searchMovie(it)
+
+            }
+        }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
+
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(500L)
-                        channel.send(it)
-                    }
-                }
-//                hideKeyboard(this@HomeActivity)
+
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+
                 newText?.let {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        channel.send(it)
+                    if (newText.trim().length > 2) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            channel.send(it)
+
+
+                        }
                     }
+
                 }
                 return true
             }
         })
-
-        CoroutineScope(Dispatchers.IO).launch {
-            channel.consumeEach {
-                if (it.isEmpty()) {
-                    popularViewModel?.getHomepageMovies()
-                } else {
-                    delay(1000)
-                    popularViewModel?.searchMovie(it)
-                }
-            }
-        }
     }
 
 
@@ -212,6 +223,10 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
         navController.navigate(action_popularFragment_to_detailFragment, bundle)
 
     }
-
 }
+
+
+
+
+
 

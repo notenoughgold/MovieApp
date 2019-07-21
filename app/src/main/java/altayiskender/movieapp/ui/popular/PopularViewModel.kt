@@ -27,7 +27,7 @@ constructor(private val repository: Repository) : ViewModel() {
 
     fun searchMovie(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = repository.searchMovie(query).await()
+            val result = repository.searchMovie(query)
             withContext(Dispatchers.Main) {
                 moviesLiveData.value = result.results
             }
@@ -42,11 +42,11 @@ constructor(private val repository: Repository) : ViewModel() {
             try {
                 when (sortBy) {
                     SORT_POPULAR ->
-                        result = repository.getPopularMovies().await()
+                        result = repository.getPopularMovies()
                     SORT_PLAYING ->
-                        result = repository.getNowPlayingMovies().await()
+                        result = repository.getNowPlayingMovies()
                     SORT_UPCOMING ->
-                        result = repository.getUpcomingMovies().await()
+                        result = repository.getUpcomingMovies()
                 }
 
                 withContext(Dispatchers.Main) {

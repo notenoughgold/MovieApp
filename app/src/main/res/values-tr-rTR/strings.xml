@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Movie App</string>
+    <string name="Birthday">Doğum tarihi</string>
+    <string name="Birthplace">Doğum yeri</string>
+    <string name="about">Hakkında</string>
+    <string name="empty">Boş</string>
+    <string name="bookmark">Beğen</string>
+    <string name="homepage">Ana sayfa</string>
+    <string name="internet_error_please_check_your_connection">İnternet hatası oluştu, lütfen bağlantınızı kontrol edin</string>
+    <string name="movie_saved">Film beğenilenlere eklendi</string>
+    <string name="movie_unsaved">Film beğenilenlerden çıkarıldı</string>
+    <string name="nav_bookmarks">Beğenilenler</string>
+    <string name="nav_discover">Keşfet</string>
+    <string name="now_playing">Vizyonda</string>
+    <string name="open_source_licenses">Açık Kaynak Lisansları</string>
+    <string name="popular">Popüler</string>
+    <string name="rating">Değerlendirme</string>
+    <string name="release_date">Çıkış tarihi</string>
+    <string name="remove_bookmark">Beğenilenlerden kaldır</string>
+    <string name="runtime">Film süresi</string>
+    <string name="search">Ara</string>
+    <string name="show_less">Daha fazla göster</string>
+    <string name="show_more">Daha az göster</string>
+    <string name="sortBy">Sırala</string>
+    <string name="tmdb_usage">Bu uygulama film bilgileri ve görüntülerini TheMovieDatabase (TMDb) tarafından almaktadır. https://www.themoviedb.org/</string>
+    <string name="try_again">Tekrar dene</string>
+    <string name="upcoming">Yakında</string>
+    <string name="description">Kullanıcının film keşfetmesine yardımcı olan bir uygulama</string>
+</resources>

@@ -13,6 +13,7 @@ import dagger.Reusable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
@@ -31,6 +32,9 @@ class RepoModule {
     @Reusable
     fun providesOkHttpClient(): OkHttpClient {
         val client = OkHttpClient.Builder().addInterceptor(AuthInterceptor())
+        if (BuildConfig.DEBUG) {
+            client.addNetworkInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC })
+        }
         return client.build()
     }
 
@@ -68,11 +72,10 @@ class RepoModule {
 
 
 class AuthInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain?): Response {
-        var request = chain?.request()
-        val url = request?.url()?.newBuilder()?.addQueryParameter(API_KEY, key)?.addQueryParameter(LANGUAGE, Locale.getDefault().language)?.build()
-        request = request?.newBuilder()?.url(url!!)?.build()
-        return chain!!.proceed(request!!)
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+        val url = request.url.newBuilder().addQueryParameter(API_KEY, key).addQueryParameter(LANGUAGE, Locale.getDefault().language).build()
+        return chain.proceed(request.newBuilder().url(url).build())
 
     }
 }

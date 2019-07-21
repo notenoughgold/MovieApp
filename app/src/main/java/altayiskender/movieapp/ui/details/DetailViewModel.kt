@@ -23,7 +23,7 @@ class DetailViewModel @Inject constructor(private val repository: Repository) : 
             return null
         }
         CoroutineScope(Dispatchers.IO).launch {
-            val result = repository.getMovieDetails(movieId!!).await()
+            val result = repository.getMovieDetails(movieId!!)
 
             withContext(Dispatchers.Main) {
                 movieLiveData.value = result

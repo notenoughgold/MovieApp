@@ -1,28 +1,27 @@
 package altayiskender.movieapp.repository
 
 import altayiskender.movieapp.models.Movie
-import altayiskender.movieapp.utils.runOnIoThread
 
 class Repository(private val api: TmdbApi,private val movieBookmarksDao: MovieBookmarksDao) {
 
 
     // Get a list of currently popular movies.
-    fun getPopularMovies() = api.getPopularMovies()
+    suspend fun getPopularMovies() = api.getPopularMovies()
 
     // Get a list of upcoming movie.
-    fun getUpcomingMovies() = api.getUpcomingMovies()
+    suspend fun getUpcomingMovies() = api.getUpcomingMovies()
 
     // Get a list of now playing movie.
-    fun getNowPlayingMovies() = api.getNowPlayingMovies()
+    suspend fun getNowPlayingMovies() = api.getNowPlayingMovies()
 
     // Get details to the given movie.
-    fun getMovieDetails(id: Long) = api.getMovieDetails(id)
+    suspend fun getMovieDetails(id: Long) = api.getMovieDetails(id)
 
     // Search all movies for the given query.
-    fun searchMovie(query: String) = api.searchMovie(query)
+    suspend fun searchMovie(query: String) = api.searchMovie(query)
 
     // Search details for the given people.
-    fun getPeopleDetails(id: Long) = api.getPeopleDetails(id)
+    suspend fun getPeopleDetails(id: Long) = api.getPeopleDetails(id)
 
     // Get a list of bookmarked movies.
     fun getAllBookmarkedMovies() = movieBookmarksDao.loadAllBookmarkedMovies()
@@ -32,15 +31,13 @@ class Repository(private val api: TmdbApi,private val movieBookmarksDao: MovieBo
 
     // insert a movie into bookmarks db.
     fun insertBookmarkedMovie(bookmark: Movie) {
-        runOnIoThread {
             movieBookmarksDao.insertBookmarkedMovie(bookmark)
-        }
+
     }
 
     // delete a movie from bookmarks db.
     fun deleteBookmarkedMovie(bookmark: Movie) {
-        runOnIoThread {
             movieBookmarksDao.deleteBookmarkedMovie(bookmark)
-        }
+
     }
 }

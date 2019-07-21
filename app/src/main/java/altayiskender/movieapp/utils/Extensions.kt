@@ -1,11 +1,12 @@
 package altayiskender.movieapp.utils
 
 import android.widget.ImageView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 
 
 fun ImageView.loadImage(imageUrl: String) {
-    if (!imageUrl.isEmpty()) {
-        Picasso.get().load(imageUrl).into(this)
+    if (imageUrl.isNotEmpty()) {
+        Glide.with(this).load(imageUrl).transition(withCrossFade()).into(this)
     }
 }

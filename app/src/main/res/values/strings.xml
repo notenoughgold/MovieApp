@@ -27,6 +27,9 @@
     <string name="release_date">Release Date</string>
     <string name="rating">Rating</string>
     <string name="runtime">Runtime</string>
+    <string name="description">An app that helps user search for movies</string>
+    <string name="movie_poster">Movie poster</string>
+    <string name="person_portrait">Person portrait</string>
 
 
 </resources>

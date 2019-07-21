@@ -28,7 +28,7 @@ class PeopleViewModel @Inject constructor(private val repository: Repository) : 
             return null
         }
         CoroutineScope(Dispatchers.IO).launch {
-            val result = repository.getPeopleDetails(peopleId!!).await()
+            val result = repository.getPeopleDetails(peopleId!!)
 
             withContext(Dispatchers.Main) {
                 peopleLiveData.value = result

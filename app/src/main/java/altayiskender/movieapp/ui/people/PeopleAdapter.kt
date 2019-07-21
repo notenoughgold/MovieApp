@@ -45,7 +45,7 @@ class PeopleAdapter(private val onInteractionListener: OnInteractionListener)
                 (holder as? DetailsViewHolder)?.bind(peopleResponse)
             }
             VIEW_TYPE_PEOPLE_CAST -> {
-                val cast = peopleResponse?.combinedCredits?.cast
+                val cast = peopleResponse?.movieCredits?.cast
                 val size = cast?.size
                 if (size != null && position <= size && holder is CastViewHolder) {
                     holder.bind(cast[position - 1])
@@ -64,7 +64,7 @@ class PeopleAdapter(private val onInteractionListener: OnInteractionListener)
         return if (peopleResponse == null) {
             0
         } else {
-            peopleResponse?.combinedCredits?.cast?.size?.plus(1) ?: 1
+            peopleResponse?.movieCredits?.cast?.size?.plus(1) ?: 1
         }
     }
 
@@ -98,7 +98,7 @@ class PeopleAdapter(private val onInteractionListener: OnInteractionListener)
 
             } else {
                 binding.peopleBirthplaceTv.visibility = View.GONE
-                binding.peopleBirthdayTvTitle.visibility = View.GONE
+                binding.peopleBirthplaceTvTitle.visibility = View.GONE
             }
 
 

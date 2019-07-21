@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -36,8 +36,6 @@
         android:layout_height="56dp"
         android:layout_gravity="bottom"
         android:elevation="4dp"
-        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-        app:layout_scrollFlags="scroll|snap|enterAlways"
         app:menu="@menu/bottom_nav_menu" />
 
 

@@ -20,11 +20,12 @@
 
             <ImageView
                 android:id="@+id/people_photo_iv"
+                android:contentDescription="@string/person_portrait"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"
+                android:scaleType="centerInside"
                 android:transitionName="people_photo_iv_transition"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
@@ -34,7 +35,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:orientation="vertical">
 
                 <TextView

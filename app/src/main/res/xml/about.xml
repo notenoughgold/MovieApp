@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <about>
     <me.jfenn.attribouter.wedges.AppWedge
-        description="An app that helps user search for movies"
+        description="@string/description"
         icon="@mipmap/ic_launcher" />
     <me.jfenn.attribouter.wedges.TextWedge
         centered="true"
