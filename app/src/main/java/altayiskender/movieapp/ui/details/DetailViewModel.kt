@@ -13,7 +13,7 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private var movieLiveData = MutableLiveData<Movie>()
-     var movieSavedStatusLiveData = MutableLiveData<Boolean>()
+    var movieSavedStatusLiveData = MutableLiveData<Boolean>()
     var movieId: Long? = null
     var movieTitle: String? = null
 
@@ -34,11 +34,21 @@ class DetailViewModel @Inject constructor(private val repository: Repository) : 
     }
 
     fun saveMovieToBookmarks() {
-        repository.insertBookmarkedMovie(movieLiveData.value!!)
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.insertBookmarkedMovie(movieLiveData.value!!)
+            withContext(Dispatchers.Main) {
+                movieSavedStatusLiveData.value = true
+            }
+        }
     }
 
     fun deleteMovieFromBookmarks() {
-        repository.deleteBookmarkedMovie(movieLiveData.value!!)
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.deleteBookmarkedMovie(movieLiveData.value!!)
+            withContext(Dispatchers.Main) {
+                movieSavedStatusLiveData.value = false
+            }
+        }
     }
 
     fun checkIfMovieSaved(movieId: Long): MutableLiveData<Boolean>? {

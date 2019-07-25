@@ -9,7 +9,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -18,12 +17,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_popular.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -42,14 +41,20 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private var popularViewModel: PopularViewModel? = null
-    private var popularAdapter: PopularAdapter? = null
-    private lateinit var popularRecyclerView: RecyclerView
-    private lateinit var errorView: LinearLayout
+    private lateinit var popularViewModel: PopularViewModel
+//    private var popularAdapter: PopularAdapter? = null
+//    private  var popularRecyclerView: RecyclerView? = null
+//    private  var errorView: LinearLayout? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         AndroidSupportInjection.inject(this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Timber.i("onCreate")
+        super.onCreate(savedInstanceState)
+        popularViewModel = ViewModelProviders.of(this, viewModelFactory).get(PopularViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -58,17 +63,14 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
         // Inflate the layout for this fragment
         val binding = FragmentPopularBinding.inflate(inflater, container, false)
 
-        popularViewModel = ViewModelProviders.of(this, viewModelFactory).get(PopularViewModel::class.java)
+//        popularViewModel = ViewModelProviders.of(this, viewModelFactory).get(PopularViewModel::class.java)
 
-        popularAdapter = PopularAdapter(layoutInflater, this)
-        errorView = binding.errorView
+        val popularAdapter = PopularAdapter(layoutInflater, this)
+        val errorView = binding.errorView
         val tryAgainButton: Button = binding.btnTryAgain
         tryAgainButton.setOnClickListener { fetchMoviesAgain() }
 
-
-
-
-        popularRecyclerView = binding.popularRecyclerView
+        val popularRecyclerView = binding.popularRecyclerView
         popularRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, 2)
@@ -76,16 +78,16 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
 
         }
 
-        popularViewModel?.moviesLiveData?.observe(this, Observer { it ->
+        popularViewModel.moviesLiveData.observe(this, Observer { it ->
             it?.let {
                 popularProgressBar.visibility = View.GONE
                 errorView.visibility = View.GONE
-                popularAdapter?.setMovies(it)
+                popularAdapter.setMovies(it)
                 popularRecyclerView.scheduleLayoutAnimation()
             }
         })
 
-        popularViewModel?.hasError?.observe(this, Observer {
+        popularViewModel.hasError.observe(this, Observer {
             if (it) {
                 popularProgressBar.visibility = View.GONE
                 errorView.apply {
@@ -96,10 +98,10 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
 
         })
 
-        popularViewModel?.getHomepageMovies()
+        popularViewModel.getHomepageMovies()
 
 
-        getSortByStringAndSetTitle(popularViewModel!!.sortBy)
+        getSortByStringAndSetTitle(popularViewModel.sortBy)
 
 
         setHasOptionsMenu(true)
@@ -109,13 +111,13 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
 
     private fun fetchMoviesAgain() {
         popularProgressBar.visibility = View.VISIBLE
-        errorView.visibility = View.GONE
-        popularViewModel?.getHomepageMovies()
+        errorView!!.visibility = View.GONE
+        popularViewModel.getHomepageMovies()
 
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        when (popularViewModel?.sortBy) {
+        when (popularViewModel.sortBy) {
             SORT_POPULAR -> menu.findItem(popularItem)?.isEnabled = false
             SORT_UPCOMING -> menu.findItem(upcomingItem)?.isEnabled = false
             SORT_PLAYING -> menu.findItem(nowPlayingItem)?.isEnabled = false
@@ -144,8 +146,8 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
     }
 
     private fun loadMoviesWhenClickingSortByMenuItem(sortBy: Int) {
-        popularViewModel?.sortBy = sortBy
-        popularViewModel?.getHomepageMovies()
+        popularViewModel.sortBy = sortBy
+        popularViewModel.getHomepageMovies()
         getSortByStringAndSetTitle(sortBy)
         activity?.invalidateOptionsMenu()
     }
@@ -174,7 +176,7 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
             }
 
             override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                popularViewModel?.getHomepageMovies()
+                popularViewModel.getHomepageMovies()
                 return true
             }
 
@@ -184,7 +186,7 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
             channel.consumeEach {
 
                 delay(1000)
-                popularViewModel?.searchMovie(it)
+                popularViewModel.searchMovie(it)
 
             }
         }

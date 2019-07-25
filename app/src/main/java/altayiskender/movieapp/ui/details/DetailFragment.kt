@@ -112,13 +112,13 @@ class DetailFragment : Fragment(), DetailAdapter.OnInteractionListener {
         return when (item.itemId) {
             bookmarkItem -> {
                 detailsViewModel?.saveMovieToBookmarks()
-                detailsViewModel?.movieSavedStatusLiveData?.value=true
+//                detailsViewModel?.movieSavedStatusLiveData?.value=true
                 Toast.makeText(context, R.string.movie_saved, Toast.LENGTH_SHORT).show()
                 true
             }
             removeBookmarkItem -> {
                 detailsViewModel?.deleteMovieFromBookmarks()
-                detailsViewModel?.movieSavedStatusLiveData?.value=false
+//                detailsViewModel?.movieSavedStatusLiveData?.value=false
                 Toast.makeText(context, R.string.movie_unsaved, Toast.LENGTH_SHORT).show()
                 true
             }
