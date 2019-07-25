@@ -19,9 +19,8 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_popular.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -181,36 +180,22 @@ class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
             }
 
         })
-        val channel = BroadcastChannel<String>(1)
-        CoroutineScope(Dispatchers.IO).launch {
-            channel.consumeEach {
 
-                delay(1000)
-                popularViewModel.searchMovie(it)
-
-            }
-        }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-
+                query?.let {
+                    if (query.trim().length > 2) {
+                        popularViewModel.searchMovie(it)
+                    }
+                }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
 
-                newText?.let {
-                    if (newText.trim().length > 2) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            channel.send(it)
-
-
-                        }
-                    }
-
-                }
                 return true
             }
         })

@@ -52,6 +52,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0-beta01'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0-alpha08'
+    implementation 'androidx.fragment:fragment:1.2.0-alpha01'
+    implementation 'androidx.fragment:fragment-ktx:1.2.0-alpha01'
+    implementation 'androidx.fragment:fragment-testing:1.2.0-alpha01'
 
     //room,nav,lifecycle
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-beta01'
