@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/popularFragment"
-        android:name="altayiskender.movieapp.ui.popular.PopularFragment"
+        android:name="com.altayiskender.movieapp.ui.popular.PopularFragment"
         android:label="Popular"
         tools:layout="@layout/fragment_popular">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="altayiskender.movieapp.ui.details.DetailFragment"
+        android:name="com.altayiskender.movieapp.ui.details.DetailFragment"
         tools:layout="@layout/fragment_detail">
         <action
             android:id="@+id/action_detailFragment_to_peopleFragment"
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/peopleFragment"
-        android:name="altayiskender.movieapp.ui.people.PeopleFragment"
+        android:name="com.altayiskender.movieapp.ui.people.PeopleFragment"
         tools:layout="@layout/fragment_people">
         <action
             android:id="@+id/action_peopleFragment_to_detailFragment"
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/bookmarksFragment"
-        android:name="altayiskender.movieapp.ui.bookmarks.BookmarksFragment"
+        android:name="com.altayiskender.movieapp.ui.bookmarks.BookmarksFragment"
         android:label="@string/nav_bookmarks"
         tools:layout="@layout/fragment_bookmarks" >
         <action
