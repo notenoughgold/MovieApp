@@ -55,7 +55,7 @@ class BookmarksFragment : Fragment(), KodeinAware, BookmarksAdapter.OnInteractio
         bookmarksRv.adapter = bookmarksAdapter
 
         bookmarksViewModel.getAllBookmarkedMovies()
-            ?.observe(this, Observer {
+            ?.observe(viewLifecycleOwner, Observer {
                 setBookmarks(it)
 
             })

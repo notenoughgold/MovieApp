@@ -21,6 +21,9 @@ class PopularViewModel(private val repository: Repository) : ViewModel() {
     val moviesLiveData = MutableLiveData<List<Movie>>()
     var hasError = MutableLiveData<Boolean>()
 
+    init {
+        getHomepageMovies()
+    }
 
     fun searchMovie(query: String) {
         CoroutineScope(Dispatchers.IO).launch {

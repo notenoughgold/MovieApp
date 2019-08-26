@@ -69,7 +69,7 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
 
         }
 
-        popularViewModel.moviesLiveData.observe(this, Observer { it ->
+        popularViewModel.moviesLiveData.observe(viewLifecycleOwner, Observer { it ->
             it?.let {
                 popularProgressBar.visibility = View.GONE
                 errorView.visibility = View.GONE
@@ -78,7 +78,7 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
             }
         })
 
-        popularViewModel.hasError.observe(this, Observer {
+        popularViewModel.hasError.observe(viewLifecycleOwner, Observer {
             if (it) {
                 popularProgressBar.visibility = View.GONE
                 errorView.apply {
@@ -88,9 +88,6 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
 
 
         })
-
-        popularViewModel.getHomepageMovies()
-
 
         getSortByStringAndSetTitle(popularViewModel.sortBy)
 

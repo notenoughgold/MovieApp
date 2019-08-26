@@ -57,7 +57,7 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
         peopleRv.adapter = peopleAdapter
 
         peopleViewModel.getPeopleDetails()
-            ?.observe(this, androidx.lifecycle.Observer {
+            ?.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
                 setPeopleDetails(it)
 
             })

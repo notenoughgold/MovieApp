@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.google.android.material.card.MaterialCardView xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/bookmarkCardView"
@@ -9,8 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        app:cardCornerRadius="@dimen/card_corner_radius">
+        android:layout_marginEnd="4dp">
 
 
         <LinearLayout

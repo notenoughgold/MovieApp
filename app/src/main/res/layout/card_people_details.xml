@@ -20,13 +20,12 @@
 
             <ImageView
                 android:id="@+id/people_photo_iv"
-                android:contentDescription="@string/person_portrait"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
+                android:contentDescription="@string/person_portrait"
                 android:scaleType="centerInside"
-                android:transitionName="people_photo_iv_transition"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
             <LinearLayout

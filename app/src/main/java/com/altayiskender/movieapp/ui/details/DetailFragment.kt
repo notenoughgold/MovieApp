@@ -61,13 +61,13 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
         detailsRv.adapter = DetailAdapter(this)
 
         detailsViewModel.getMovieDetails()
-            ?.observe(this, Observer {
+            ?.observe(viewLifecycleOwner, Observer {
                 (detailsRv.adapter as DetailAdapter).setMovie(it)
             })
         (activity as? AppCompatActivity)?.supportActionBar?.title = detailsViewModel.movieTitle
 
         detailsViewModel.checkIfMovieSaved(detailsViewModel.movieId as Long)
-            ?.observe(this, Observer {
+            ?.observe(viewLifecycleOwner, Observer {
                 it?.let { activity?.invalidateOptionsMenu() }
             })
 

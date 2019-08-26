@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<BottomNavigationView>(R.id.bottom_nav_view)
             .setupWithNavController(navController)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
