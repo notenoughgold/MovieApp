@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.altayiskender.movieapp.databinding.CardCastBinding
-import com.altayiskender.movieapp.databinding.CardDetailsBinding
-import com.altayiskender.movieapp.databinding.CardDirectorBinding
-import com.altayiskender.movieapp.databinding.HeaderRecyclerViewBinding
+import com.altayiskender.movieapp.R
+
 import com.altayiskender.movieapp.models.CastOfShow
 import com.altayiskender.movieapp.models.CrewOfShow
 import com.altayiskender.movieapp.models.Movie
@@ -16,6 +14,10 @@ import com.altayiskender.movieapp.utils.getBackdropUrl
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.altayiskender.movieapp.utils.loadImage
 import com.google.android.material.chip.Chip
+import kotlinx.android.synthetic.main.card_cast.view.*
+import kotlinx.android.synthetic.main.card_details.view.*
+import kotlinx.android.synthetic.main.card_director.view.*
+import kotlinx.android.synthetic.main.header_recycler_view.view.*
 
 private const val VIEW_TYPE_MOVIE_DETAIL = 0
 private const val VIEW_TYPE_MOVIE_CAST = 2
@@ -23,7 +25,10 @@ private const val VIEW_TYPE_MOVIE_DIRECTOR = 1
 private const val VIEW_TYPE_MOVIE_HEADER = 3
 
 
-class DetailAdapter(private val onInteractionListener: OnInteractionListener) :
+class DetailAdapter(
+    private val inflater: LayoutInflater,
+    private val onInteractionListener: OnInteractionListener
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var movie: Movie? = null
@@ -32,25 +37,25 @@ class DetailAdapter(private val onInteractionListener: OnInteractionListener) :
         return when (viewType) {
             VIEW_TYPE_MOVIE_DETAIL -> {
                 DetailsViewHolder(
-                    CardDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    inflater.inflate(R.layout.card_details, parent, false)
                 )
             }
             VIEW_TYPE_MOVIE_CAST -> {
                 CastViewHolder(
-                    CardCastBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                    inflater.inflate(R.layout.card_cast, parent, false),
                     onInteractionListener
                 )
             }
             VIEW_TYPE_MOVIE_DIRECTOR -> {
                 DirectorViewHolder(
-                    CardDirectorBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                    inflater.inflate(R.layout.card_director, parent, false),
                     onInteractionListener
                 )
             }
             VIEW_TYPE_MOVIE_HEADER -> {
                 HeaderViewHolder(
-                    HeaderRecyclerViewBinding.inflate(
-                        LayoutInflater.from(parent.context),
+                    inflater.inflate(
+                        R.layout.header_recycler_view,
                         parent,
                         false
                     )
@@ -123,71 +128,61 @@ class DetailAdapter(private val onInteractionListener: OnInteractionListener) :
         notifyDataSetChanged()
     }
 
-    class DetailsViewHolder(private var binding: CardDetailsBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class DetailsViewHolder(private val view: View) :
+        RecyclerView.ViewHolder(view) {
 
         fun bind(movie: Movie?) {
             if (movie == null) {
                 return
             }
             if (movie.backdropPath?.isNotEmpty() == true) {
-                binding.detailsImageView.loadImage(getBackdropUrl(movie.backdropPath))
+                view.detailsImageView.loadImage(getBackdropUrl(movie.backdropPath))
             }
 
             if (movie.genres?.isNotEmpty() == true) {
-                binding.detailsGenresCg.visibility = View.VISIBLE
+                view.detailsGenresCg.visibility = View.VISIBLE
                 val genresList = movie.genres!!.map { it.name }
                 for (str in genresList) {
-                    val chip = Chip(binding.detailsGenresCg.context)
+                    val chip = Chip(view.detailsGenresCg.context)
                     chip.text = str
                     chip.isCheckable = false
                     chip.isClickable = false
 
-                    binding.detailsGenresCg.addView(chip)
+                    view.detailsGenresCg.addView(chip)
                 }
             } else {
-                binding.detailsGenresCg.visibility = View.GONE
+                view.detailsGenresCg.visibility = View.GONE
             }
 
             if (movie.overview?.isEmpty() == true) {
-                binding.detailsDescriptionContainer.visibility = View.GONE
+                view.detailsDescriptionTv.visibility = View.GONE
             } else {
-                binding.detailsDescriptionContainer.visibility = View.VISIBLE
-                binding.detailsDescriptionTv.text = movie.overview
-                binding.detailsDescriptionContainer.setOnClickListener {
-                    if (binding.detailsDescriptionMoreTv.visibility == View.INVISIBLE) {
-                        binding.detailsDescriptionMoreTv.visibility = View.VISIBLE
-                        binding.detailsDescriptionLessTv.visibility = View.INVISIBLE
-                        binding.detailsDescriptionTv.maxLines = 5
-                    } else {
-                        binding.detailsDescriptionTv.maxLines = 30
-                        binding.detailsDescriptionMoreTv.visibility = View.INVISIBLE
-                        binding.detailsDescriptionLessTv.visibility = View.VISIBLE
-                    }
-                }
+                view.detailsDescriptionTv.visibility = View.VISIBLE
+                view.detailsDescriptionTv.text = movie.overview
+
             }
 
-            binding.detailsReleaseTv.text = movie.releaseDate
+            view.detailsReleaseTv.text = movie.releaseDate
 
-            binding.detailsRatingTv.text = "${movie.voteAverage} / 10"
+            view.detailsRatingTv.text = "${movie.voteAverage} / 10"
 
-            binding.detailsRuntimeTv.text = "${movie.runtime} m"
+            view.detailsRuntimeTv.text = "${movie.runtime} m"
 
         }
     }
 
     class DirectorViewHolder(
-        private var binding: CardDirectorBinding,
+        private var view: View,
         private val onInteractionListener: OnInteractionListener
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(view) {
 
         fun bind(director: CrewOfShow?) {
             if (director == null) {
                 return
             }
-            binding.directorProfileIv.loadImage(getPosterUrl(director.profilePath))
-            binding.directorNameTv.text = director.name
-            binding.root.apply {
+            view.directorProfileIv.loadImage(getPosterUrl(director.profilePath))
+            view.directorNameTv.text = director.name
+            view.apply {
                 setOnClickListener {
                     onInteractionListener.onItemClicked(
                         director.id,
@@ -198,32 +193,32 @@ class DetailAdapter(private val onInteractionListener: OnInteractionListener) :
         }
     }
 
-    class HeaderViewHolder(private var binding: HeaderRecyclerViewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class HeaderViewHolder(private var view: View) :
+        RecyclerView.ViewHolder(view) {
         fun bind(position: Int) {
             if (position == 1) {
-                binding.headerTv.text = "Director"
+                view.headerTv.text = "Director"
             } else if (position == 3) {
-                binding.headerTv.text = "Cast"
+                view.headerTv.text = "Cast"
             }
         }
     }
 
     class CastViewHolder(
-        private var binding: CardCastBinding,
+        private var view: View,
         private val onInteractionListener: OnInteractionListener
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(view) {
 
         fun bind(cast: CastOfShow?) {
             if (cast == null) {
                 return
             }
 
-            binding.castPosterIv.loadImage(getPosterUrl(cast.profilePath))
-            binding.castNameTv.text = cast.name
-            binding.castCharacterTv.text = cast.character
+            view.castPosterIv.loadImage(getPosterUrl(cast.profilePath))
+            view.castNameTv.text = cast.name
+            view.castCharacterTv.text = cast.character
 
-            binding.root.apply {
+            view.apply {
                 setOnClickListener {
                     onInteractionListener.onItemClicked(
                         cast.id,

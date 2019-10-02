@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.bookmarkItem
 import com.altayiskender.movieapp.R.id.removeBookmarkItem
-import com.altayiskender.movieapp.databinding.FragmentDetailBinding
+import kotlinx.android.synthetic.main.fragment_detail.view.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -46,7 +46,7 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = FragmentDetailBinding.inflate(inflater, container, false)
+        val view = inflater.inflate(R.layout.fragment_detail, container, false)
 
         setHasOptionsMenu(true)
 
@@ -56,9 +56,9 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
         }
 
 
-        val detailsRv = binding.detailsRv
+        val detailsRv = view.detailsRv
         detailsRv.layoutManager = LinearLayoutManager(context)
-        detailsRv.adapter = DetailAdapter(this)
+        detailsRv.adapter = DetailAdapter(layoutInflater, this)
 
         detailsViewModel.getMovieDetails()
             ?.observe(viewLifecycleOwner, Observer {
@@ -71,7 +71,7 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
                 it?.let { activity?.invalidateOptionsMenu() }
             })
 
-        return binding.root
+        return view
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -100,13 +100,11 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
         return when (item.itemId) {
             bookmarkItem -> {
                 detailsViewModel.saveMovieToBookmarks()
-//                detailsViewModel?.movieSavedStatusLiveData?.value=true
                 Toast.makeText(context, R.string.movie_saved, Toast.LENGTH_SHORT).show()
                 true
             }
             removeBookmarkItem -> {
                 detailsViewModel.deleteMovieFromBookmarks()
-//                detailsViewModel?.movieSavedStatusLiveData?.value=false
                 Toast.makeText(context, R.string.movie_unsaved, Toast.LENGTH_SHORT).show()
                 true
             }

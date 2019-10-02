@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
-import com.altayiskender.movieapp.databinding.FragmentPeopleBinding
 import com.altayiskender.movieapp.models.PeopleResponse
+import kotlinx.android.synthetic.main.fragment_people.view.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -43,7 +43,7 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = FragmentPeopleBinding.inflate(inflater, container, false)
+        val view = inflater.inflate(R.layout.fragment_people, container, false)
         setHasOptionsMenu(true)
 
         if (peopleViewModel.peopleId == null && peopleViewModel.peopleName == null) {
@@ -51,8 +51,8 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
             peopleViewModel.peopleName = arguments!!.getString(ARG_PEOPLE_NAME)
         }
 
-        val peopleRv = binding.peopleRv
-        peopleAdapter = PeopleAdapter(this)
+        val peopleRv = view.peopleRv
+        peopleAdapter = PeopleAdapter(layoutInflater, this)
         peopleRv.layoutManager = LinearLayoutManager(context)
         peopleRv.adapter = peopleAdapter
 
@@ -63,7 +63,7 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
             })
         (activity as? AppCompatActivity)?.supportActionBar?.title = peopleViewModel.peopleName
 
-        return binding.root
+        return view
     }
 
     private fun setPeopleDetails(peopleResponse: PeopleResponse) {

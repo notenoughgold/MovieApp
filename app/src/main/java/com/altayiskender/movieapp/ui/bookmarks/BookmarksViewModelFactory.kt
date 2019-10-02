@@ -11,7 +11,7 @@ class BookmarksViewModelFactory(private val repository: Repository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(BookmarksViewModel::class.java)) {
-            Timber.d("creatingPopularViewModel")
+            Timber.d("creatingBookmarksViewModel")
             BookmarksViewModel(repository) as T
         } else {
             throw Throwable("ViewModel Not Found")

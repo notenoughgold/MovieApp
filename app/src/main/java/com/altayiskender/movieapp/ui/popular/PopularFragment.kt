@@ -14,8 +14,8 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.*
-import com.altayiskender.movieapp.databinding.FragmentPopularBinding
 import kotlinx.android.synthetic.main.fragment_popular.*
+import kotlinx.android.synthetic.main.fragment_popular.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.kodein.di.KodeinAware
@@ -52,24 +52,27 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Timber.i("onCreateView")
 
         // Inflate the layout for this fragment
-        val binding = FragmentPopularBinding.inflate(inflater, container, false)
+        val view = inflater.inflate(R.layout.fragment_popular, container, false)
 
-        val popularAdapter = PopularAdapter(layoutInflater, this)
-        val errorView = binding.errorView
-        val tryAgainButton: Button = binding.btnTryAgain
+        val errorView = view.errorView
+        val tryAgainButton: Button = view.btn_tryAgain
         tryAgainButton.setOnClickListener { fetchMoviesAgain() }
+        val popularAdapter = PopularAdapter(layoutInflater, this)
 
-        val popularRecyclerView = binding.popularRecyclerView
+        val popularRecyclerView = view.popularRecyclerView
         popularRecyclerView.apply {
+            adapter = popularAdapter
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, 2)
-            adapter = popularAdapter
 
         }
 
         popularViewModel.moviesLiveData.observe(viewLifecycleOwner, Observer { it ->
+            Timber.i("popularViewModel.moviesLiveData has ${it.size}")
+
             it?.let {
                 popularProgressBar.visibility = View.GONE
                 errorView.visibility = View.GONE
@@ -79,6 +82,8 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
         })
 
         popularViewModel.hasError.observe(viewLifecycleOwner, Observer {
+            Timber.i("popularViewModel.hasError $it.toString()")
+
             if (it) {
                 popularProgressBar.visibility = View.GONE
                 errorView.apply {
@@ -94,7 +99,7 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
 
         setHasOptionsMenu(true)
 
-        return binding.root
+        return view
     }
 
     private fun fetchMoviesAgain() {

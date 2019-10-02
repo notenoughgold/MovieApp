@@ -10,3 +10,4 @@ fun ImageView.loadImage(imageUrl: String) {
         Glide.with(this).load(imageUrl).transition(withCrossFade()).into(this)
     }
 }
+

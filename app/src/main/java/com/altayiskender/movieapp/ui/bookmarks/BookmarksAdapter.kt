@@ -2,24 +2,28 @@ package com.altayiskender.movieapp.ui.bookmarks
 
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.altayiskender.movieapp.databinding.CardBookmarksBinding
+import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.models.Movie
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.altayiskender.movieapp.utils.loadImage
+import kotlinx.android.synthetic.main.card_bookmarks.view.*
 
 
-class BookmarksAdapter(private val onInteractionListener: OnInteractionListener) :
+class BookmarksAdapter(
+    private val layoutInflater: LayoutInflater,
+    private val onInteractionListener: OnInteractionListener
+) :
     RecyclerView.Adapter<BookmarksAdapter.BookmarksViewHolder>() {
 
     private var bookmarks = listOf<Movie>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarksViewHolder {
         return BookmarksViewHolder(
-            CardBookmarksBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
+            layoutInflater.inflate(
+                R.layout.card_bookmarks, parent,
                 false
             ), onInteractionListener
         )
@@ -34,16 +38,16 @@ class BookmarksAdapter(private val onInteractionListener: OnInteractionListener)
     }
 
     class BookmarksViewHolder(
-        private val binding: CardBookmarksBinding,
+        private val view: View,
         private val onInteractionListener: OnInteractionListener
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(view) {
 
         fun bind(bookmark: Movie) {
-            binding.bookmarkPosterIv.loadImage(getPosterUrl(bookmark.posterPath))
-            binding.bookmarkTitleTv.text = bookmark.title
-            binding.bookmarkReleaseYearTv.text = bookmark.releaseDate
+            view.bookmarkPosterIv.loadImage(getPosterUrl(bookmark.posterPath))
+            view.bookmarkTitleTv.text = bookmark.title
+            view.bookmarkReleaseYearTv.text = bookmark.releaseDate
 
-            binding.root.setOnClickListener {
+            view.setOnClickListener {
                 onInteractionListener.onItemClicked(bookmark.id!!, bookmark.title!!)
             }
         }

@@ -12,10 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
-import com.altayiskender.movieapp.databinding.FragmentBookmarksBinding
 import com.altayiskender.movieapp.models.Movie
 import com.altayiskender.movieapp.ui.popular.ARG_MOVIE
 import com.altayiskender.movieapp.ui.popular.ARG_MOVIE_NAME
+import kotlinx.android.synthetic.main.fragment_bookmarks.view.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -27,8 +27,6 @@ class BookmarksFragment : Fragment(), KodeinAware, BookmarksAdapter.OnInteractio
 
     private val viewModelFactory: BookmarksViewModelFactory by instance()
     lateinit var bookmarksViewModel: BookmarksViewModel
-    private lateinit var bookmarksAdapter: BookmarksAdapter
-    private lateinit var emptyView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -43,32 +41,29 @@ class BookmarksFragment : Fragment(), KodeinAware, BookmarksAdapter.OnInteractio
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Timber.i("onCreateView")
         // Inflate the layout for this fragment
-        val binding = FragmentBookmarksBinding.inflate(inflater, container, false)
-        emptyView = binding.emptyView
+        val view = inflater.inflate(R.layout.fragment_bookmarks, container, false)
+        var emptyView = view.empty_view
         setHasOptionsMenu(true)
-
-
-        val bookmarksRv = binding.bookmarksRv
+        val bookmarksAdapter = BookmarksAdapter(layoutInflater, this)
+        val bookmarksRv = view.bookmarksRv
         bookmarksRv.layoutManager = LinearLayoutManager(context)
-        bookmarksAdapter = BookmarksAdapter(this)
         bookmarksRv.adapter = bookmarksAdapter
 
         bookmarksViewModel.getAllBookmarkedMovies()
             ?.observe(viewLifecycleOwner, Observer {
-                setBookmarks(it)
+                bookmarksAdapter.setBookmarks(it)
 
+                if (it.isEmpty()) {
+                    emptyView.visibility = View.VISIBLE
+                } else {
+                    emptyView.visibility = View.GONE
+                }
             })
-        return binding.root
+        return view
     }
 
-    private fun setBookmarks(it: List<Movie>) {
-        if (it.isEmpty()) {
-            emptyView.visibility = View.VISIBLE
-        } else {
-            bookmarksAdapter.setBookmarks(it)
-        }
-    }
 
     override fun onItemClicked(movieId: Long, movieTitle: String) {
         val navController = NavHostFragment.findNavController(this)

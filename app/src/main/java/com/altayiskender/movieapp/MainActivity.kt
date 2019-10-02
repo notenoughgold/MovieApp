@@ -6,10 +6,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.altayiskender.movieapp.R.id.aboutItem
+import com.altayiskender.movieapp.utils.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import me.jfenn.attribouter.Attribouter
@@ -17,16 +19,48 @@ import me.jfenn.attribouter.Attribouter
 
 class MainActivity : AppCompatActivity() {
 
+    private var currentNavController: LiveData<NavController>? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        val navController = findNavController(this, R.id.nav_host_fragment)
-        setupActionBarWithNavController(this, navController)
+        if (savedInstanceState == null) {
+            setupBottomNavigationBar()
+        } // Else, need to wait for onRestoreInstanceState
 
-        findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-            .setupWithNavController(navController)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // Now that BottomNavigationBar has restored its instance state
+        // and its selectedItemId, we can proceed with setting up the
+        // BottomNavigationBar with Navigation
+        setupBottomNavigationBar()
+    }
+
+    /**
+     * Called on first creation and when restoring state.
+     */
+    private fun setupBottomNavigationBar() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+
+        val navGraphIds = listOf(R.navigation.home, R.navigation.bookmarks)
+
+        // Setup the bottom navigation view with a list of navigation graphs
+        val controller = bottomNavigationView.setupWithNavController(
+            navGraphIds = navGraphIds,
+            fragmentManager = supportFragmentManager,
+            containerId = R.id.nav_host_container,
+            intent = intent
+        )
+
+        // Whenever the selected controller changes, setup the action bar.
+        controller.observe(this, Observer { navController ->
+            setupActionBarWithNavController(navController)
+        })
+        currentNavController = controller
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -48,8 +82,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        // Find the navController and then call navController.navigateUp
-        val navController = findNavController(this, R.id.nav_host_fragment)
-        return navController.navigateUp()
+        return currentNavController?.value?.navigateUp() ?: false
     }
+//    override fun onSupportNavigateUp(): Boolean {
+//        // Find the navController and then call navController.navigateUp
+//        val navController = findNavController(this, R.id.nav_host_fragment)
+//        return navController.navigateUp()
+//    }
 }
