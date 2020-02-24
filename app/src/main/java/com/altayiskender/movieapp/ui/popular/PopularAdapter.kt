@@ -1,19 +1,16 @@
 package com.altayiskender.movieapp.ui.popular
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.altayiskender.movieapp.R
+import com.altayiskender.movieapp.databinding.ListItemHomeBinding
 import com.altayiskender.movieapp.models.Movie
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.altayiskender.movieapp.utils.loadImage
-import kotlinx.android.synthetic.main.list_item_home.view.*
-import timber.log.Timber
+
 
 class PopularAdapter(
-    private val inflater: LayoutInflater,
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.Adapter<PopularAdapter.HomeViewHolder>() {
     private var movies = listOf<Movie>()
@@ -29,8 +26,9 @@ class PopularAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         return HomeViewHolder(
-            inflater.inflate(R.layout.list_item_home, parent, false),
-            onInteractionListener
+            ListItemHomeBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), onInteractionListener
 
         )
     }
@@ -50,14 +48,14 @@ class PopularAdapter(
     }
 
     class HomeViewHolder(
-        private val view: View,
+        private val binding: ListItemHomeBinding,
         private val onInteractionListener: OnInteractionListener
-    ) : RecyclerView.ViewHolder(view) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-            view.homePosterImageView.loadImage(getPosterUrl(movie.posterPath))
-            view.homeNameTextView.text = movie.title
-            view.setOnClickListener {
+            binding.homePosterImageView.loadImage(getPosterUrl(movie.posterPath))
+            binding.homeNameTextView.text = movie.title
+            binding.root.setOnClickListener {
                 onInteractionListener.onItemClicked(movie.id!!, movie.title!!)
             }
         }

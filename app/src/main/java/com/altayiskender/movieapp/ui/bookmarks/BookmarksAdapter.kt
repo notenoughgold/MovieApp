@@ -2,18 +2,15 @@ package com.altayiskender.movieapp.ui.bookmarks
 
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.altayiskender.movieapp.R
+import com.altayiskender.movieapp.databinding.CardBookmarksBinding
 import com.altayiskender.movieapp.models.Movie
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.altayiskender.movieapp.utils.loadImage
-import kotlinx.android.synthetic.main.card_bookmarks.view.*
 
 
 class BookmarksAdapter(
-    private val layoutInflater: LayoutInflater,
     private val onInteractionListener: OnInteractionListener
 ) :
     RecyclerView.Adapter<BookmarksAdapter.BookmarksViewHolder>() {
@@ -22,9 +19,8 @@ class BookmarksAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarksViewHolder {
         return BookmarksViewHolder(
-            layoutInflater.inflate(
-                R.layout.card_bookmarks, parent,
-                false
+            CardBookmarksBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
             ), onInteractionListener
         )
     }
@@ -38,16 +34,16 @@ class BookmarksAdapter(
     }
 
     class BookmarksViewHolder(
-        private val view: View,
+        private val binding: CardBookmarksBinding,
         private val onInteractionListener: OnInteractionListener
-    ) : RecyclerView.ViewHolder(view) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(bookmark: Movie) {
-            view.bookmarkPosterIv.loadImage(getPosterUrl(bookmark.posterPath))
-            view.bookmarkTitleTv.text = bookmark.title
-            view.bookmarkReleaseYearTv.text = bookmark.releaseDate
+            binding.bookmarkPosterIv.loadImage(getPosterUrl(bookmark.posterPath))
+            binding.bookmarkTitleTv.text = bookmark.title
+            binding.bookmarkReleaseYearTv.text = bookmark.releaseDate
 
-            view.setOnClickListener {
+            binding.root.setOnClickListener {
                 onInteractionListener.onItemClicked(bookmark.id!!, bookmark.title!!)
             }
         }

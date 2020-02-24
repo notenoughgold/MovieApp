@@ -11,21 +11,23 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.altayiskender.movieapp.R.id.aboutItem
+import com.altayiskender.movieapp.databinding.ActivityMainBinding
 import com.altayiskender.movieapp.utils.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 import me.jfenn.attribouter.Attribouter
 
 
 class MainActivity : AppCompatActivity() {
 
     private var currentNavController: LiveData<NavController>? = null
+    private lateinit var binding: ActivityMainBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
      * Called on first creation and when restoring state.
      */
     private fun setupBottomNavigationBar() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+        val bottomNavigationView = binding.bottomNavView
 
         val navGraphIds = listOf(R.navigation.home, R.navigation.bookmarks)
 
@@ -84,9 +86,5 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
     }
-//    override fun onSupportNavigateUp(): Boolean {
-//        // Find the navController and then call navController.navigateUp
-//        val navController = findNavController(this, R.id.nav_host_fragment)
-//        return navController.navigateUp()
-//    }
+
 }

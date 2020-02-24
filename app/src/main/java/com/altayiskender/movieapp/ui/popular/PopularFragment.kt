@@ -14,8 +14,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.*
-import kotlinx.android.synthetic.main.fragment_popular.*
-import kotlinx.android.synthetic.main.fragment_popular.view.*
+import com.altayiskender.movieapp.databinding.FragmentPopularBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.kodein.di.KodeinAware
@@ -39,6 +38,8 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
 
     private val viewModelFactory: PopularViewModelFactory by instance()
     private lateinit var popularViewModel: PopularViewModel
+    private var _binding: FragmentPopularBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate")
@@ -55,14 +56,16 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
         Timber.i("onCreateView")
 
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_popular, container, false)
+        _binding = FragmentPopularBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        val errorView = view.errorView
-        val tryAgainButton: Button = view.btn_tryAgain
+
+        val errorView = binding.errorView
+        val tryAgainButton: Button = binding.btnTryAgain
         tryAgainButton.setOnClickListener { fetchMoviesAgain() }
-        val popularAdapter = PopularAdapter(layoutInflater, this)
+        val popularAdapter = PopularAdapter(this)
 
-        val popularRecyclerView = view.popularRecyclerView
+        val popularRecyclerView = binding.popularRecyclerView
         popularRecyclerView.apply {
             adapter = popularAdapter
             setHasFixedSize(true)
@@ -74,7 +77,7 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
             Timber.i("popularViewModel.moviesLiveData has ${it.size}")
 
             it?.let {
-                popularProgressBar.visibility = View.GONE
+                binding.popularProgressBar.visibility = View.GONE
                 errorView.visibility = View.GONE
                 popularAdapter.setMovies(it)
                 popularRecyclerView.scheduleLayoutAnimation()
@@ -85,7 +88,7 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
             Timber.i("popularViewModel.hasError $it.toString()")
 
             if (it) {
-                popularProgressBar.visibility = View.GONE
+                binding.popularProgressBar.visibility = View.GONE
                 errorView.apply {
                     visibility = View.VISIBLE
                 }
@@ -103,8 +106,8 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
     }
 
     private fun fetchMoviesAgain() {
-        popularProgressBar.visibility = View.VISIBLE
-        errorView!!.visibility = View.GONE
+        binding.popularProgressBar.visibility = View.VISIBLE
+        binding.errorView.visibility = View.GONE
         popularViewModel.getHomepageMovies()
 
     }
@@ -203,6 +206,11 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
         bundle.putString(ARG_MOVIE_NAME, movieTitle)
         navController.navigate(action_popularFragment_to_detailFragment, bundle)
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 

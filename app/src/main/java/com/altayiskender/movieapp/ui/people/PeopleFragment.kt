@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
+import com.altayiskender.movieapp.databinding.FragmentPeopleBinding
 import com.altayiskender.movieapp.models.PeopleResponse
-import kotlinx.android.synthetic.main.fragment_people.view.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -30,6 +30,9 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
     private val viewModelFactory: PeopleViewModelFactory by instance()
     lateinit var peopleViewModel: PeopleViewModel
     private lateinit var peopleAdapter: PeopleAdapter
+    private var _binding: FragmentPeopleBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         Timber.i("onCreate")
@@ -43,7 +46,8 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_people, container, false)
+        _binding = FragmentPeopleBinding.inflate(inflater, container, false)
+        val view = binding.root
         setHasOptionsMenu(true)
 
         if (peopleViewModel.peopleId == null && peopleViewModel.peopleName == null) {
@@ -51,7 +55,7 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
             peopleViewModel.peopleName = arguments!!.getString(ARG_PEOPLE_NAME)
         }
 
-        val peopleRv = view.peopleRv
+        val peopleRv = binding.peopleRv
         peopleAdapter = PeopleAdapter(layoutInflater, this)
         peopleRv.layoutManager = LinearLayoutManager(context)
         peopleRv.adapter = peopleAdapter
@@ -79,4 +83,8 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
         navController.navigate(R.id.action_peopleFragment_to_detailFragment, bundle)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

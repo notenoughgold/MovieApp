@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.bookmarkItem
 import com.altayiskender.movieapp.R.id.removeBookmarkItem
-import kotlinx.android.synthetic.main.fragment_detail.view.*
+import com.altayiskender.movieapp.databinding.FragmentDetailBinding
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -32,7 +32,8 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
 
     private val viewModelFactory: DetailsViewModelFactory by instance()
     lateinit var detailsViewModel: DetailViewModel
-
+    private var _binding: FragmentDetailBinding? = null
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.i("onCreate")
@@ -46,8 +47,8 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_detail, container, false)
-
+        _binding = FragmentDetailBinding.inflate(inflater, container, false)
+        val view = binding.root
         setHasOptionsMenu(true)
 
         if (detailsViewModel.movieId == null && detailsViewModel.movieTitle == null) {
@@ -56,7 +57,7 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
         }
 
 
-        val detailsRv = view.detailsRv
+        val detailsRv = binding.detailsRv
         detailsRv.layoutManager = LinearLayoutManager(context)
         detailsRv.adapter = DetailAdapter(layoutInflater, this)
 
@@ -113,5 +114,10 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
         }
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

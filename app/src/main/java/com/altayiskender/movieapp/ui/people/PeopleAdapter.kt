@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.altayiskender.movieapp.R
+import com.altayiskender.movieapp.databinding.CardPeopleDetailsBinding
+import com.altayiskender.movieapp.databinding.CardPeopleWorksBinding
 import com.altayiskender.movieapp.models.CastAsPerson
 import com.altayiskender.movieapp.models.PeopleResponse
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.altayiskender.movieapp.utils.loadImage
-import kotlinx.android.synthetic.main.card_people_details.view.*
-import kotlinx.android.synthetic.main.card_people_works.view.*
+
 
 private const val VIEW_TYPE_PEOPLE_DETAIL = 0
 private const val VIEW_TYPE_PEOPLE_CAST = 1
@@ -28,20 +28,16 @@ class PeopleAdapter(
         return when (viewType) {
             VIEW_TYPE_PEOPLE_DETAIL -> {
                 DetailsViewHolder(
-                    layoutInflater.inflate(
-                        R.layout.card_people_details,
-                        parent,
-                        false
+                    CardPeopleDetailsBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
                     )
 
                 )
             }
             VIEW_TYPE_PEOPLE_CAST -> {
                 CastViewHolder(
-                    layoutInflater.inflate(
-                        R.layout.card_people_works,
-                        parent,
-                        false
+                    CardPeopleWorksBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
                     ),
                     onInteractionListener
                 )
@@ -86,60 +82,60 @@ class PeopleAdapter(
         notifyDataSetChanged()
     }
 
-    class DetailsViewHolder(private var view: View) :
-        RecyclerView.ViewHolder(view) {
+    class DetailsViewHolder(private var binding: CardPeopleDetailsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(peopleResponse: PeopleResponse?) {
             if (peopleResponse == null) {
                 return
             }
             if (peopleResponse.profilePath?.isNotEmpty() == true) {
-                view.people_photo_iv.loadImage(getPosterUrl(peopleResponse.profilePath))
+                binding.peoplePhotoIv.loadImage(getPosterUrl(peopleResponse.profilePath))
             }
 
             if (peopleResponse.birthday?.isNotEmpty() == true) {
-                view.people_birthday_tv.visibility = View.VISIBLE
-                view.people_birthday_tv.text = peopleResponse.birthday
+                binding.peopleBirthdayTv.visibility = View.VISIBLE
+                binding.peopleBirthdayTv.text = peopleResponse.birthday
 
             } else {
-                view.people_birthday_tv.visibility = View.GONE
-                view.people_birthday_tv_title.visibility = View.GONE
+                binding.peopleBirthdayTv.visibility = View.GONE
+                binding.peopleBirthdayTvTitle.visibility = View.GONE
             }
 
             if (peopleResponse.placeOfBirth?.isNotEmpty() == true) {
-                view.people_birthplace_tv.visibility = View.VISIBLE
-                view.people_birthplace_tv.text = peopleResponse.placeOfBirth
+                binding.peopleBirthplaceTv.visibility = View.VISIBLE
+                binding.peopleBirthplaceTv.text = peopleResponse.placeOfBirth
 
             } else {
-                view.people_birthplace_tv.visibility = View.GONE
-                view.people_birthplace_tv_title.visibility = View.GONE
+                binding.peopleBirthplaceTv.visibility = View.GONE
+                binding.peopleBirthplaceTvTitle.visibility = View.GONE
             }
 
 
             if (peopleResponse.homepage?.isNotEmpty() == true) {
-                view.people_homepageurl_tv.visibility = View.VISIBLE
-                view.people_homepageurl_tv.text = peopleResponse.homepage
+                binding.peopleHomepageurlTv.visibility = View.VISIBLE
+                binding.peopleHomepageurlTv.text = peopleResponse.homepage
 
 
             } else {
-                view.people_homepageurl_tv.visibility = View.GONE
-                view.people_homepageurl_tv_title.visibility = View.GONE
+                binding.peopleHomepageurlTv.visibility = View.GONE
+                binding.peopleHomepageurlTvTitle.visibility = View.GONE
             }
 
             if (peopleResponse.biography?.isEmpty() == true) {
-                view.peopleBiographyContainer.visibility = View.GONE
+                binding.peopleBiographyContainer.visibility = View.GONE
             } else {
-                view.peopleBiographyContainer.visibility = View.VISIBLE
-                view.people_bio_tv.text = peopleResponse.biography
-                view.peopleBiographyContainer.setOnClickListener {
-                    if (view.peopleDescriptionMoreTv.visibility == View.INVISIBLE) {
-                        view.peopleDescriptionMoreTv.visibility = View.VISIBLE
-                        view.peopleDescriptionLessTv.visibility = View.INVISIBLE
-                        view.people_bio_tv.maxLines = 5
+                binding.peopleBiographyContainer.visibility = View.VISIBLE
+                binding.peopleBioTv.text = peopleResponse.biography
+                binding.peopleBiographyContainer.setOnClickListener {
+                    if (binding.peopleDescriptionMoreTv.visibility == View.INVISIBLE) {
+                        binding.peopleDescriptionMoreTv.visibility = View.VISIBLE
+                        binding.peopleDescriptionLessTv.visibility = View.INVISIBLE
+                        binding.peopleBioTv.maxLines = 5
                     } else {
-                        view.people_bio_tv.maxLines = 30
-                        view.peopleDescriptionMoreTv.visibility = View.INVISIBLE
-                        view.peopleDescriptionLessTv.visibility = View.VISIBLE
+                        binding.peopleBioTv.maxLines = 30
+                        binding.peopleDescriptionMoreTv.visibility = View.INVISIBLE
+                        binding.peopleDescriptionLessTv.visibility = View.VISIBLE
                     }
                 }
             }
@@ -147,27 +143,27 @@ class PeopleAdapter(
     }
 
     class CastViewHolder(
-        private val view: View,
+        private val binding: CardPeopleWorksBinding,
         private val onInteractionListener: OnInteractionListener
-    ) : RecyclerView.ViewHolder(view) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(cast: CastAsPerson?) {
             if (cast == null) {
                 return
             }
 
-            view.workPosterIv.loadImage(getPosterUrl(cast.posterPath))
-            view.workNameTv.text = cast.title
-            view.castCharacterTv.text = cast.character
+            binding.workPosterIv.loadImage(getPosterUrl(cast.posterPath))
+            binding.workNameTv.text = cast.title
+            binding.castCharacterTv.text = cast.character
             var airDate: String? = null
             if (!cast.releaseDate.isNullOrEmpty()) {
                 airDate = cast.releaseDate
             } else if (!cast.firstAirDate.isNullOrEmpty()) {
                 airDate = cast.firstAirDate
             }
-            view.workYearTv.text = airDate
+            binding.workYearTv.text = airDate
 
-            view.setOnClickListener {
+            binding.root.setOnClickListener {
                 onInteractionListener.onItemClicked(
                     cast.id!!,
                     cast.title!!

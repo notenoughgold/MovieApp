@@ -5,17 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
-import com.altayiskender.movieapp.models.Movie
+import com.altayiskender.movieapp.databinding.FragmentBookmarksBinding
 import com.altayiskender.movieapp.ui.popular.ARG_MOVIE
 import com.altayiskender.movieapp.ui.popular.ARG_MOVIE_NAME
-import kotlinx.android.synthetic.main.fragment_bookmarks.view.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -27,6 +25,9 @@ class BookmarksFragment : Fragment(), KodeinAware, BookmarksAdapter.OnInteractio
 
     private val viewModelFactory: BookmarksViewModelFactory by instance()
     lateinit var bookmarksViewModel: BookmarksViewModel
+
+    private var _binding: FragmentBookmarksBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -43,11 +44,12 @@ class BookmarksFragment : Fragment(), KodeinAware, BookmarksAdapter.OnInteractio
     ): View? {
         Timber.i("onCreateView")
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_bookmarks, container, false)
-        var emptyView = view.empty_view
+        _binding = FragmentBookmarksBinding.inflate(inflater, container, false)
+        val view = binding.root
         setHasOptionsMenu(true)
-        val bookmarksAdapter = BookmarksAdapter(layoutInflater, this)
-        val bookmarksRv = view.bookmarksRv
+
+        val bookmarksAdapter = BookmarksAdapter(this)
+        val bookmarksRv = binding.bookmarksRv
         bookmarksRv.layoutManager = LinearLayoutManager(context)
         bookmarksRv.adapter = bookmarksAdapter
 
@@ -56,9 +58,9 @@ class BookmarksFragment : Fragment(), KodeinAware, BookmarksAdapter.OnInteractio
                 bookmarksAdapter.setBookmarks(it)
 
                 if (it.isEmpty()) {
-                    emptyView.visibility = View.VISIBLE
+                    binding.emptyView.visibility = View.VISIBLE
                 } else {
-                    emptyView.visibility = View.GONE
+                    binding.emptyView.visibility = View.GONE
                 }
             })
         return view
@@ -73,4 +75,8 @@ class BookmarksFragment : Fragment(), KodeinAware, BookmarksAdapter.OnInteractio
         navController.navigate(R.id.action_bookmarksFragment_to_detailFragment, bundle)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
