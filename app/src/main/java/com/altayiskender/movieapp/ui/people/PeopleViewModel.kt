@@ -9,8 +9,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class PeopleViewModel(private val repository: Repository) : ViewModel() {
+class PeopleViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private var peopleLiveData = MutableLiveData<PeopleResponse>()
     private val compositeDisposable = CompositeDisposable()

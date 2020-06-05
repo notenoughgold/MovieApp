@@ -2,6 +2,7 @@ package com.altayiskender.movieapp.ui.popular
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
@@ -15,12 +16,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.*
 import com.altayiskender.movieapp.databinding.FragmentPopularBinding
+import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
+
 import timber.log.Timber
+import javax.inject.Inject
 
 
 const val ARG_MOVIE = "arg_movie"
@@ -32,14 +34,15 @@ private const val SORT_PLAYING = 2
 
 @ExperimentalCoroutinesApi
 @ObsoleteCoroutinesApi
-class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionListener {
-    override val kodein by kodein()
+class PopularFragment : DaggerFragment(), PopularAdapter.OnInteractionListener {
 
 
-    private val viewModelFactory: PopularViewModelFactory by instance()
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var popularViewModel: PopularViewModel
     private var _binding: FragmentPopularBinding? = null
     private val binding get() = _binding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate")
@@ -150,9 +153,9 @@ class PopularFragment : Fragment(), KodeinAware, PopularAdapter.OnInteractionLis
 
     private fun getSortByStringAndSetTitle(sortBy: Int) {
         val str = when (sortBy) {
-            SORT_POPULAR -> context!!.resources.getString(R.string.popular)
-            SORT_PLAYING -> context!!.resources.getString(R.string.now_playing)
-            SORT_UPCOMING -> context!!.resources.getString(R.string.upcoming)
+            SORT_POPULAR -> requireContext().resources.getString(R.string.popular)
+            SORT_PLAYING -> requireContext().resources.getString(R.string.now_playing)
+            SORT_UPCOMING -> requireContext().resources.getString(R.string.upcoming)
             else -> null
         }
         (activity as? AppCompatActivity)?.supportActionBar?.title = str

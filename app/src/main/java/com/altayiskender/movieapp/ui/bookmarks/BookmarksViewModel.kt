@@ -8,8 +8,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class BookmarksViewModel(private val repository: Repository) : ViewModel() {
+class BookmarksViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private var bookmarksLiveData = MutableLiveData<List<Movie>>()
 

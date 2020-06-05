@@ -22,6 +22,4 @@ interface MovieBookmarksDao {
     @Query("SELECT id  FROM bookmarks WHERE id LIKE :movieId")
     fun checkMovieIdIfSaved(movieId: Long): List<Long>
 
-//    @Query("SELECT * FROM bookmarks WHERE id = :id")
-//    fun loadMovieBookmarkById(id: Int): Observable<Movie>
 }

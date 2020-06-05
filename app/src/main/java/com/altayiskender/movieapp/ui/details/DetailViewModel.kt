@@ -8,8 +8,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DetailViewModel(private val repository: Repository) : ViewModel() {
+class DetailViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private var movieLiveData = MutableLiveData<Movie>()
     var movieSavedStatusLiveData = MutableLiveData<Boolean>()

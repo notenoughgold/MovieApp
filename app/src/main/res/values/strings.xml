@@ -30,6 +30,8 @@
     <string name="description">An app that helps user search for movies</string>
     <string name="movie_poster">Movie poster</string>
     <string name="person_portrait">Person portrait</string>
+    <string name="cast">Cast</string>
+    <string name="crew">Crew</string>
 
 
 </resources>

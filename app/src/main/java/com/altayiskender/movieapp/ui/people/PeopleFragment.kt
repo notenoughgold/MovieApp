@@ -1,6 +1,7 @@
 package com.altayiskender.movieapp.ui.people
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.databinding.FragmentPeopleBinding
 import com.altayiskender.movieapp.models.PeopleResponse
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
+import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
+import javax.inject.Inject
 
 private const val ARG_PEOPLE = "arg_people"
 private const val ARG_MOVIE = "arg_movie"
@@ -24,14 +24,19 @@ private const val ARG_PEOPLE_NAME = "arg_people_name"
 private const val ARG_MOVIE_NAME = "arg_movie_name"
 
 
-class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListener {
-    override val kodein by kodein()
+class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
 
-    private val viewModelFactory: PeopleViewModelFactory by instance()
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var peopleViewModel: PeopleViewModel
     private lateinit var peopleAdapter: PeopleAdapter
     private var _binding: FragmentPeopleBinding? = null
     private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        AndroidSupportInjection.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -51,8 +56,8 @@ class PeopleFragment : Fragment(), KodeinAware, PeopleAdapter.OnInteractionListe
         setHasOptionsMenu(true)
 
         if (peopleViewModel.peopleId == null && peopleViewModel.peopleName == null) {
-            peopleViewModel.peopleId = arguments!!.getLong(ARG_PEOPLE)
-            peopleViewModel.peopleName = arguments!!.getString(ARG_PEOPLE_NAME)
+            peopleViewModel.peopleId = requireArguments().getLong(ARG_PEOPLE)
+            peopleViewModel.peopleName = requireArguments().getString(ARG_PEOPLE_NAME)
         }
 
         val peopleRv = binding.peopleRv

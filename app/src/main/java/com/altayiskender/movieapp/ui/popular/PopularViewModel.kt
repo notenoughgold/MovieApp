@@ -10,12 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.lang.reflect.Constructor
+import javax.inject.Inject
 
 private const val SORT_POPULAR = 0
 private const val SORT_UPCOMING = 1
 private const val SORT_PLAYING = 2
 
-class PopularViewModel(private val repository: Repository) : ViewModel() {
+class PopularViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     var sortBy = SORT_POPULAR
     val moviesLiveData = MutableLiveData<List<Movie>>()

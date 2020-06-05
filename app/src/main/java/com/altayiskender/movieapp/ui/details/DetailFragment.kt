@@ -1,6 +1,7 @@
 package com.altayiskender.movieapp.ui.details
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -14,10 +15,12 @@ import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.bookmarkItem
 import com.altayiskender.movieapp.R.id.removeBookmarkItem
 import com.altayiskender.movieapp.databinding.FragmentDetailBinding
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
+import com.altayiskender.movieapp.utils.getBackdropUrl
+import com.altayiskender.movieapp.utils.loadImage
+import com.google.android.material.chip.Chip
+import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
+import javax.inject.Inject
 
 private const val ARG_MOVIE = "arg_movie"
 private const val ARG_PEOPLE = "arg_people"
@@ -25,15 +28,21 @@ private const val ARG_MOVIE_NAME = "arg_movie_name"
 private const val ARG_PEOPLE_NAME = "arg_people_name"
 
 
-class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListener {
+class DetailFragment : Fragment(), CastListAdapter.OnInteractionListener,
+    CrewListAdapter.OnInteractionListener {
 
-    override val kodein by kodein()
 
-
-    private val viewModelFactory: DetailsViewModelFactory by instance()
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var detailsViewModel: DetailViewModel
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        AndroidSupportInjection.inject(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.i("onCreate")
@@ -48,31 +57,71 @@ class DetailFragment : Fragment(), KodeinAware, DetailAdapter.OnInteractionListe
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
-        val view = binding.root
         setHasOptionsMenu(true)
-
         if (detailsViewModel.movieId == null && detailsViewModel.movieTitle == null) {
-            detailsViewModel.movieId = arguments!!.getLong(ARG_MOVIE)
-            detailsViewModel.movieTitle = arguments!!.getString(ARG_MOVIE_NAME)
-        }
+                detailsViewModel.movieId = requireArguments().getLong(ARG_MOVIE)
+                detailsViewModel.movieTitle = requireArguments().getString(ARG_MOVIE_NAME)
+            }
 
+        (activity as? AppCompatActivity)?.supportActionBar?.title = detailsViewModel.movieTitle
 
-        val detailsRv = binding.detailsRv
-        detailsRv.layoutManager = LinearLayoutManager(context)
-        detailsRv.adapter = DetailAdapter(layoutInflater, this)
+        val castListRv = binding.castListRv
+        val crewListRv = binding.crewListRv
+        castListRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        crewListRv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        castListRv.adapter = CastListAdapter(this)
+        crewListRv.adapter = CrewListAdapter(this)
 
         detailsViewModel.getMovieDetails()
-            ?.observe(viewLifecycleOwner, Observer {
-                (detailsRv.adapter as DetailAdapter).setMovie(it)
+            ?.observe(viewLifecycleOwner, Observer { movie ->
+                if (movie.backdropPath?.isNotEmpty() == true) {
+                    binding.detailsImageView.loadImage(getBackdropUrl(movie.backdropPath))
+                }
+
+                if (movie.genres?.isNotEmpty() == true) {
+                    binding.detailsGenresCg.apply {
+                        visibility = View.VISIBLE
+                        if (this.childCount == 0) {
+                            val genresList = movie.genres!!.map { it.name }
+                            genresList.forEach { str ->
+                                val chip = Chip(binding.detailsGenresCg.context)
+                                chip.text = str
+                                chip.isCheckable = false
+                                chip.isClickable = false
+                                binding.detailsGenresCg.addView(chip)
+                            }
+                        }
+                    }
+                } else {
+                    binding.detailsGenresCg.visibility = View.GONE
+                }
+
+                if (movie.overview?.isEmpty() == true) {
+                    binding.detailsDescriptionTv.visibility = View.GONE
+                } else {
+                    binding.detailsDescriptionTv.visibility = View.VISIBLE
+                    binding.detailsDescriptionTv.text = movie.overview
+                }
+
+                binding.detailsReleaseTv.text = movie.releaseDate
+
+                binding.detailsRatingTv.text = "${movie.voteAverage} / 10"
+
+                binding.detailsRuntimeTv.text = "${movie.runtime} m"
+
+                (castListRv.adapter as CastListAdapter).submitList(movie.credits?.cast)
+                (crewListRv.adapter as CrewListAdapter).submitList(movie.credits?.crew)
+
             })
-        (activity as? AppCompatActivity)?.supportActionBar?.title = detailsViewModel.movieTitle
 
         detailsViewModel.checkIfMovieSaved(detailsViewModel.movieId as Long)
             ?.observe(viewLifecycleOwner, Observer {
                 it?.let { activity?.invalidateOptionsMenu() }
             })
 
-        return view
+        return binding.root
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

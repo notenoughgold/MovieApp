@@ -1,6 +1,7 @@
 package com.altayiskender.movieapp.ui.bookmarks
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,20 +15,23 @@ import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.databinding.FragmentBookmarksBinding
 import com.altayiskender.movieapp.ui.popular.ARG_MOVIE
 import com.altayiskender.movieapp.ui.popular.ARG_MOVIE_NAME
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
+import dagger.android.support.AndroidSupportInjection
+
 import timber.log.Timber
+import javax.inject.Inject
 
+class BookmarksFragment : Fragment(), BookmarksAdapter.OnInteractionListener {
 
-class BookmarksFragment : Fragment(), KodeinAware, BookmarksAdapter.OnInteractionListener {
-    override val kodein by kodein()
-
-    private val viewModelFactory: BookmarksViewModelFactory by instance()
-    lateinit var bookmarksViewModel: BookmarksViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var bookmarksViewModel: BookmarksViewModel
 
     private var _binding: FragmentBookmarksBinding? = null
     private val binding get() = _binding!!
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        AndroidSupportInjection.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
