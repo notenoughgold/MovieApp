@@ -2,11 +2,15 @@ package com.altayiskender.movieapp.di
 
 import com.altayiskender.movieapp.BuildConfig
 import android.app.Application
+import android.content.Context
+import androidx.room.Room
 import com.altayiskender.movieapp.repository.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -14,19 +18,20 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import javax.inject.Singleton
 
 private const val SERVER_URL = "https://api.themoviedb.org/3/"
 private const val API_KEY = "api_key"
 private const val LANGUAGE = "language"
-
 private const val key = BuildConfig.TMDB_API_TOKEN
 
+@InstallIn(ApplicationComponent::class)
 @Module
-class RepoModule {
+class RepositoryModule {
 
 
     @Provides
-    @Reusable
+    @Singleton
     fun providesOkHttpClient(): OkHttpClient {
         val client = OkHttpClient.Builder().addInterceptor(AuthInterceptor())
         if (BuildConfig.DEBUG) {
@@ -36,7 +41,7 @@ class RepoModule {
     }
 
     @Provides
-    @Reusable
+    @Singleton
     fun providesRetrofitClient(okHttpClient: OkHttpClient): ApiService {
         return Retrofit.Builder()
             .baseUrl(SERVER_URL)
@@ -48,19 +53,23 @@ class RepoModule {
     }
 
     @Provides
-    @Reusable
-    fun providesAppDatabase(app: Application): AppDatabase {
-        return AppDatabase.getInstance(app)
+    @Singleton
+    fun providesAppDatabase(@ApplicationContext app: Context): AppDatabase {
+        return Room.databaseBuilder(
+            app,
+            AppDatabase::class.java,
+           DATABASE_NAME
+        ).build()
     }
 
     @Provides
-    @Reusable
+    @Singleton
     fun providesMovieBookmarksDao(database: AppDatabase): MovieBookmarksDao {
         return database.movieBookmarksDao()
     }
 
     @Provides
-    @Reusable
+    @Singleton
     fun provideRepository(dbApi: ApiService, movieBookmarksDao: MovieBookmarksDao): Repository {
         return Repository(dbApi, movieBookmarksDao)
     }

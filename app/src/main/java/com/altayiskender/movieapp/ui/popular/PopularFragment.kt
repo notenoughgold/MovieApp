@@ -1,28 +1,21 @@
 package com.altayiskender.movieapp.ui.popular
 
-
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.*
 import com.altayiskender.movieapp.databinding.FragmentPopularBinding
-import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.DaggerFragment
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
 
 
 const val ARG_MOVIE = "arg_movie"
@@ -32,14 +25,10 @@ private const val SORT_POPULAR = 0
 private const val SORT_UPCOMING = 1
 private const val SORT_PLAYING = 2
 
-@ExperimentalCoroutinesApi
-@ObsoleteCoroutinesApi
-class PopularFragment : DaggerFragment(), PopularAdapter.OnInteractionListener {
+@AndroidEntryPoint
+class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
 
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var popularViewModel: PopularViewModel
+    private  val popularViewModel: PopularViewModel by viewModels()
     private var _binding: FragmentPopularBinding? = null
     private val binding get() = _binding!!
 
@@ -47,9 +36,6 @@ class PopularFragment : DaggerFragment(), PopularAdapter.OnInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate")
         super.onCreate(savedInstanceState)
-        popularViewModel =
-            ViewModelProvider(this, viewModelFactory).get(PopularViewModel::class.java)
-
     }
 
     override fun onCreateView(

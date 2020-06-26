@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
@@ -19,6 +20,7 @@ import com.altayiskender.movieapp.utils.getBackdropUrl
 import com.altayiskender.movieapp.utils.loadImage
 import com.google.android.material.chip.Chip
 import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -27,35 +29,25 @@ private const val ARG_PEOPLE = "arg_people"
 private const val ARG_MOVIE_NAME = "arg_movie_name"
 private const val ARG_PEOPLE_NAME = "arg_people_name"
 
-
+@AndroidEntryPoint
 class DetailFragment : Fragment(), CastListAdapter.OnInteractionListener,
     CrewListAdapter.OnInteractionListener {
 
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var detailsViewModel: DetailViewModel
+    private val detailsViewModel: DetailViewModel by viewModels()
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        AndroidSupportInjection.inject(this)
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.i("onCreate")
-        super.onCreate(savedInstanceState)
-        detailsViewModel =
-            ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
         if (detailsViewModel.movieId == null && detailsViewModel.movieTitle == null) {

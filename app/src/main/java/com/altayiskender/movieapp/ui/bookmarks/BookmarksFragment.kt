@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
@@ -16,30 +17,21 @@ import com.altayiskender.movieapp.databinding.FragmentBookmarksBinding
 import com.altayiskender.movieapp.ui.popular.ARG_MOVIE
 import com.altayiskender.movieapp.ui.popular.ARG_MOVIE_NAME
 import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class BookmarksFragment : Fragment(), BookmarksAdapter.OnInteractionListener {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var bookmarksViewModel: BookmarksViewModel
-
+    private  val bookmarksViewModel: BookmarksViewModel by viewModels()
     private var _binding: FragmentBookmarksBinding? = null
     private val binding get() = _binding!!
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        AndroidSupportInjection.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         Timber.i("onCreate")
         super.onCreate(savedInstanceState)
-        bookmarksViewModel =
-            ViewModelProvider(this, viewModelFactory).get(BookmarksViewModel::class.java)
-
     }
 
     override fun onCreateView(

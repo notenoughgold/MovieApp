@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.databinding.FragmentPeopleBinding
 import com.altayiskender.movieapp.models.PeopleResponse
 import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,27 +25,18 @@ private const val ARG_MOVIE = "arg_movie"
 private const val ARG_PEOPLE_NAME = "arg_people_name"
 private const val ARG_MOVIE_NAME = "arg_movie_name"
 
-
+@AndroidEntryPoint
 class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var peopleViewModel: PeopleViewModel
+    private val peopleViewModel: PeopleViewModel by viewModels()
     private lateinit var peopleAdapter: PeopleAdapter
     private var _binding: FragmentPeopleBinding? = null
     private val binding get() = _binding!!
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        AndroidSupportInjection.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         Timber.i("onCreate")
         super.onCreate(savedInstanceState)
-        peopleViewModel = ViewModelProvider(this, viewModelFactory).get(PeopleViewModel::class.java)
-
     }
 
     override fun onCreateView(

@@ -1,5 +1,6 @@
 package com.altayiskender.movieapp.ui.details
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.altayiskender.movieapp.models.Movie
@@ -10,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class DetailViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class DetailViewModel @ViewModelInject constructor(private val repository: Repository) : ViewModel() {
 
     private var movieLiveData = MutableLiveData<Movie>()
     var movieSavedStatusLiveData = MutableLiveData<Boolean>()

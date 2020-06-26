@@ -19,7 +19,7 @@ class CrewListAdapter(
     private val onInteractionListener: OnInteractionListener
 ) :
 
-    ListAdapter<CrewOfShow, CrewListAdapter.CrewViewHolder>((CrewItemDiffCallback())) {
+    ListAdapter<CrewOfShow, CrewListAdapter.CrewViewHolder>(CrewItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrewViewHolder {
         return CrewViewHolder(
@@ -29,44 +29,6 @@ class CrewListAdapter(
             onInteractionListener
         )
     }
-//            RecyclerView.ViewHolder {
-//        return when (viewType) {
-//            VIEW_TYPE_MOVIE_DETAIL -> {
-//                DetailsViewHolder(
-//                    CardDetailsBinding.inflate(
-//                        LayoutInflater.from(parent.context), parent, false
-//                    )
-//                )
-//            }
-//            VIEW_TYPE_MOVIE_CAST -> {
-//                CastViewHolder(
-//                    CardCastBinding.inflate(
-//                        LayoutInflater.from(parent.context), parent, false
-//                    ),
-//                    onInteractionListener
-//                )
-//            }
-//            VIEW_TYPE_MOVIE_DIRECTOR -> {
-//                DirectorViewHolder(
-//                    CardDirectorBinding.inflate(
-//                        LayoutInflater.from(parent.context), parent, false
-//                    ),
-//                    onInteractionListener
-//                )
-//            }
-//            VIEW_TYPE_MOVIE_HEADER -> {
-//                HeaderViewHolder(
-//                    HeaderRecyclerViewBinding.inflate(
-//                        LayoutInflater.from(parent.context), parent, false
-//                    )
-//
-//                )
-//            }
-//            else -> {
-//                throw IllegalArgumentException("Invalid view type, value of $viewType")
-//            }
-//        }
-//    }
 
     override fun onBindViewHolder(holder: CrewViewHolder, position: Int) {
         holder.bind(getItem(position))
@@ -78,7 +40,7 @@ class CrewListAdapter(
             oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: CrewOfShow, newItem: CrewOfShow): Boolean {
-            return oldItem.id == newItem.id && oldItem.job == newItem.job && oldItem.name == newItem.name && oldItem.profilePath == newItem.profilePath
+            return oldItem == newItem
         }
 
     }
