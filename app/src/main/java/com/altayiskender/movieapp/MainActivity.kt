@@ -1,10 +1,10 @@
 package com.altayiskender.movieapp
 
-
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -14,7 +14,6 @@ import com.altayiskender.movieapp.R.id.aboutItem
 import com.altayiskender.movieapp.databinding.ActivityMainBinding
 import com.altayiskender.movieapp.utils.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
-import me.jfenn.attribouter.Attribouter
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             aboutItem -> {
-                Attribouter.from(this).withFile(R.xml.about).show()
+                Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
