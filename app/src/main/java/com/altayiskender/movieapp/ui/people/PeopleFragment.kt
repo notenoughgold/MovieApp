@@ -1,7 +1,5 @@
 package com.altayiskender.movieapp.ui.people
 
-
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,21 +7,15 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.databinding.FragmentPeopleBinding
 import com.altayiskender.movieapp.models.PeopleResponse
-import dagger.android.support.AndroidSupportInjection
+import com.altayiskender.movieapp.ui.details.DetailFragment.Companion.ARG_MOVIE
+import com.altayiskender.movieapp.ui.details.DetailFragment.Companion.ARG_MOVIE_NAME
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
-
-private const val ARG_PEOPLE = "arg_people"
-private const val ARG_MOVIE = "arg_movie"
-private const val ARG_PEOPLE_NAME = "arg_people_name"
-private const val ARG_MOVIE_NAME = "arg_movie_name"
 
 @AndroidEntryPoint
 class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
@@ -42,8 +34,7 @@ class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         _binding = FragmentPeopleBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
@@ -84,5 +75,10 @@ class PeopleFragment : Fragment(), PeopleAdapter.OnInteractionListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val ARG_PEOPLE_NAME = "arg_people_name"
+        const val ARG_PEOPLE = "arg_people"
     }
 }

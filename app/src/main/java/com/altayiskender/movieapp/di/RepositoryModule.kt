@@ -1,16 +1,16 @@
 package com.altayiskender.movieapp.di
 
-import com.altayiskender.movieapp.BuildConfig
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.altayiskender.movieapp.API_KEY
+import com.altayiskender.movieapp.BuildConfig
 import com.altayiskender.movieapp.repository.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -21,21 +21,22 @@ import java.util.*
 import javax.inject.Singleton
 
 private const val SERVER_URL = "https://api.themoviedb.org/3/"
-private const val API_KEY = "api_key"
+private const val API_KEY_NAME = "api_key"
 private const val LANGUAGE = "language"
-private const val key = BuildConfig.TMDB_API_TOKEN
+private const val key = API_KEY
 
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
 class RepositoryModule {
-
 
     @Provides
     @Singleton
     fun providesOkHttpClient(): OkHttpClient {
         val client = OkHttpClient.Builder().addInterceptor(AuthInterceptor())
         if (BuildConfig.DEBUG) {
-            client.addNetworkInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC })
+            client.addNetworkInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BASIC
+            })
         }
         return client.build()
     }
@@ -58,7 +59,7 @@ class RepositoryModule {
         return Room.databaseBuilder(
             app,
             AppDatabase::class.java,
-           DATABASE_NAME
+            DATABASE_NAME
         ).build()
     }
 
@@ -76,12 +77,12 @@ class RepositoryModule {
 
 }
 
-
 class AuthInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val url = request.url.newBuilder().addQueryParameter(API_KEY, key).addQueryParameter(LANGUAGE, Locale.getDefault().language).build()
+        val url = request.url.newBuilder().addQueryParameter(API_KEY_NAME, key).addQueryParameter(
+            LANGUAGE, Locale.getDefault().language
+        ).build()
         return chain.proceed(request.newBuilder().url(url).build())
-
     }
 }

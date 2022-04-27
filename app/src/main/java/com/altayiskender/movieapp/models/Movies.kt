@@ -1,5 +1,5 @@
 package com.altayiskender.movieapp.models
 
 data class Movies(
-    val results: List<Movie>?
+    val results: List<Movie>
 )

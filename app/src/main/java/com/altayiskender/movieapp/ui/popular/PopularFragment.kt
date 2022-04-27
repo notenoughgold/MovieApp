@@ -9,17 +9,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.*
 import com.altayiskender.movieapp.databinding.FragmentPopularBinding
+import com.altayiskender.movieapp.ui.details.DetailFragment.Companion.ARG_MOVIE
+import com.altayiskender.movieapp.ui.details.DetailFragment.Companion.ARG_MOVIE_NAME
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-
-
-const val ARG_MOVIE = "arg_movie"
-const val ARG_MOVIE_NAME = "arg_movie_name"
 
 private const val SORT_POPULAR = 0
 private const val SORT_UPCOMING = 1
@@ -28,7 +26,7 @@ private const val SORT_PLAYING = 2
 @AndroidEntryPoint
 class PopularFragment : Fragment(), PopularAdapter.OnInteractionListener {
 
-    private  val popularViewModel: PopularViewModel by viewModels()
+    private val popularViewModel: PopularViewModel by viewModels()
     private var _binding: FragmentPopularBinding? = null
     private val binding get() = _binding!!
 

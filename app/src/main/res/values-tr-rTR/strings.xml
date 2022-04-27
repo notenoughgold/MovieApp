@@ -13,7 +13,6 @@
     <string name="nav_bookmarks">Beğenilenler</string>
     <string name="nav_discover">Keşfet</string>
     <string name="now_playing">Vizyonda</string>
-    <string name="open_source_licenses">Açık Kaynak Lisansları</string>
     <string name="popular">Popüler</string>
     <string name="rating">Değerlendirme</string>
     <string name="release_date">Çıkış tarihi</string>
@@ -23,8 +22,6 @@
     <string name="show_less">Daha fazla göster</string>
     <string name="show_more">Daha az göster</string>
     <string name="sortBy">Sırala</string>
-    <string name="tmdb_usage">Bu uygulama film bilgileri ve görüntülerini TheMovieDatabase (TMDb) tarafından almaktadır. https://www.themoviedb.org/</string>
     <string name="try_again">Tekrar dene</string>
     <string name="upcoming">Yakında</string>
-    <string name="description">Kullanıcının film keşfetmesine yardımcı olan bir uygulama</string>
 </resources>

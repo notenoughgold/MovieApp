@@ -1,26 +1,19 @@
 package com.altayiskender.movieapp.ui.bookmarks
 
-
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.databinding.FragmentBookmarksBinding
-import com.altayiskender.movieapp.ui.popular.ARG_MOVIE
-import com.altayiskender.movieapp.ui.popular.ARG_MOVIE_NAME
-import dagger.android.support.AndroidSupportInjection
+import com.altayiskender.movieapp.ui.details.DetailFragment.Companion.ARG_MOVIE
+import com.altayiskender.movieapp.ui.details.DetailFragment.Companion.ARG_MOVIE_NAME
 import dagger.hilt.android.AndroidEntryPoint
-
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class BookmarksFragment : Fragment(), BookmarksAdapter.OnInteractionListener {
@@ -37,7 +30,7 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.OnInteractionListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Timber.i("onCreateView")
         // Inflate the layout for this fragment
         _binding = FragmentBookmarksBinding.inflate(inflater, container, false)
@@ -50,15 +43,14 @@ class BookmarksFragment : Fragment(), BookmarksAdapter.OnInteractionListener {
         bookmarksRv.adapter = bookmarksAdapter
 
         bookmarksViewModel.getAllBookmarkedMovies()
-            ?.observe(viewLifecycleOwner, Observer {
+            ?.observe(viewLifecycleOwner) {
                 bookmarksAdapter.setBookmarks(it)
-
                 if (it.isEmpty()) {
                     binding.emptyView.visibility = View.VISIBLE
                 } else {
                     binding.emptyView.visibility = View.GONE
                 }
-            })
+            }
         return view
     }
 

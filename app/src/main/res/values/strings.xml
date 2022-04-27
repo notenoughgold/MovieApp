@@ -17,8 +17,6 @@
     <string name="movie_saved">Movie is saved to bookmarks</string>
     <string name="bookmark">Bookmark</string>
 
-    <string name="open_source_licenses">Open Source Licenses</string>
-    <string name="tmdb_usage">This app gets movie information and images from The Movie Database. https://www.themoviedb.org/</string>
     <string name="remove_bookmark">Remove Bookmark</string>
     <string name="movie_unsaved">Movie is removed from bookmarks</string>
     <string name="empty">Empty</string>
@@ -27,7 +25,6 @@
     <string name="release_date">Release Date</string>
     <string name="rating">Rating</string>
     <string name="runtime">Runtime</string>
-    <string name="description">An app that helps user search for movies</string>
     <string name="movie_poster">Movie poster</string>
     <string name="person_portrait">Person portrait</string>
     <string name="cast">Cast</string>

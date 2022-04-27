@@ -1,22 +1,22 @@
 package com.altayiskender.movieapp.ui.popular
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.altayiskender.movieapp.models.Movie
 import com.altayiskender.movieapp.models.Movies
 import com.altayiskender.movieapp.repository.Repository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
+import javax.inject.Inject
 
 private const val SORT_POPULAR = 0
 private const val SORT_UPCOMING = 1
 private const val SORT_PLAYING = 2
 
-class PopularViewModel @ViewModelInject constructor(private val repository: Repository) : ViewModel() {
+@HiltViewModel
+class PopularViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     var sortBy = SORT_POPULAR
     val moviesLiveData = MutableLiveData<List<Movie>>()
@@ -27,38 +27,37 @@ class PopularViewModel @ViewModelInject constructor(private val repository: Repo
     }
 
     fun searchMovie(query: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val result = repository.searchMovie(query)
-            withContext(Dispatchers.Main) {
+        viewModelScope.launch {
+            try {
+                val result = repository.searchMovie(query)
                 moviesLiveData.value = result.results
+            } catch (e: Throwable) {
+                Timber.d(e, "search $query movies error")
+                hasError.postValue(true)
+
             }
+
         }
     }
 
 
     fun getHomepageMovies() {
         hasError.value = false
-        CoroutineScope(Dispatchers.IO).launch {
-            var result: Movies? = null
+        viewModelScope.launch {
             try {
-                when (sortBy) {
+                val result: Movies = when (sortBy) {
                     SORT_POPULAR ->
-                        result = repository.getPopularMovies()
+                        repository.getPopularMovies()
                     SORT_PLAYING ->
-                        result = repository.getNowPlayingMovies()
+                        repository.getNowPlayingMovies()
                     SORT_UPCOMING ->
-                        result = repository.getUpcomingMovies()
+                        repository.getUpcomingMovies()
+                    else -> repository.getPopularMovies()
                 }
-
-                withContext(Dispatchers.Main) {
-                    moviesLiveData.value = result?.results
-                }
+                moviesLiveData.value = result.results
             } catch (e: Throwable) {
                 Timber.d(e, "get $sortBy movies error")
-
-                withContext(Dispatchers.Main) {
-                    hasError.value = true
-                }
+                hasError.value = true
             }
         }
     }

@@ -1,17 +1,18 @@
 package com.altayiskender.movieapp.ui.details
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.altayiskender.movieapp.models.Movie
 import com.altayiskender.movieapp.repository.Repository
-import kotlinx.coroutines.CoroutineScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class DetailViewModel @ViewModelInject constructor(private val repository: Repository) : ViewModel() {
+@HiltViewModel
+class DetailViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private var movieLiveData = MutableLiveData<Movie>()
     var movieSavedStatusLiveData = MutableLiveData<Boolean>()
@@ -23,40 +24,36 @@ class DetailViewModel @ViewModelInject constructor(private val repository: Repos
         if (movieId == null) {
             return null
         }
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             val result = repository.getMovieDetails(movieId!!)
-
-            withContext(Dispatchers.Main) {
-                movieLiveData.value = result
-            }
-
+            movieLiveData.postValue(result)
         }
         return movieLiveData
     }
 
     fun saveMovieToBookmarks() {
-        CoroutineScope(Dispatchers.IO).launch {
-            repository.insertBookmarkedMovie(movieLiveData.value!!)
-            withContext(Dispatchers.Main) {
-                movieSavedStatusLiveData.value = true
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                repository.insertBookmarkedMovie(movieLiveData.value!!)
+                movieSavedStatusLiveData.postValue(true)
             }
         }
     }
 
     fun deleteMovieFromBookmarks() {
-        CoroutineScope(Dispatchers.IO).launch {
-            repository.deleteBookmarkedMovie(movieLiveData.value!!)
-            withContext(Dispatchers.Main) {
-                movieSavedStatusLiveData.value = false
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                repository.deleteBookmarkedMovie(movieLiveData.value!!)
+                movieSavedStatusLiveData.postValue(false)
             }
         }
     }
 
-    fun checkIfMovieSaved(movieId: Long): MutableLiveData<Boolean>? {
-        CoroutineScope(Dispatchers.IO).launch {
-            val n = repository.checkMovieIdIfSaved(movieId)
-            withContext(Dispatchers.Main) {
-                movieSavedStatusLiveData.value = n.isNotEmpty()
+    fun checkIfMovieSaved(movieId: Long): MutableLiveData<Boolean> {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val n = repository.checkMovieIdIfSaved(movieId)
+                movieSavedStatusLiveData.postValue(n.isNotEmpty())
             }
         }
         return movieSavedStatusLiveData

@@ -40,7 +40,6 @@
             android:textStyle="italic"
             tools:text="LWIAY" />
 
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>
 

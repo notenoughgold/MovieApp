@@ -1,7 +1,5 @@
 package com.altayiskender.movieapp.ui.details
 
-
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -9,25 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.R.id.bookmarkItem
 import com.altayiskender.movieapp.R.id.removeBookmarkItem
 import com.altayiskender.movieapp.databinding.FragmentDetailBinding
+import com.altayiskender.movieapp.ui.people.PeopleFragment.Companion.ARG_PEOPLE
+import com.altayiskender.movieapp.ui.people.PeopleFragment.Companion.ARG_PEOPLE_NAME
 import com.altayiskender.movieapp.utils.getBackdropUrl
 import com.altayiskender.movieapp.utils.loadImage
 import com.google.android.material.chip.Chip
-import dagger.android.support.AndroidSupportInjection
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
-
-private const val ARG_MOVIE = "arg_movie"
-private const val ARG_PEOPLE = "arg_people"
-private const val ARG_MOVIE_NAME = "arg_movie_name"
-private const val ARG_PEOPLE_NAME = "arg_people_name"
 
 @AndroidEntryPoint
 class DetailFragment : Fragment(), CastListAdapter.OnInteractionListener,
@@ -37,8 +29,6 @@ class DetailFragment : Fragment(), CastListAdapter.OnInteractionListener,
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.i("onCreate")
@@ -47,13 +37,13 @@ class DetailFragment : Fragment(), CastListAdapter.OnInteractionListener,
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
         if (detailsViewModel.movieId == null && detailsViewModel.movieTitle == null) {
-                detailsViewModel.movieId = requireArguments().getLong(ARG_MOVIE)
-                detailsViewModel.movieTitle = requireArguments().getString(ARG_MOVIE_NAME)
-            }
+            detailsViewModel.movieId = requireArguments().getLong(ARG_MOVIE)
+            detailsViewModel.movieTitle = requireArguments().getString(ARG_MOVIE_NAME)
+        }
 
         (activity as? AppCompatActivity)?.supportActionBar?.title = detailsViewModel.movieTitle
 
@@ -109,9 +99,9 @@ class DetailFragment : Fragment(), CastListAdapter.OnInteractionListener,
             })
 
         detailsViewModel.checkIfMovieSaved(detailsViewModel.movieId as Long)
-            ?.observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner) {
                 it?.let { activity?.invalidateOptionsMenu() }
-            })
+            }
 
         return binding.root
     }
@@ -119,7 +109,7 @@ class DetailFragment : Fragment(), CastListAdapter.OnInteractionListener,
     override fun onPrepareOptionsMenu(menu: Menu) {
         when (detailsViewModel.movieSavedStatusLiveData.value) {
             true -> menu.findItem(removeBookmarkItem)?.isVisible = true
-            false -> menu.findItem(bookmarkItem)?.isVisible = true
+            false, null -> menu.findItem(bookmarkItem)?.isVisible = true
         }
     }
 
@@ -160,5 +150,10 @@ class DetailFragment : Fragment(), CastListAdapter.OnInteractionListener,
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val ARG_MOVIE = "arg_movie"
+        const val ARG_MOVIE_NAME = "arg_movie_name"
     }
 }
