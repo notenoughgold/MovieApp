@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.altayiskender.movieapp.databinding.CardBookmarksBinding
-import com.altayiskender.movieapp.models.Movie
-import com.altayiskender.movieapp.utils.getPosterUrl
-import com.altayiskender.movieapp.utils.loadImage
+import com.altayiskender.movieapp.domain.models.Movie
 
 
 class BookmarksAdapter(
@@ -39,7 +37,6 @@ class BookmarksAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(bookmark: Movie) {
-            binding.bookmarkPosterIv.loadImage(getPosterUrl(bookmark.posterPath))
             binding.bookmarkTitleTv.text = bookmark.title
             binding.bookmarkReleaseYearTv.text = bookmark.releaseDate
 

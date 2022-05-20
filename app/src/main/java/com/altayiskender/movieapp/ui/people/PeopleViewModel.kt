@@ -2,8 +2,8 @@ package com.altayiskender.movieapp.ui.people
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.altayiskender.movieapp.models.PeopleResponse
-import com.altayiskender.movieapp.repository.Repository
+import com.altayiskender.movieapp.data.Repository
+import com.altayiskender.movieapp.domain.models.PeopleResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,40 +1,43 @@
 package com.altayiskender.movieapp.ui.details
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.altayiskender.movieapp.models.Movie
-import com.altayiskender.movieapp.repository.Repository
+import com.altayiskender.movieapp.data.Repository
+import com.altayiskender.movieapp.domain.models.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-    private var movieLiveData = MutableLiveData<Movie>()
+    var movieState = mutableStateOf<Movie?>(null)
     var movieSavedStatusLiveData = MutableLiveData<Boolean>()
-    var movieId: Long? = null
-    var movieTitle: String? = null
+    var loading = mutableStateOf(false)
 
 
-    fun getMovieDetails(): MutableLiveData<Movie>? {
-        if (movieId == null) {
-            return null
-        }
+    fun getMovieDetails(id: Long) {
         viewModelScope.launch {
-            val result = repository.getMovieDetails(movieId!!)
-            movieLiveData.postValue(result)
+            loading.value = true
+            try {
+                val result = repository.getMovieDetails(id)
+                movieState.value = result
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+            loading.value = false
         }
-        return movieLiveData
     }
 
     fun saveMovieToBookmarks() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                repository.insertBookmarkedMovie(movieLiveData.value!!)
+                repository.insertBookmarkedMovie(movieState.value!!)
                 movieSavedStatusLiveData.postValue(true)
             }
         }
@@ -43,7 +46,7 @@ class DetailViewModel @Inject constructor(private val repository: Repository) : 
     fun deleteMovieFromBookmarks() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                repository.deleteBookmarkedMovie(movieLiveData.value!!)
+                repository.deleteBookmarkedMovie(movieState.value!!)
                 movieSavedStatusLiveData.postValue(false)
             }
         }

@@ -18,7 +18,7 @@
             android:layout_height="100dp"
             android:background="@android:color/darker_gray"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_person" />
+            android:src="@drawable/ic_person_placeholder" />
 
         <TextView
             android:id="@+id/castNameTv"

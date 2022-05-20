@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.altayiskender.movieapp.databinding.CardPeopleDetailsBinding
 import com.altayiskender.movieapp.databinding.CardPeopleWorksBinding
-import com.altayiskender.movieapp.models.CastAsPerson
-import com.altayiskender.movieapp.models.PeopleResponse
-import com.altayiskender.movieapp.utils.getPosterUrl
-import com.altayiskender.movieapp.utils.loadImage
+import com.altayiskender.movieapp.domain.models.CastAsPerson
+import com.altayiskender.movieapp.domain.models.PeopleResponse
 
 
 private const val VIEW_TYPE_PEOPLE_DETAIL = 0
@@ -90,7 +88,6 @@ class PeopleAdapter(
                 return
             }
             if (peopleResponse.profilePath?.isNotEmpty() == true) {
-                binding.peoplePhotoIv.loadImage(getPosterUrl(peopleResponse.profilePath))
             }
 
             if (peopleResponse.birthday?.isNotEmpty() == true) {
@@ -152,7 +149,6 @@ class PeopleAdapter(
                 return
             }
 
-            binding.workPosterIv.loadImage(getPosterUrl(cast.posterPath))
             binding.workNameTv.text = cast.title
             binding.castCharacterTv.text = cast.character
             var airDate: String? = null

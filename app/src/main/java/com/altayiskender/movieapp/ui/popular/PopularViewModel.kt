@@ -1,14 +1,17 @@
 package com.altayiskender.movieapp.ui.popular
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.altayiskender.movieapp.models.Movie
-import com.altayiskender.movieapp.models.Movies
-import com.altayiskender.movieapp.repository.Repository
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.altayiskender.movieapp.data.Repository
+import com.altayiskender.movieapp.data.remote.MoviePagingSource
+import com.altayiskender.movieapp.domain.models.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 private const val SORT_POPULAR = 0
@@ -19,48 +22,56 @@ private const val SORT_PLAYING = 2
 class PopularViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     var sortBy = SORT_POPULAR
-    val moviesLiveData = MutableLiveData<List<Movie>>()
-    var hasError = MutableLiveData<Boolean>()
+    val movies: Flow<PagingData<Movie>> =
+        Pager(PagingConfig(pageSize = 20)) {
+            MoviePagingSource(repository)
+        }.flow.cachedIn(viewModelScope)
+
+
+    var hasError = mutableStateOf<Boolean>(false)
+    var isLoading = mutableStateOf(false)
 
     init {
-        getHomepageMovies()
+        // getHomepageMovies()
     }
 
-    fun searchMovie(query: String) {
-        viewModelScope.launch {
-            try {
-                val result = repository.searchMovie(query)
-                moviesLiveData.value = result.results
-            } catch (e: Throwable) {
-                Timber.d(e, "search $query movies error")
-                hasError.postValue(true)
+//    fun searchMovie(query: String) {
+//        viewModelScope.launch {
+//            try {
+//                val result = repository.searchMovie(query)
+//                movies.value = result.results
+//            } catch (e: Throwable) {
+//                Timber.d(e, "search $query movies error")
+//                hasError.value = true
+//
+//            }
+//
+//        }
+//    }
 
-            }
 
-        }
-    }
-
-
-    fun getHomepageMovies() {
-        hasError.value = false
-        viewModelScope.launch {
-            try {
-                val result: Movies = when (sortBy) {
-                    SORT_POPULAR ->
-                        repository.getPopularMovies()
-                    SORT_PLAYING ->
-                        repository.getNowPlayingMovies()
-                    SORT_UPCOMING ->
-                        repository.getUpcomingMovies()
-                    else -> repository.getPopularMovies()
-                }
-                moviesLiveData.value = result.results
-            } catch (e: Throwable) {
-                Timber.d(e, "get $sortBy movies error")
-                hasError.value = true
-            }
-        }
-    }
+//    fun getHomepageMovies() {
+//        hasError.value = false
+//        viewModelScope.launch {
+//            isLoading.value = true
+//            try {
+//                val result: Movies = when (sortBy) {
+//                    SORT_POPULAR ->
+//                        repository.getPopularMovies()
+//                    SORT_PLAYING ->
+//                        repository.getNowPlayingMovies()
+//                    SORT_UPCOMING ->
+//                        repository.getUpcomingMovies()
+//                    else -> repository.getPopularMovies()
+//                }
+//                movies.value = result.results
+//            } catch (e: Throwable) {
+//                Timber.d(e, "get $sortBy movies error")
+//                hasError.value = true
+//            }
+//            isLoading.value = false
+//        }
+//    }
 }
 
 

@@ -5,9 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.altayiskender.movieapp.databinding.ListItemHomeBinding
-import com.altayiskender.movieapp.models.Movie
-import com.altayiskender.movieapp.utils.getPosterUrl
-import com.altayiskender.movieapp.utils.loadImage
+import com.altayiskender.movieapp.domain.models.Movie
 
 
 class PopularAdapter(
@@ -53,7 +51,6 @@ class PopularAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-            binding.homePosterImageView.loadImage(getPosterUrl(movie.posterPath))
             binding.homeNameTextView.text = movie.title
             binding.root.setOnClickListener {
                 onInteractionListener.onItemClicked(movie.id!!, movie.title!!)
