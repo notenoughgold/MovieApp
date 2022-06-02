@@ -1,13 +1,10 @@
-package com.altayiskender.movieapp.ui.details
+package com.altayiskender.movieapp.ui.people
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,41 +27,28 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.altayiskender.movieapp.R
-import com.altayiskender.movieapp.domain.models.Movie
+import com.altayiskender.movieapp.domain.models.PeopleResponse
 import com.altayiskender.movieapp.ui.NavigationPage
-import com.altayiskender.movieapp.utils.getBackdropUrl
 import com.altayiskender.movieapp.utils.getPosterUrl
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailPage(
-    movieId: Long,
-    viewModel: DetailViewModel,
+fun PeoplePage(
+    peopleId: Long,
+    viewModel: PeopleViewModel,
     navController: NavController
 ) {
-    val movie by viewModel.movieState
-//    val hasError by viewModel.hasError
-    val isLoading by viewModel.loading
+    val personState by viewModel.peopleLiveData.observeAsState()
+    val isLoading by viewModel.isLoading
 
-    LaunchedEffect(key1 = movieId) {
-        viewModel.getMovieDetails(movieId)
+    LaunchedEffect(key1 = peopleId) {
+        viewModel.getPeopleDetails(peopleId)
     }
-    Box {
-        movie?.backdropPath?.let {
-            AsyncImage(
-                model = getBackdropUrl(it),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillHeight,
-            )
-        }
-    }
+
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
         topBar = {
-            movie?.title?.let {
+            personState?.name?.let {
                 SmallTopAppBar(
-                    colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Transparent),
                     title = {
                         Text(
                             text = it,
@@ -85,9 +70,11 @@ fun DetailPage(
             ) {
                 val (progress) = createRefs()
 
-                movie?.let {
-                    MovieDetailBody(
-                        movie = it, modifier = Modifier.fillMaxSize(), navController = navController
+                personState?.let {
+                    PersonDetailBody(
+                        person = it,
+                        modifier = Modifier.fillMaxSize(),
+                        navController = navController
                     )
                 }
                 AnimatedVisibility(visible = isLoading, modifier = Modifier.constrainAs(progress) {
@@ -103,66 +90,59 @@ fun DetailPage(
 }
 
 @Composable
-private fun MovieDetailBody(movie: Movie, modifier: Modifier, navController: NavController) {
+fun PersonDetailBody(person: PeopleResponse, modifier: Modifier, navController: NavController) {
     Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
+        modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
+        Row {
+            Spacer(modifier = Modifier.weight(1f))
+            AsyncImage(
+                model = getPosterUrl(person.profilePath),
+                contentScale = ContentScale.Crop,
+                contentDescription = person.name,
+                fallback = painterResource(id = R.drawable.ic_person_placeholder),
+                error = painterResource(id = R.drawable.ic_person_placeholder),
+                placeholder = painterResource(id = R.drawable.ic_person_placeholder),
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .height(150.dp)
+                    .aspectRatio(1f)
+                    .fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .padding(16.dp, 16.dp, 16.dp, 0.dp)
                 .fillMaxWidth()
         ) {
-            if (movie.releaseDate?.isNotBlank() == true) {
+            if (person.birthday?.isNotBlank() == true) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = stringResource(id = R.string.release_date),
+                        text = stringResource(id = R.string.Birthday),
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    Text(text = movie.releaseDate, fontWeight = FontWeight.Bold)
+                    Text(text = person.birthday, fontWeight = FontWeight.Bold)
                 }
             }
-            if (movie.voteAverage != null && movie.voteAverage > 0) {
+            if (!person.placeOfBirth.isNullOrBlank()) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = stringResource(id = R.string.rating),
+                        text = stringResource(id = R.string.Birthplace),
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    Text(text = movie.voteAverage.toString(), fontWeight = FontWeight.Bold)
-                }
-            }
-            if (movie.runtime != null && movie.runtime > 0) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = stringResource(id = R.string.runtime),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = person.placeOfBirth.toString(),
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
-                    Text(text = movie.runtime.toString(), fontWeight = FontWeight.Bold)
                 }
             }
-        }
-        if (!movie.genres.isNullOrEmpty()) {
-            val genres = movie.genres
-            LazyRow(
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(genres.size) {
-                    GenreChip(text = genres[it].name)
-                }
-            }
-        }
-        movie.overview?.let {
-            Text(
-                text = it,
-                modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 16.dp),
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
 
-
-        if (!movie.credits?.cast.isNullOrEmpty()) {
+        }
+        if (!person.movieCredits?.cast.isNullOrEmpty()) {
             Text(
                 text = stringResource(id = R.string.cast),
                 modifier = Modifier.padding(horizontal = 16.dp)
@@ -171,18 +151,19 @@ private fun MovieDetailBody(movie: Movie, modifier: Modifier, navController: Nav
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(movie.credits!!.cast!!.size) {
-                    val person = movie.credits.cast!![it]
-                    val name = person.name
-                    val id = person.id
-                    val url = person.profilePath
-                    val work = person.character
-                    PersonItem(id, name, url, work, navController)
+                items(person.movieCredits!!.cast!!.size) {
+                    val movie = person.movieCredits.cast!![it]
+                    val name = movie!!.title
+                    val id = movie.id
+                    val url = movie.posterPath
+                    val work = movie.character
+                    val date = movie.releaseDate
+                    CreditItem(id, name, url, work, date, navController)
                 }
             }
         }
 
-        if (!movie.credits?.crew.isNullOrEmpty()) {
+        if (!person.movieCredits?.crew.isNullOrEmpty()) {
             Text(
                 text = stringResource(id = R.string.crew),
                 modifier = Modifier.padding(horizontal = 16.dp)
@@ -191,26 +172,36 @@ private fun MovieDetailBody(movie: Movie, modifier: Modifier, navController: Nav
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(movie.credits!!.crew!!.size) {
-                    val person = movie.credits.crew!![it]
-                    val name = person.name
-                    val id = person.id
-                    val url = person.profilePath
-                    val work = person.job
-                    PersonItem(id, name, url, work, navController)
+                items(person.movieCredits!!.crew!!.size) {
+                    val movie = person.movieCredits.crew!![it]
+                    val name = movie!!.title
+                    val id = movie.id
+                    val url = movie.posterPath
+                    val work = movie.job
+                    val date = movie.releaseDate
+                    CreditItem(id, name, url, work, date, navController)
                 }
             }
+        }
+        if (!person.biography.isNullOrBlank()) {
+            Text(
+                text = person.biography,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(16.dp)
+            )
         }
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PersonItem(
+private fun CreditItem(
     id: Long,
-    name: String,
+    name: String?,
     url: String?,
-    work: String,
+    work: String?,
+    date: String?,
     navController: NavController
 ) {
     Surface(onClick = { onClickItem(id, navController) }, color = Color.Transparent) {
@@ -220,45 +211,41 @@ private fun PersonItem(
         ) {
             AsyncImage(
                 model = getPosterUrl(url),
+                modifier = Modifier.aspectRatio(0.67f),
                 fallback = painterResource(id = R.drawable.ic_person_placeholder),
                 error = painterResource(id = R.drawable.ic_person_placeholder),
                 placeholder = painterResource(id = R.drawable.ic_person_placeholder),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .height(80.dp)
-                    .aspectRatio(1f)
             )
-            Text(
-                text = name,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = work,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            if (!name.isNullOrBlank()) {
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            if (!work.isNullOrBlank()) {
+                Text(
+                    text = work,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            if (!date.isNullOrBlank()) {
+                Text(
+                    text = date,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
 
-@Composable
-private fun GenreChip(text: String) {
-    Box(
-        modifier = Modifier.border(
-            1.dp,
-            color = MaterialTheme.colorScheme.onSurface,
-            shape = RoundedCornerShape(corner = CornerSize(12.dp))
-        )
-    ) {
-        Text(text = text, Modifier.padding(8.dp))
-    }
-}
-
 private fun onClickItem(id: Long, navController: NavController) {
-    navController.navigate("${NavigationPage.PeopleDetail.routeName}/${id}")
+    navController.navigate("${NavigationPage.MovieDetail.routeName}/${id}")
 }

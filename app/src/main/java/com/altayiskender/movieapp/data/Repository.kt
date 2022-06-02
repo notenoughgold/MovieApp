@@ -16,7 +16,7 @@ interface Repository {
     suspend fun getNowPlayingMovies(): MoviesResponse
 
     // Get details to the given movie.
-    suspend fun getMovieDetails(id: Long): Movie
+    suspend fun getMovieDetails(id: Long): Result<Movie>
 
     // Search all movies for the given query.
     suspend fun searchMovie(query: String): MoviesResponse

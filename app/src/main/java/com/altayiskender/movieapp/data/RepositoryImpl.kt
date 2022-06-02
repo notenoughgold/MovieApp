@@ -23,7 +23,8 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getNowPlayingMovies() = remoteDataSource.getNowPlayingMovies()
 
     // Get details to the given movie.
-    override suspend fun getMovieDetails(id: Long) = remoteDataSource.getMovieDetails(id)
+    override suspend fun getMovieDetails(id: Long): Result<Movie> =
+        getResult { remoteDataSource.getMovieDetails(id) }
 
     // Search all movies for the given query.
     override suspend fun searchMovie(query: String) = remoteDataSource.searchMovie(query)

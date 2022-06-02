@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.altayiskender.movieapp.data.Repository
+import com.altayiskender.movieapp.data.Result
 import com.altayiskender.movieapp.domain.models.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,11 +25,9 @@ class DetailViewModel @Inject constructor(private val repository: Repository) : 
     fun getMovieDetails(id: Long) {
         viewModelScope.launch {
             loading.value = true
-            try {
-                val result = repository.getMovieDetails(id)
-                movieState.value = result
-            } catch (e: Exception) {
-                Timber.e(e)
+            when (val result = repository.getMovieDetails(id)) {
+                is Result.Success -> movieState.value = result.data
+                is Result.Error -> Timber.e(result.throwable)
             }
             loading.value = false
         }
