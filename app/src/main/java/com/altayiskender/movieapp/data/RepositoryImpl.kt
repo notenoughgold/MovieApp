@@ -30,7 +30,8 @@ class RepositoryImpl @Inject constructor(
     override suspend fun searchMovie(query: String) = remoteDataSource.searchMovie(query)
 
     // Search details for the given people.
-    override suspend fun getPeopleDetails(id: Long) = remoteDataSource.getPeopleDetails(id)
+    override suspend fun getPeopleDetails(id: Long) =
+        getResult { remoteDataSource.getPeopleDetails(id) }
 
     // Get a list of bookmarked movies.
     override fun getAllBookmarkedMovies() = localDataSource.getAllBookmarkedMovies()

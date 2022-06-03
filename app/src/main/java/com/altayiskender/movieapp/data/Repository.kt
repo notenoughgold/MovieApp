@@ -22,7 +22,7 @@ interface Repository {
     suspend fun searchMovie(query: String): MoviesResponse
 
     // Search details for the given people.
-    suspend fun getPeopleDetails(id: Long): PeopleResponse
+    suspend fun getPeopleDetails(id: Long): Result<PeopleResponse>
 
     // Get a list of bookmarked movies.
     fun getAllBookmarkedMovies(): List<Movie>

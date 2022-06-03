@@ -1,34 +1,35 @@
 package com.altayiskender.movieapp.ui.people
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.altayiskender.movieapp.data.Repository
+import com.altayiskender.movieapp.data.Result
 import com.altayiskender.movieapp.domain.models.PeopleResponse
+import com.altayiskender.movieapp.domain.usecases.GetPersonDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class PeopleViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class PeopleViewModel @Inject constructor(private val getPersonDetailUseCase: GetPersonDetailUseCase) :
+    ViewModel() {
 
-    val peopleLiveData = MutableLiveData<PeopleResponse>()
-    val isLoading = mutableStateOf<Boolean>(false)
+    val peopleState = mutableStateOf<PeopleResponse?>(null)
+    val isLoading = mutableStateOf(false)
 
     fun getPeopleDetails(id: Long) {
         viewModelScope.launch {
             isLoading.value = true
-            val result = repository.getPeopleDetails(id)
-
-            withContext(Dispatchers.Main) {
-                peopleLiveData.value = result
+            when (val result = getPersonDetailUseCase.invoke(id)) {
+                is Result.Success -> {
+                    peopleState.value = result.data
+                }
+                is Result.Error -> {
+                    Timber.e(result.throwable)
+                }
             }
             isLoading.value = false
         }
-
     }
-
 }

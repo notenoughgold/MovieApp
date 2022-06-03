@@ -2,19 +2,19 @@ package com.altayiskender.movieapp.data.remote
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.altayiskender.movieapp.data.Repository
 import com.altayiskender.movieapp.data.Result
 import com.altayiskender.movieapp.domain.models.Movie
+import com.altayiskender.movieapp.domain.usecases.GetPopularMoviesUseCase
 import timber.log.Timber
 
 class MoviePagingSource(
-    private val repository: Repository
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase
 ) : PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val nextPage = params.key ?: 1
-            when (val result = repository.getPopularMovies(nextPage)) {
+            when (val result = getPopularMoviesUseCase.invoke(nextPage)) {
                 is Result.Success -> {
                     LoadResult.Page(
                         data = result.data.results,

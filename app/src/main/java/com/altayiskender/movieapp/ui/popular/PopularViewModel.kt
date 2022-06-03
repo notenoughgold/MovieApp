@@ -7,9 +7,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.altayiskender.movieapp.data.Repository
 import com.altayiskender.movieapp.data.remote.MoviePagingSource
 import com.altayiskender.movieapp.domain.models.Movie
+import com.altayiskender.movieapp.domain.usecases.GetPopularMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -19,21 +19,18 @@ private const val SORT_UPCOMING = 1
 private const val SORT_PLAYING = 2
 
 @HiltViewModel
-class PopularViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class PopularViewModel @Inject constructor(private val getPopularMoviesUseCase: GetPopularMoviesUseCase) :
+    ViewModel() {
 
     var sortBy = SORT_POPULAR
+
     val movies: Flow<PagingData<Movie>> =
         Pager(PagingConfig(pageSize = 20)) {
-            MoviePagingSource(repository)
+            MoviePagingSource(getPopularMoviesUseCase)
         }.flow.cachedIn(viewModelScope)
 
-
-    var hasError = mutableStateOf<Boolean>(false)
+    var hasError = mutableStateOf(false)
     var isLoading = mutableStateOf(false)
-
-    init {
-        // getHomepageMovies()
-    }
 
 //    fun searchMovie(query: String) {
 //        viewModelScope.launch {
@@ -48,7 +45,6 @@ class PopularViewModel @Inject constructor(private val repository: Repository) :
 //
 //        }
 //    }
-
 
 //    fun getHomepageMovies() {
 //        hasError.value = false

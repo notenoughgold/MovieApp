@@ -12,7 +12,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,7 +37,7 @@ fun PeoplePage(
     viewModel: PeopleViewModel,
     navController: NavController
 ) {
-    val personState by viewModel.peopleLiveData.observeAsState()
+    val personState by viewModel.peopleState
     val isLoading by viewModel.isLoading
 
     LaunchedEffect(key1 = peopleId) {
@@ -86,7 +85,8 @@ fun PeoplePage(
                     CircularProgressIndicator()
                 }
             }
-        })
+        }
+    )
 }
 
 @Composable
@@ -192,7 +192,6 @@ fun PersonDetailBody(person: PeopleResponse, modifier: Modifier, navController: 
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
