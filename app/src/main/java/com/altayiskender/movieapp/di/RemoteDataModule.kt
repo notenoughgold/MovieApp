@@ -2,7 +2,6 @@ package com.altayiskender.movieapp.di
 
 import com.altayiskender.movieapp.BuildConfig
 import com.altayiskender.movieapp.data.remote.ApiService
-import com.altayiskender.movieapp.utils.API_KEY
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -54,9 +53,10 @@ private class AuthInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val url =
-            request.url.newBuilder().addQueryParameter(API_KEY_NAME, API_KEY).addQueryParameter(
-                LANGUAGE, Locale.getDefault().language
-            ).build()
+            request.url.newBuilder().addQueryParameter(API_KEY_NAME, BuildConfig.apiKey)
+                .addQueryParameter(
+                    LANGUAGE, Locale.getDefault().language
+                ).build()
         return chain.proceed(request.newBuilder().url(url).build())
     }
 }
