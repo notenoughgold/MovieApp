@@ -3,7 +3,6 @@ package com.altayiskender.movieapp.ui.details
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.altayiskender.movieapp.data.Result
 import com.altayiskender.movieapp.domain.models.Movie
 import com.altayiskender.movieapp.domain.usecases.GetMovieDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,9 +22,10 @@ class DetailViewModel @Inject constructor(private val getMovieDetailUseCase: Get
     fun getMovieDetails(id: Long) {
         viewModelScope.launch {
             loading.value = true
-            when (val result = getMovieDetailUseCase.invoke(id)) {
-                is Result.Success -> movieState.value = result.data
-                is Result.Error -> Timber.e(result.throwable)
+            getMovieDetailUseCase.invoke(id).onSuccess {
+                movieState.value = it
+            }.onFailure {
+                Timber.e(it)
             }
             loading.value = false
         }

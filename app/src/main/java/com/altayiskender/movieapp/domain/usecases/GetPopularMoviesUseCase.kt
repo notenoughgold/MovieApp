@@ -1,7 +1,6 @@
 package com.altayiskender.movieapp.domain.usecases
 
-import com.altayiskender.movieapp.data.Repository
-import com.altayiskender.movieapp.data.Result
+import com.altayiskender.movieapp.domain.Repository
 import com.altayiskender.movieapp.domain.models.MoviesResponse
 import javax.inject.Inject
 

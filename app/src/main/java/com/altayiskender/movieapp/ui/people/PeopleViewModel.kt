@@ -3,7 +3,6 @@ package com.altayiskender.movieapp.ui.people
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.altayiskender.movieapp.data.Result
 import com.altayiskender.movieapp.domain.models.PeopleResponse
 import com.altayiskender.movieapp.domain.usecases.GetPersonDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,13 +20,10 @@ class PeopleViewModel @Inject constructor(private val getPersonDetailUseCase: Ge
     fun getPeopleDetails(id: Long) {
         viewModelScope.launch {
             isLoading.value = true
-            when (val result = getPersonDetailUseCase.invoke(id)) {
-                is Result.Success -> {
-                    peopleState.value = result.data
-                }
-                is Result.Error -> {
-                    Timber.e(result.throwable)
-                }
+            getPersonDetailUseCase.invoke(id).onSuccess {
+                peopleState.value = it
+            }.onFailure {
+                Timber.e(it)
             }
             isLoading.value = false
         }

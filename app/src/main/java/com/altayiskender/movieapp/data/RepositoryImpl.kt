@@ -2,6 +2,7 @@ package com.altayiskender.movieapp.data
 
 import com.altayiskender.movieapp.data.local.LocalDataSource
 import com.altayiskender.movieapp.data.remote.RemoteDataSource
+import com.altayiskender.movieapp.domain.Repository
 import com.altayiskender.movieapp.domain.models.Movie
 import com.altayiskender.movieapp.domain.models.MoviesResponse
 import javax.inject.Inject
@@ -14,24 +15,26 @@ class RepositoryImpl @Inject constructor(
 
     // Get a list of currently popular movies.
     override suspend fun getPopularMovies(page: Int): Result<MoviesResponse> =
-        getResult { remoteDataSource.getPopularMovies(page) }
+        runCatching { remoteDataSource.getPopularMovies(page) }
 
     // Get a list of upcoming movie.
-    override suspend fun getUpcomingMovies() = remoteDataSource.getUpcomingMovies()
+    override suspend fun getUpcomingMovies(): Result<MoviesResponse> =
+        runCatching { remoteDataSource.getUpcomingMovies() }
 
     // Get a list of now playing movie.
-    override suspend fun getNowPlayingMovies() = remoteDataSource.getNowPlayingMovies()
+    override suspend fun getNowPlayingMovies(): Result<MoviesResponse> =
+        runCatching { remoteDataSource.getNowPlayingMovies() }
 
     // Get details to the given movie.
     override suspend fun getMovieDetails(id: Long): Result<Movie> =
-        getResult { remoteDataSource.getMovieDetails(id) }
+        runCatching { remoteDataSource.getMovieDetails(id) }
 
     // Search all movies for the given query.
     override suspend fun searchMovie(query: String) = remoteDataSource.searchMovie(query)
 
     // Search details for the given people.
     override suspend fun getPeopleDetails(id: Long) =
-        getResult { remoteDataSource.getPeopleDetails(id) }
+        runCatching { remoteDataSource.getPeopleDetails(id) }
 
     // Get a list of bookmarked movies.
     override fun getAllBookmarkedMovies() = localDataSource.getAllBookmarkedMovies()

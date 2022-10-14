@@ -1,4 +1,4 @@
-package com.altayiskender.movieapp.data
+package com.altayiskender.movieapp.domain
 
 import com.altayiskender.movieapp.domain.models.Movie
 import com.altayiskender.movieapp.domain.models.MoviesResponse
@@ -10,10 +10,10 @@ interface Repository {
     suspend fun getPopularMovies(page: Int): Result<MoviesResponse>
 
     // Get a list of upcoming movie.
-    suspend fun getUpcomingMovies(): MoviesResponse
+    suspend fun getUpcomingMovies(): Result<MoviesResponse>
 
     // Get a list of now playing movie.
-    suspend fun getNowPlayingMovies(): MoviesResponse
+    suspend fun getNowPlayingMovies(): Result<MoviesResponse>
 
     // Get details to the given movie.
     suspend fun getMovieDetails(id: Long): Result<Movie>

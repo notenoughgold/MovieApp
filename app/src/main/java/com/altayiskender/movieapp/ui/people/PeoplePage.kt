@@ -47,7 +47,7 @@ fun PeoplePage(
     Scaffold(
         topBar = {
             personState?.name?.let {
-                SmallTopAppBar(
+                TopAppBar(
                     title = {
                         Text(
                             text = it,

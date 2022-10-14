@@ -1,8 +1,7 @@
-package com.altayiskender.movieapp.di
+package com.altayiskender.movieapp.data.di
 
 import com.altayiskender.movieapp.BuildConfig
 import com.altayiskender.movieapp.data.remote.ApiService
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +12,7 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
+import java.util.Locale
 import javax.inject.Singleton
 
 private const val SERVER_URL = "https://api.themoviedb.org/3/"
@@ -41,7 +40,6 @@ class RemoteDataModule {
     fun providesRetrofitClient(okHttpClient: OkHttpClient): ApiService {
         return Retrofit.Builder()
             .baseUrl(SERVER_URL)
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

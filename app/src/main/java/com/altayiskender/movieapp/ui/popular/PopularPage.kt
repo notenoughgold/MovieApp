@@ -68,9 +68,10 @@ fun PopularPage(viewModel: PopularViewModel, navController: NavController) {
     })
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PosterAppBar(gridState: LazyGridState, coroutineScope: CoroutineScope) {
-    SmallTopAppBar(title = {
+    TopAppBar(title = {
         Text(text = "Popular Movies")
     }, navigationIcon = {
         IconButton(onClick = { scrollToTop(gridState, coroutineScope) }) {
