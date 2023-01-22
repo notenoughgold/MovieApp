@@ -2,6 +2,7 @@ package com.altayiskender.movieapp.ui
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,15 +10,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.altayiskender.movieapp.ui.details.DetailPage
 import com.altayiskender.movieapp.ui.people.PeoplePage
-import com.altayiskender.movieapp.ui.popular.PopularPage
 
 @Composable
 fun NavHostPage() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = NavigationPage.Popular.routeName) {
-        composable(NavigationPage.Popular.routeName) {
-            PopularPage(
-                viewModel = hiltViewModel(),
+    val navController: NavHostController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = NavigationPage.BottomNavigationPage.routeName
+    ) {
+        composable(NavigationPage.BottomNavigationPage.routeName) {
+            BottomNavigationPage(
                 navController = navController
             )
         }
@@ -56,7 +58,10 @@ fun NavHostPage() {
 
 sealed class NavigationPage(val routeName: String) {
 
+    object BottomNavigationPage : NavigationPage("BottomNavigationPage")
     object Popular : NavigationPage("Popular")
+    object Bookmarks : NavigationPage("Bookmarks")
+
     object MovieDetail : NavigationPage("MovieDetail") {
         const val routeWithArgument: String = "MovieDetail/{movieId}"
         const val argument0: String = "movieId"

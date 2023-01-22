@@ -14,15 +14,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-private const val SORT_POPULAR = 0
-private const val SORT_UPCOMING = 1
-private const val SORT_PLAYING = 2
-
 @HiltViewModel
-class PopularViewModel @Inject constructor(private val getPopularMoviesUseCase: GetPopularMoviesUseCase) :
-    ViewModel() {
-
-    var sortBy = SORT_POPULAR
+class PopularViewModel @Inject constructor(
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase
+) : ViewModel() {
 
     val movies: Flow<PagingData<Movie>> =
         Pager(PagingConfig(pageSize = 20)) {
@@ -32,42 +27,6 @@ class PopularViewModel @Inject constructor(private val getPopularMoviesUseCase: 
     var hasError = mutableStateOf(false)
     var isLoading = mutableStateOf(false)
 
-//    fun searchMovie(query: String) {
-//        viewModelScope.launch {
-//            try {
-//                val result = repository.searchMovie(query)
-//                movies.value = result.results
-//            } catch (e: Throwable) {
-//                Timber.d(e, "search $query movies error")
-//                hasError.value = true
-//
-//            }
-//
-//        }
-//    }
-
-//    fun getHomepageMovies() {
-//        hasError.value = false
-//        viewModelScope.launch {
-//            isLoading.value = true
-//            try {
-//                val result: Movies = when (sortBy) {
-//                    SORT_POPULAR ->
-//                        repository.getPopularMovies()
-//                    SORT_PLAYING ->
-//                        repository.getNowPlayingMovies()
-//                    SORT_UPCOMING ->
-//                        repository.getUpcomingMovies()
-//                    else -> repository.getPopularMovies()
-//                }
-//                movies.value = result.results
-//            } catch (e: Throwable) {
-//                Timber.d(e, "get $sortBy movies error")
-//                hasError.value = true
-//            }
-//            isLoading.value = false
-//        }
-//    }
 }
 
 
