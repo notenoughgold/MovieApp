@@ -1,25 +1,44 @@
 package com.altayiskender.movieapp.ui.details
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.altayiskender.movieapp.domain.models.Movie
+import com.altayiskender.movieapp.domain.usecases.DeleteBookmarkUseCase
+import com.altayiskender.movieapp.domain.usecases.GetBookmarkStatusUseCase
 import com.altayiskender.movieapp.domain.usecases.GetMovieDetailUseCase
+import com.altayiskender.movieapp.domain.usecases.InsertBookmarkUseCase
+import com.altayiskender.movieapp.ui.NavigationPage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(private val getMovieDetailUseCase: GetMovieDetailUseCase) :
-    ViewModel() {
+class DetailViewModel @Inject constructor(
+    stateHandle: SavedStateHandle,
+    private val getMovieDetailUseCase: GetMovieDetailUseCase,
+    getBookmarkStatusUseCase: GetBookmarkStatusUseCase,
+    private val insertBookmarkUseCase: InsertBookmarkUseCase,
+    private val deleteBookmarkUseCase: DeleteBookmarkUseCase
+) : ViewModel() {
+
+    private val movieId: Long = checkNotNull(stateHandle[NavigationPage.MovieDetail.id])
 
     var movieState = mutableStateOf<Movie?>(null)
 
-    // var movieSavedStatusLiveData = MutableLiveData<Boolean>()
+    var movieSavedState = getBookmarkStatusUseCase.invoke(movieId)
+
     var loading = mutableStateOf(false)
 
-    fun getMovieDetails(id: Long) {
+    init {
+        getMovieDetails(movieId)
+    }
+
+    private fun getMovieDetails(id: Long) {
         viewModelScope.launch {
             loading.value = true
             getMovieDetailUseCase.invoke(id).onSuccess {
@@ -31,31 +50,31 @@ class DetailViewModel @Inject constructor(private val getMovieDetailUseCase: Get
         }
     }
 
-//    fun saveMovieToBookmarks() {
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                repository.insertBookmarkedMovie(movieState.value!!)
-//                movieSavedStatusLiveData.postValue(true)
-//            }
-//        }
-//    }
-//
-//    fun deleteMovieFromBookmarks() {
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                repository.deleteBookmarkedMovie(movieState.value!!)
-//                movieSavedStatusLiveData.postValue(false)
-//            }
-//        }
-//    }
-//
-//    fun checkIfMovieSaved(movieId: Long): MutableLiveData<Boolean> {
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                val n = repository.checkMovieIdIfSaved(movieId)
-//                movieSavedStatusLiveData.postValue(n.isNotEmpty())
-//            }
-//        }
-//        return movieSavedStatusLiveData
-//    }
+    private fun saveMovieToBookmarks() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                movieState.value?.let {
+                    insertBookmarkUseCase.invoke(it)
+                }
+            }
+        }
+    }
+
+    private fun deleteMovieFromBookmarks() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                movieState.value?.let {
+                    deleteBookmarkUseCase.invoke(it)
+                }
+            }
+        }
+    }
+
+    fun toggleBookmarkStatus(bookmarkedStatus: Boolean) {
+        if (bookmarkedStatus) {
+            deleteMovieFromBookmarks()
+        } else {
+            saveMovieToBookmarks()
+        }
+    }
 }

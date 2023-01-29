@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,16 +32,11 @@ import com.altayiskender.movieapp.utils.getPosterUrl
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PeoplePage(
-    peopleId: Long,
     viewModel: PeopleViewModel,
     navController: NavController
 ) {
     val personState by viewModel.peopleState
     val isLoading by viewModel.isLoading
-
-    LaunchedEffect(key1 = peopleId) {
-        viewModel.getPeopleDetails(peopleId)
-    }
 
     Scaffold(
         topBar = {

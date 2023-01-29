@@ -5,13 +5,14 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.altayiskender.movieapp.domain.models.Movie
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface MovieBookmarksDao {
 
-    @Query("SELECT * FROM bookmarks ")
-    fun loadAllBookmarkedMovies(): List<Movie>
+    @Query("SELECT * FROM bookmarks")
+    fun loadAllBookmarkedMovies(): Flow<List<Movie>>
 
     @Insert
     fun insertBookmarkedMovie(bookmark: Movie)
@@ -19,7 +20,7 @@ interface MovieBookmarksDao {
     @Delete
     fun deleteBookmarkedMovie(bookmark: Movie)
 
-    @Query("SELECT id  FROM bookmarks WHERE id LIKE :movieId")
-    fun checkMovieIdIfSaved(movieId: Long): List<Long>
+    @Query("SELECT EXISTS(SELECT * FROM bookmarks WHERE id = :id)")
+    fun checkMovieIdIfSaved(id: Long): Flow<Boolean>
 
 }

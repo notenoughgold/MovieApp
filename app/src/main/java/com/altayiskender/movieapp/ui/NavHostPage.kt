@@ -26,14 +26,10 @@ fun NavHostPage() {
         composable(
             route = NavigationPage.MovieDetail.routeWithArgument,
             arguments = listOf(
-                navArgument(NavigationPage.MovieDetail.argument0) { type = NavType.LongType },
+                navArgument(NavigationPage.MovieDetail.id) { type = NavType.LongType },
             )
-        ) { backStackEntry ->
-            val movieId =
-                backStackEntry.arguments?.getLong(NavigationPage.MovieDetail.argument0)
-                    ?: return@composable
+        ) {
             DetailPage(
-                movieId = movieId,
                 viewModel = hiltViewModel(),
                 navController = navController
             )
@@ -41,14 +37,10 @@ fun NavHostPage() {
         composable(
             route = NavigationPage.PeopleDetail.routeWithArgument,
             arguments = listOf(
-                navArgument(NavigationPage.PeopleDetail.argument0) { type = NavType.LongType },
+                navArgument(NavigationPage.PeopleDetail.id) { type = NavType.LongType },
             )
-        ) { backStackEntry ->
-            val movieId =
-                backStackEntry.arguments?.getLong(NavigationPage.PeopleDetail.argument0)
-                    ?: return@composable
+        ) {
             PeoplePage(
-                peopleId = movieId,
                 viewModel = hiltViewModel(),
                 navController = navController
             )
@@ -64,11 +56,11 @@ sealed class NavigationPage(val routeName: String) {
 
     object MovieDetail : NavigationPage("MovieDetail") {
         const val routeWithArgument: String = "MovieDetail/{movieId}"
-        const val argument0: String = "movieId"
+        const val id: String = "movieId"
     }
 
     object PeopleDetail : NavigationPage("PeopleDetail") {
         const val routeWithArgument: String = "PeopleDetail/{peopleId}"
-        const val argument0: String = "peopleId"
+        const val id: String = "peopleId"
     }
 }

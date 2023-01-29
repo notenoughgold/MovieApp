@@ -3,6 +3,7 @@ package com.altayiskender.movieapp.domain
 import com.altayiskender.movieapp.domain.models.Movie
 import com.altayiskender.movieapp.domain.models.MoviesResponse
 import com.altayiskender.movieapp.domain.models.PeopleResponse
+import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
@@ -25,10 +26,10 @@ interface Repository {
     suspend fun getPeopleDetails(id: Long): Result<PeopleResponse>
 
     // Get a list of bookmarked movies.
-    fun getAllBookmarkedMovies(): List<Movie>
+    fun getAllBookmarkedMovies(): Flow<List<Movie>>
 
     // Check if movie exist in bookmarks db.
-    fun checkMovieIdIfSaved(movieId: Long): List<Long>
+    fun checkMovieIdIfSaved(movieId: Long): Flow<Boolean>
 
     // insert a movie into bookmarks db.
     fun insertBookmarkedMovie(bookmark: Movie)
