@@ -1,6 +1,6 @@
 package com.altayiskender.movieapp.data.di
 
-import com.altayiskender.movieapp.BuildConfig
+import com.altayiskender.movieapp.config.BuildConfig
 import com.altayiskender.movieapp.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
@@ -15,10 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Locale
 import javax.inject.Singleton
 
-private const val SERVER_URL = "https://api.themoviedb.org/3/"
-private const val API_KEY_NAME = "api_key"
-private const val LANGUAGE = "language"
-
 @InstallIn(SingletonComponent::class)
 @Module
 class RemoteDataModule {
@@ -27,7 +23,7 @@ class RemoteDataModule {
     @Singleton
     fun providesOkHttpClient(): OkHttpClient {
         val client = OkHttpClient.Builder().addInterceptor(AuthInterceptor())
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.isDebug) {
             client.addNetworkInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BASIC
             })
@@ -45,16 +41,26 @@ class RemoteDataModule {
             .build()
             .create(ApiService::class.java)
     }
+
+    companion object {
+        private const val SERVER_URL = "https://api.themoviedb.org/3/"
+    }
 }
 
 private class AuthInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val url =
-            request.url.newBuilder().addQueryParameter(API_KEY_NAME, BuildConfig.apiKey)
-                .addQueryParameter(
-                    LANGUAGE, Locale.getDefault().language
-                ).build()
+            request.url.newBuilder()
+                .addQueryParameter(API_KEY_NAME, API_KEY)
+                .addQueryParameter(LANGUAGE, Locale.getDefault().language)
+                .build()
         return chain.proceed(request.newBuilder().url(url).build())
     }
+
+    companion object {
+        private const val API_KEY_NAME = "api_key"
+        private const val LANGUAGE = "language"
+    }
+
 }

@@ -187,7 +187,6 @@ fun PersonDetailBody(person: PeopleResponse, modifier: Modifier, navController: 
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CreditItem(
     id: Long,

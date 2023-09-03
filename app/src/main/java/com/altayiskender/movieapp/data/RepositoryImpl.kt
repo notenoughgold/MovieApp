@@ -5,13 +5,11 @@ import com.altayiskender.movieapp.data.remote.RemoteDataSource
 import com.altayiskender.movieapp.domain.Repository
 import com.altayiskender.movieapp.domain.models.Movie
 import com.altayiskender.movieapp.domain.models.MoviesResponse
-import javax.inject.Inject
 
-class RepositoryImpl @Inject constructor(
+class RepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) : Repository {
-
 
     // Get a list of currently popular movies.
     override suspend fun getPopularMovies(page: Int): Result<MoviesResponse> =

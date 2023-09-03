@@ -11,8 +11,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-const val DATABASE_NAME = "MovieBookmarksDatabase"
-
 @InstallIn(SingletonComponent::class)
 @Module
 class LocalDataModule {
@@ -32,4 +30,9 @@ class LocalDataModule {
     fun providesMovieBookmarksDao(database: AppDatabase): MovieBookmarksDao {
         return database.movieBookmarksDao()
     }
+
+    companion object {
+        const val DATABASE_NAME = "MovieBookmarksDatabase"
+    }
+
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,7 +23,6 @@ import com.altayiskender.movieapp.R
 import com.altayiskender.movieapp.ui.NavigationPage
 import com.altayiskender.movieapp.utils.getPosterUrl
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonItem(
     id: Long,

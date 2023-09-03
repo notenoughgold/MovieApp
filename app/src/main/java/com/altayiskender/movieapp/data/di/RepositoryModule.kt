@@ -33,7 +33,8 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideRepository(
-        remoteDataSource: RemoteDataSource, localDataSource: LocalDataSource
+        remoteDataSource: RemoteDataSource,
+        localDataSource: LocalDataSource
     ): Repository {
         return RepositoryImpl(localDataSource, remoteDataSource)
     }

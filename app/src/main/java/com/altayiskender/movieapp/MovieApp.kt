@@ -2,6 +2,7 @@ package com.altayiskender.movieapp
 
 
 import android.app.Application
+import com.altayiskender.movieapp.config.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -14,7 +15,7 @@ open class MovieApp : Application() {
     }
 
     private fun plantTimber() {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.isDebug) {
             Timber.plant(Timber.DebugTree())
         }
     }

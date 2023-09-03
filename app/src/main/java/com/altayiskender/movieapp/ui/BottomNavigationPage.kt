@@ -15,7 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import com.altayiskender.movieapp.ui.bookmarks.BookmarksPage
 import com.altayiskender.movieapp.ui.popular.PopularPage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationPage(navController: NavHostController) {
 

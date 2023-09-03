@@ -3,9 +3,8 @@ package com.altayiskender.movieapp.data.remote
 import com.altayiskender.movieapp.domain.models.Movie
 import com.altayiskender.movieapp.domain.models.MoviesResponse
 import com.altayiskender.movieapp.domain.models.PeopleResponse
-import javax.inject.Inject
 
-class RemoteDataSourceImpl @Inject constructor(private val apiService: ApiService) :
+class RemoteDataSourceImpl(private val apiService: ApiService) :
     RemoteDataSource {
     override suspend fun getPopularMovies(page: Int): MoviesResponse =
         apiService.getPopularMovies(page)

@@ -46,7 +46,7 @@ fun DetailPage(
         topBar = {
             movie?.title?.let {
                 TopAppBar(
-                    colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Transparent),
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                     title = {
                         Text(
                             text = it,
