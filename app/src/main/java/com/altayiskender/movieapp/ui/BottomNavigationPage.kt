@@ -16,24 +16,33 @@ import com.altayiskender.movieapp.ui.bookmarks.BookmarksPage
 import com.altayiskender.movieapp.ui.popular.PopularPage
 
 @Composable
-fun BottomNavigationPage(navController: NavHostController) {
-
+fun BottomNavigationPage(
+    navController: NavHostController,
+    bottomNavigationIndex: Int,
+    onBottomNavigation: (Int) -> Unit
+) {
     val navBarEntries = listOf(NavigationPage.Popular, NavigationPage.Bookmarks)
     val icons = listOf(Icons.Filled.Star, Icons.Filled.Favorite)
-    val bottomNavController = rememberNavController()
-    var selectedItem by remember { mutableStateOf(0) }
+    val bottomNavController = rememberNavController().apply {
+        addOnDestinationChangedListener { _, destination, _ ->
+            onBottomNavigation(
+                navBarEntries.indexOfFirst {
+                    destination.route == it.routeName
+                }
+            )
+        }
+    }
 
     Scaffold(
-        topBar = { PosterAppBar(navBarEntries[selectedItem].routeName) },
+        topBar = { PosterAppBar(navBarEntries[bottomNavigationIndex].routeName) },
         bottomBar = {
             NavigationBar {
                 navBarEntries.forEachIndexed { index, entry ->
                     NavigationBarItem(
                         icon = { Icon(icons[index], null) },
                         label = { Text(entry.routeName) },
-                        selected = selectedItem == index,
+                        selected = bottomNavigationIndex == index,
                         onClick = {
-                            selectedItem = index
                             bottomNavController.navigate(entry.routeName) {
                                 // Pop up to the start destination of the graph to
                                 // avoid building up a large stack of destinations

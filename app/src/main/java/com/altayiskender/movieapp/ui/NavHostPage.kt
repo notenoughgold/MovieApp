@@ -1,6 +1,10 @@
 package com.altayiskender.movieapp.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -14,13 +18,16 @@ import com.altayiskender.movieapp.ui.people.PeoplePage
 @Composable
 fun NavHostPage() {
     val navController: NavHostController = rememberNavController()
+    var bottomNavigationIndex by rememberSaveable { mutableStateOf(0) }
     NavHost(
         navController = navController,
         startDestination = NavigationPage.BottomNavigationPage.routeName
     ) {
         composable(NavigationPage.BottomNavigationPage.routeName) {
             BottomNavigationPage(
-                navController = navController
+                navController = navController,
+                bottomNavigationIndex = bottomNavigationIndex,
+                onBottomNavigation = { bottomNavigationIndex = it }
             )
         }
         composable(
