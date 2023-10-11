@@ -27,7 +27,7 @@ fun PopularPage(viewModel: PopularViewModel = hiltViewModel(), navController: Na
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
-        val (progress) = createRefs()
+        val progress = createRef()
         AnimatedVisibility(
             visible = isLoading, modifier = Modifier.constrainAs(progress) {
                 top.linkTo(parent.top)
