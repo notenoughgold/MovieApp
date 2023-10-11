@@ -50,16 +50,16 @@ fun NavHostPage() {
 
 sealed class NavigationPage(val routeName: String) {
 
-    object BottomNavigationPage : NavigationPage("BottomNavigationPage")
-    object Popular : NavigationPage("Popular")
-    object Bookmarks : NavigationPage("Bookmarks")
+    data object BottomNavigationPage : NavigationPage("BottomNavigationPage")
+    data object Popular : NavigationPage("Popular")
+    data object Bookmarks : NavigationPage("Bookmarks")
 
-    object MovieDetail : NavigationPage("MovieDetail") {
+    data object MovieDetail : NavigationPage("MovieDetail") {
         const val routeWithArgument: String = "MovieDetail/{movieId}"
         const val id: String = "movieId"
     }
 
-    object PeopleDetail : NavigationPage("PeopleDetail") {
+    data object PeopleDetail : NavigationPage("PeopleDetail") {
         const val routeWithArgument: String = "PeopleDetail/{peopleId}"
         const val id: String = "peopleId"
     }
