@@ -2,16 +2,17 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
-    id("kotlin-kapt")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.altayiskender.movieapp"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -28,26 +29,8 @@ android {
         }
     }
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-
     kotlin {
         jvmToolchain(17)
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-
-    packaging {
-        resources {
-            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-        }
     }
 
     namespace = "com.altayiskender.movieapp"
@@ -55,46 +38,44 @@ android {
 
 dependencies {
     implementation(fileTree("dir" to "libs", "include" to listOf("*.jar")))
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
     //support
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation(libs.core.ktx)
+    implementation(libs.appcompat)
 
     //compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui.ui)
-    implementation("androidx.compose.material3:material3")
+    implementation(libs.compose.material3)
     implementation(libs.compose.ui.tooling.preview)
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.navigation:navigation-compose:2.6.0")
+    implementation(libs.activity.compose)
+    implementation(libs.constraintlayout.compose)
+    implementation(libs.navigation.compose)
     implementation(libs.compose.runtime.livedata)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1")
+    implementation(libs.lifecycle.runtime)
+    implementation(libs.lifecycle.viewmodel)
 
     implementation(libs.room)
     implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
 
     //coil
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation(libs.coil)
 
     //Dagger Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     // retrofit
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
 
     //paging
-    implementation("androidx.paging:paging-runtime-ktx:3.2.0")
-    implementation("androidx.paging:paging-compose:3.2.0")
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
 
     //testing
     testImplementation("junit:junit:4.13.2")
@@ -105,8 +86,8 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 
     //log
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
 }
