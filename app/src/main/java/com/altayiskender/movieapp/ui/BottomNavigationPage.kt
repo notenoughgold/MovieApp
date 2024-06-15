@@ -4,8 +4,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -19,7 +25,8 @@ import com.altayiskender.movieapp.ui.popular.PopularPage
 fun BottomNavigationPage(
     navController: NavHostController,
     bottomNavigationIndex: Int,
-    onBottomNavigation: (Int) -> Unit
+    onBottomNavigation: (Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val navBarEntries = listOf(NavigationPage.Popular, NavigationPage.Bookmarks)
     val icons = listOf(Icons.Filled.Star, Icons.Filled.Favorite)
@@ -34,6 +41,7 @@ fun BottomNavigationPage(
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = { PosterAppBar(navBarEntries[bottomNavigationIndex].routeName) },
         bottomBar = {
             NavigationBar {
@@ -85,7 +93,9 @@ fun BottomNavigationPage(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PosterAppBar(title: String) {
-    TopAppBar(title = {
-        Text(text = title)
-    })
+    TopAppBar(
+        title = {
+            Text(text = title)
+        }
+    )
 }

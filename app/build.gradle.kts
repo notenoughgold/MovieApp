@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.detekt)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -24,8 +26,9 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
-        debug {
-            isMinifyEnabled = false
+        create("dev") {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
         }
     }
 
@@ -36,12 +39,17 @@ android {
     namespace = "com.altayiskender.movieapp"
 }
 
+detekt {
+    buildUponDefaultConfig = true
+    config.setFrom("$rootDir/detekt.yml")
+    ignoredBuildTypes = listOf("dev")
+}
+
 dependencies {
     implementation(fileTree("dir" to "libs", "include" to listOf("*.jar")))
 
     //support
     implementation(libs.core.ktx)
-    implementation(libs.appcompat)
 
     //compose
     implementation(platform(libs.compose.bom))
@@ -52,6 +60,7 @@ dependencies {
     implementation(libs.constraintlayout.compose)
     implementation(libs.navigation.compose)
     implementation(libs.compose.runtime.livedata)
+    detektPlugins(libs.compose.rules)
 
     implementation(libs.lifecycle.runtime)
     implementation(libs.lifecycle.viewmodel)

@@ -1,13 +1,15 @@
 package com.altayiskender.movieapp.domain.models
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "bookmarks")
+@Parcelize
 data class Movie @Ignore constructor(
     @PrimaryKey
     @ColumnInfo(name = "id")
@@ -34,8 +36,8 @@ data class Movie @Ignore constructor(
     val overview: String? = null,
     @Ignore
     val credits: Credits? = null
+) : Parcelable {
 
-) : Serializable {
     constructor(id: Long, title: String?, releaseDate: String?, posterPath: String?) : this(
         id,
         0,
@@ -49,4 +51,5 @@ data class Movie @Ignore constructor(
         null,
         null
     )
+
 }

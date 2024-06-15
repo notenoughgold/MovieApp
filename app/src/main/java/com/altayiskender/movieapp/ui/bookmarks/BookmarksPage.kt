@@ -12,21 +12,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.altayiskender.movieapp.ui.popular.PopularMovieItem
+import com.altayiskender.movieapp.ui.common.PopularMovieItem
 
 @Composable
 fun BookmarksPage(
-    vm: BookmarksViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: BookmarksViewModel = hiltViewModel(),
 ) {
-    val bookmarkedMovieItems by vm.getAllBookmarkedMovies().collectAsState(initial = emptyList())
+    val bookmarkedMovieItems by viewModel.getAllBookmarkedMovies()
+        .collectAsState(initial = emptyList())
 
     if (bookmarkedMovieItems.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "No bookmarks")
         }
     } else {
         LazyVerticalGrid(
+            modifier = modifier.fillMaxSize(),
             columns = GridCells.Fixed(2),
             content = {
                 items(

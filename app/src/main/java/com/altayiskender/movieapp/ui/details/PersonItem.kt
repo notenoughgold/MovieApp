@@ -17,27 +17,26 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.altayiskender.movieapp.R
-import com.altayiskender.movieapp.ui.NavigationPage
 import com.altayiskender.movieapp.utils.getPosterUrl
 
 @Composable
 fun PersonItem(
-    id: Long,
-    name: String,
-    url: String?,
-    work: String,
-    navController: NavController
+    person: PersonUiModel,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Surface(onClick = { onClickItem(id, navController) }, color = Color.Transparent) {
+    Surface(
+        modifier = modifier.width(100.dp),
+        color = Color.Transparent,
+        onClick = onClick
+    ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.width(100.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
-                model = getPosterUrl(url),
+                model = getPosterUrl(person.profilePath),
                 fallback = painterResource(id = R.drawable.ic_person_placeholder),
                 error = painterResource(id = R.drawable.ic_person_placeholder),
                 placeholder = painterResource(id = R.drawable.ic_person_placeholder),
@@ -49,21 +48,17 @@ fun PersonItem(
                     .aspectRatio(1f)
             )
             Text(
-                text = name,
+                text = person.name,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = work,
+                text = person.role,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }
     }
-}
-
-private fun onClickItem(id: Long, navController: NavController) {
-    navController.navigate("${NavigationPage.PeopleDetail.routeName}/${id}")
 }

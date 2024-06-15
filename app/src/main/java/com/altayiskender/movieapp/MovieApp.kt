@@ -1,6 +1,5 @@
 package com.altayiskender.movieapp
 
-
 import android.app.Application
 import com.altayiskender.movieapp.config.BuildConfig
 import dagger.hilt.android.HiltAndroidApp

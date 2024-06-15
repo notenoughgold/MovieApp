@@ -15,17 +15,20 @@ import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.altayiskender.movieapp.domain.models.Movie
+import com.altayiskender.movieapp.ui.common.PopularMovieItem
 
 @Composable
-fun PopularPage(viewModel: PopularViewModel = hiltViewModel(), navController: NavController) {
-
+fun PopularPage(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: PopularViewModel = hiltViewModel()
+) {
     val lazyMovieItems: LazyPagingItems<Movie> = viewModel.movies.collectAsLazyPagingItems()
-    val hasError by viewModel.hasError
     val isLoading by viewModel.isLoading
     val gridState = rememberLazyGridState()
 
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         val progress = createRef()
         AnimatedVisibility(
@@ -46,10 +49,9 @@ fun PopularPage(viewModel: PopularViewModel = hiltViewModel(), navController: Na
             items(
                 count = lazyMovieItems.itemCount,
                 itemContent = { index: Int ->
-                    val movie = lazyMovieItems[index]
-                    if (movie != null) {
+                    lazyMovieItems[index]?.let {
                         PopularMovieItem(
-                            movie = movie,
+                            movie = it,
                             navController = navController
                         )
                     }

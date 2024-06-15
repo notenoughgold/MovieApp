@@ -51,12 +51,14 @@ import com.altayiskender.movieapp.utils.getPosterUrl
 @Composable
 fun PeoplePage(
     viewModel: PeopleViewModel,
-    navController: NavController
+    navController: NavController,
+    modifier: Modifier = Modifier
 ) {
     val personState by viewModel.peopleState
     val isLoading by viewModel.isLoading
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             personState?.name?.let {
                 TopAppBar(
@@ -84,12 +86,11 @@ fun PeoplePage(
                     .padding(padding)
                     .fillMaxSize()
             ) {
-                val (progress) = createRefs()
+                val progress = createRef()
 
                 personState?.let {
                     PersonDetailBody(
                         person = it,
-                        modifier = Modifier.fillMaxSize(),
                         navController = navController
                     )
                 }
@@ -109,9 +110,15 @@ fun PeoplePage(
 }
 
 @Composable
-fun PersonDetailBody(person: PeopleResponse, modifier: Modifier, navController: NavController) {
+fun PersonDetailBody(
+    person: PeopleResponse,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = modifier.verticalScroll(rememberScrollState()),
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
     ) {
         Row {
             Spacer(modifier = Modifier.weight(1f))
@@ -130,56 +137,20 @@ fun PersonDetailBody(person: PeopleResponse, modifier: Modifier, navController: 
             )
             Spacer(modifier = Modifier.weight(1f))
         }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .padding(16.dp, 16.dp, 16.dp, 0.dp)
-                .fillMaxWidth()
-        ) {
-            if (person.birthday?.isNotBlank() == true) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = stringResource(id = R.string.Birthday),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(text = person.birthday, fontWeight = FontWeight.Bold)
-                }
-            }
-            if (!person.placeOfBirth.isNullOrBlank()) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = stringResource(id = R.string.Birthplace),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = person.placeOfBirth.toString(),
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
 
-        }
+        PersonInfoRow(person)
+
         if (!person.movieCredits?.cast.isNullOrEmpty()) {
             Text(
                 text = stringResource(id = R.string.cast),
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-            LazyRow(
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(person.movieCredits!!.cast!!.size) {
-                    val movie = person.movieCredits.cast!![it]
-                    val name = movie!!.title
-                    val id = movie.id
-                    val url = movie.posterPath
-                    val work = movie.character
-                    val date = movie.releaseDate
-                    CreditItem(id, name, url, work, date, navController)
-                }
-            }
+            CreditsLazyRow(
+                person.movieCredits?.cast.orEmpty().map {
+                    CreditUiModel.createFrom(it)
+                },
+                navController
+            )
         }
 
         if (!person.movieCredits?.crew.isNullOrEmpty()) {
@@ -187,21 +158,14 @@ fun PersonDetailBody(person: PeopleResponse, modifier: Modifier, navController: 
                 text = stringResource(id = R.string.crew),
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-            LazyRow(
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(person.movieCredits!!.crew!!.size) {
-                    val movie = person.movieCredits.crew!![it]
-                    val name = movie!!.title
-                    val id = movie.id
-                    val url = movie.posterPath
-                    val work = movie.job
-                    val date = movie.releaseDate
-                    CreditItem(id, name, url, work, date, navController)
-                }
-            }
+            CreditsLazyRow(
+                person.movieCredits?.crew.orEmpty().map {
+                    CreditUiModel.createFrom(it)
+                },
+                navController
+            )
         }
+
         if (!person.biography.isNullOrBlank()) {
             Text(
                 text = person.biography,
@@ -213,47 +177,98 @@ fun PersonDetailBody(person: PeopleResponse, modifier: Modifier, navController: 
 }
 
 @Composable
-private fun CreditItem(
-    id: Long,
-    name: String?,
-    url: String?,
-    work: String?,
-    date: String?,
+private fun PersonInfoRow(
+    person: PeopleResponse,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .padding(16.dp, 16.dp, 16.dp, 0.dp)
+            .fillMaxWidth()
+    ) {
+        if (!person.birthday.isNullOrBlank()) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = stringResource(id = R.string.Birthday),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(text = person.birthday, fontWeight = FontWeight.Bold)
+            }
+        }
+        if (!person.placeOfBirth.isNullOrBlank()) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = stringResource(id = R.string.Birthplace),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = person.placeOfBirth,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CreditsLazyRow(
+    credits: List<CreditUiModel>,
     navController: NavController
 ) {
-    Surface(onClick = { onClickItem(id, navController) }, color = Color.Transparent) {
+    LazyRow(
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(credits.size) {
+            CreditItem(credits[it], navController)
+        }
+    }
+}
+
+@Composable
+private fun CreditItem(
+    credit: CreditUiModel,
+    navController: NavController
+) {
+    Surface(
+        onClick = { onClickItem(credit.id, navController) },
+        color = Color.Transparent
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.width(100.dp)
         ) {
             AsyncImage(
-                model = getPosterUrl(url),
-                modifier = Modifier.aspectRatio(0.67f),
+                model = getPosterUrl(credit.url),
+                modifier = Modifier.aspectRatio(ratio = 0.67f),
                 fallback = painterResource(id = R.drawable.ic_person_placeholder),
                 error = painterResource(id = R.drawable.ic_person_placeholder),
                 placeholder = painterResource(id = R.drawable.ic_person_placeholder),
-                contentDescription = null,
+                contentDescription = credit.name,
                 contentScale = ContentScale.Crop,
             )
-            if (!name.isNullOrBlank()) {
+            if (!credit.name.isNullOrBlank()) {
                 Text(
-                    text = name,
+                    text = credit.name,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            if (!work.isNullOrBlank()) {
+            if (!credit.work.isNullOrBlank()) {
                 Text(
-                    text = work,
+                    text = credit.work,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            if (!date.isNullOrBlank()) {
+            if (!credit.date.isNullOrBlank()) {
                 Text(
-                    text = date,
+                    text = credit.date,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

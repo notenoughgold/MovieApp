@@ -12,9 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun GenreChip(text: String) {
+fun GenreChip(
+    text: String,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier.border(
+        modifier = modifier.border(
             1.dp,
             color = MaterialTheme.colorScheme.onSurface,
             shape = RoundedCornerShape(corner = CornerSize(12.dp))

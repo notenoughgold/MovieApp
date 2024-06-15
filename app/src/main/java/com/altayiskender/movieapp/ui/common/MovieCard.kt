@@ -1,4 +1,4 @@
-package com.altayiskender.movieapp.ui.popular
+package com.altayiskender.movieapp.ui.common
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +13,15 @@ import com.altayiskender.movieapp.ui.NavigationPage
 import com.altayiskender.movieapp.utils.getPosterUrl
 
 @Composable
-fun PopularMovieItem(movie: Movie, navController: NavController) {
-    Surface(onClick = { navController.navigate("${NavigationPage.MovieDetail.routeName}/${movie.id}") }) {
+fun PopularMovieItem(
+    movie: Movie,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier,
+        onClick = { navController.navigate("${NavigationPage.MovieDetail.routeName}/${movie.id}") }
+    ) {
         Column {
             AsyncImage(
                 model = getPosterUrl(movie.posterPath),

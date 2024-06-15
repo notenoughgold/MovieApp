@@ -44,7 +44,6 @@ class RepositoryImpl(
     override fun insertBookmarkedMovie(bookmark: Movie) =
         localDataSource.insertBookmarkedMovie(bookmark)
 
-
     // delete a movie from bookmarks db.
     override fun deleteBookmarkedMovie(bookmark: Movie) =
         localDataSource.deleteBookmarkedMovie(bookmark)
