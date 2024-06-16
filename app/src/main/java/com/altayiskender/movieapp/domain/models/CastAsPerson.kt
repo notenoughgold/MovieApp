@@ -1,18 +1,20 @@
 package com.altayiskender.movieapp.domain.models
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CastAsPerson(
-    @SerializedName("first_air_date")
+    @SerialName("first_air_date")
     val firstAirDate: String? = null,
     val overview: String? = null,
     val originalLanguage: String? = null,
     val episodeCount: Int? = null,
     val genreIds: List<Int?>? = null,
-    @SerializedName("poster_path")
+    @SerialName("poster_path")
     val posterPath: String? = null,
     val originCountry: List<String?>? = null,
-    @SerializedName("backdrop_path")
+    @SerialName("backdrop_path")
     val backdropPath: String? = null,
     val character: String,
     val creditId: String? = null,
@@ -25,7 +27,7 @@ data class CastAsPerson(
     val originalTitle: String? = null,
     val video: Boolean? = null,
     val title: String? = null,
-    @SerializedName("release_date")
+    @SerialName("release_date")
     val releaseDate: String? = null,
     val adult: Boolean? = null
 )

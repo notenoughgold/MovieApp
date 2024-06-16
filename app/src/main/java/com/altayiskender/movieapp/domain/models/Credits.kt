@@ -1,10 +1,9 @@
 package com.altayiskender.movieapp.domain.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Credits(
     val cast: List<CastOfShow>?,
     val crew: List<CrewOfShow>?
-) : Parcelable
+)

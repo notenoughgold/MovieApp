@@ -1,17 +1,21 @@
 package com.altayiskender.movieapp.data.di
 
 import com.altayiskender.movieapp.config.BuildConfig
-import com.altayiskender.movieapp.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.URLProtocol
+import io.ktor.http.path
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import java.util.Locale
 import javax.inject.Singleton
 
@@ -21,46 +25,37 @@ class RemoteDataModule {
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(): OkHttpClient {
-        val client = OkHttpClient.Builder().addInterceptor(AuthInterceptor())
-        if (BuildConfig.isDebug) {
-            client.addNetworkInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BASIC
-            })
+    fun providesKtorClient(): HttpClient {
+        return HttpClient {
+            defaultRequest {
+                url {
+                    protocol = URLProtocol.HTTPS
+                    host = HOST
+                    path(PATH)
+                    parameters.append(API_KEY_NAME, API_KEY)
+                    parameters.append(LANGUAGE, Locale.getDefault().language)
+                }
+            }
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+            if (BuildConfig.isDebug) {
+                install(Logging) {
+                    logger = Logger.ANDROID
+                    level = LogLevel.ALL
+                }
+            }
         }
-        return client.build()
-    }
-
-    @Provides
-    @Singleton
-    fun providesRetrofitClient(okHttpClient: OkHttpClient): ApiService {
-        return Retrofit.Builder()
-            .baseUrl(SERVER_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-            .create(ApiService::class.java)
     }
 
     companion object {
-        private const val SERVER_URL = "https://api.themoviedb.org/3/"
-    }
-}
-
-private class AuthInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val url =
-            request.url.newBuilder()
-                .addQueryParameter(API_KEY_NAME, API_KEY)
-                .addQueryParameter(LANGUAGE, Locale.getDefault().language)
-                .build()
-        return chain.proceed(request.newBuilder().url(url).build())
-    }
-
-    companion object {
+        private const val HOST = "api.themoviedb.org"
+        private const val PATH = "3/"
         private const val API_KEY_NAME = "api_key"
         private const val LANGUAGE = "language"
     }
-
 }

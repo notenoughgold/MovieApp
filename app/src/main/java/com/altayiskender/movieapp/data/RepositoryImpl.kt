@@ -15,20 +15,9 @@ class RepositoryImpl(
     override suspend fun getPopularMovies(page: Int): Result<MoviesResponse> =
         runCatching { remoteDataSource.getPopularMovies(page) }
 
-    // Get a list of upcoming movie.
-    override suspend fun getUpcomingMovies(): Result<MoviesResponse> =
-        runCatching { remoteDataSource.getUpcomingMovies() }
-
-    // Get a list of now playing movie.
-    override suspend fun getNowPlayingMovies(): Result<MoviesResponse> =
-        runCatching { remoteDataSource.getNowPlayingMovies() }
-
     // Get details to the given movie.
     override suspend fun getMovieDetails(id: Long): Result<Movie> =
         runCatching { remoteDataSource.getMovieDetails(id) }
-
-    // Search all movies for the given query.
-    override suspend fun searchMovie(query: String) = remoteDataSource.searchMovie(query)
 
     // Search details for the given people.
     override suspend fun getPeopleDetails(id: Long) =

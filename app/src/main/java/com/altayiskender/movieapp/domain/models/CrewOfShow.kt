@@ -1,14 +1,13 @@
 package com.altayiskender.movieapp.domain.models
 
-import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class CrewOfShow(
     val id: Long,
     val job: String?,
     val name: String?,
-    @SerializedName("profile_path")
+    @SerialName("profile_path")
     val profilePath: String?
-) : Parcelable
+)

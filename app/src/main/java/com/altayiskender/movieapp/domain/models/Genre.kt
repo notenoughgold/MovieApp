@@ -1,10 +1,9 @@
 package com.altayiskender.movieapp.domain.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Genre(
-    val id: String,
+    val id: Int,
     val name: String
-) : Parcelable
+)

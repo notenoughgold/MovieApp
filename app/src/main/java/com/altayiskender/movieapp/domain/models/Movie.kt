@@ -1,33 +1,32 @@
 package com.altayiskender.movieapp.domain.models
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Entity(tableName = "bookmarks")
-@Parcelize
+@Serializable
 data class Movie @Ignore constructor(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Long = 0L,
-    @SerializedName("vote_count")
+    @SerialName("vote_count")
     @Ignore
     val voteCount: Int? = null,
-    @SerializedName("vote_average")
+    @SerialName("vote_average")
     @Ignore
     val voteAverage: Double? = null,
     @Ignore
     val runtime: Int? = null,
     val title: String? = "",
-    @SerializedName("release_date")
+    @SerialName("release_date")
     val releaseDate: String? = "",
-    @SerializedName("poster_path")
+    @SerialName("poster_path")
     val posterPath: String? = "",
-    @SerializedName("backdrop_path")
+    @SerialName("backdrop_path")
     @Ignore
     val backdropPath: String? = null,
     @Ignore
@@ -36,7 +35,7 @@ data class Movie @Ignore constructor(
     val overview: String? = null,
     @Ignore
     val credits: Credits? = null
-) : Parcelable {
+) {
 
     constructor(id: Long, title: String?, releaseDate: String?, posterPath: String?) : this(
         id,
