@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -243,7 +244,10 @@ private fun CreditItem(
         ) {
             AsyncImage(
                 model = getPosterUrl(credit.url),
-                modifier = Modifier.aspectRatio(ratio = 0.67f),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .aspectRatio(ratio = 0.67f)
+                    .padding(bottom = 4.dp),
                 fallback = painterResource(id = R.drawable.ic_person_placeholder),
                 error = painterResource(id = R.drawable.ic_person_placeholder),
                 placeholder = painterResource(id = R.drawable.ic_person_placeholder),
