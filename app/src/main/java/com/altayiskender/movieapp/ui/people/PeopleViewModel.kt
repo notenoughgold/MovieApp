@@ -30,11 +30,13 @@ class PeopleViewModel @Inject constructor(
     private fun getPeopleDetails(id: Long) {
         viewModelScope.launch {
             isLoading.value = true
-            getPersonDetailUseCase.invoke(id).onSuccess {
-                peopleState.value = it
-            }.onFailure {
-                Timber.e(it)
-            }
+            getPersonDetailUseCase.invoke(id)
+                .onSuccess {
+                    peopleState.value = it
+                }
+                .onFailure {
+                    Timber.e(it)
+                }
             isLoading.value = false
         }
     }

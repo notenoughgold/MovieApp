@@ -116,6 +116,11 @@ fun PersonDetailBody(
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
+
+    val onClickCredit: (id: Long) -> Unit = { id ->
+        navController.navigate("${NavigationPage.MovieDetail.routeName}/$id")
+    }
+
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
@@ -150,7 +155,7 @@ fun PersonDetailBody(
                 person.movieCredits?.cast.orEmpty().map {
                     CreditUiModel.createFrom(it)
                 },
-                navController
+                onClickCredit
             )
         }
 
@@ -163,7 +168,7 @@ fun PersonDetailBody(
                 person.movieCredits?.crew.orEmpty().map {
                     CreditUiModel.createFrom(it)
                 },
-                navController
+                onClickCredit
             )
         }
 
@@ -217,14 +222,14 @@ private fun PersonInfoRow(
 @Composable
 private fun CreditsLazyRow(
     credits: List<CreditUiModel>,
-    navController: NavController
+    onClickCredit: (id: Long) -> Unit
 ) {
     LazyRow(
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(credits.size) {
-            CreditItem(credits[it], navController)
+            CreditItem(credits[it], onClickCredit)
         }
     }
 }
@@ -232,10 +237,10 @@ private fun CreditsLazyRow(
 @Composable
 private fun CreditItem(
     credit: CreditUiModel,
-    navController: NavController
+    onClickItem: (id: Long) -> Unit
 ) {
     Surface(
-        onClick = { onClickItem(credit.id, navController) },
+        onClick = { onClickItem(credit.id) },
         color = Color.Transparent
     ) {
         Column(
@@ -255,33 +260,24 @@ private fun CreditItem(
                 contentScale = ContentScale.Crop,
             )
             if (!credit.name.isNullOrBlank()) {
-                Text(
-                    text = credit.name,
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                SingleLineSmallText(credit.name)
             }
             if (!credit.work.isNullOrBlank()) {
-                Text(
-                    text = credit.work,
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                SingleLineSmallText(credit.work)
             }
             if (!credit.date.isNullOrBlank()) {
-                Text(
-                    text = credit.date,
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                SingleLineSmallText(credit.date)
             }
         }
     }
 }
 
-private fun onClickItem(id: Long, navController: NavController) {
-    navController.navigate("${NavigationPage.MovieDetail.routeName}/${id}")
+@Composable
+private fun SingleLineSmallText(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+    )
 }
