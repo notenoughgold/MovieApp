@@ -1,60 +1,42 @@
 [versions]
 activityCompose = "1.9.0"
-androidGradlePlugin = "8.5.0"
-coil = "2.1.0"
-constraintlayoutCompose = "1.0.1"
-core = "1.13.1"
-hiltNavigationCompose = "1.2.0"
+androidGradlePlugin = "8.3.0"
+coil = "2.3.6"
 kotlin = "2.0.0"
-hilt = "2.49"
-navigationCompose = "2.7.7"
-paging = "3.3.0"
-lifecycle = "2.8.2"
-room = "2.6.1"
-compose = "2024.05.00"
-timber = "5.0.1"
-ktor = "2.3.11"
+navigationCompose = "2.7.0-alpha07"
+paging = "3.3.0-alpha02-0.5.1"
+room = "2.7.0-alpha04"
+ktor = "2.3.12"
+koin = "3.6.0-Beta4"
+koinComposeMultiplatform = "1.2.0-Beta4"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.21" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.6.11" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.6" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose" }
-compose-ui-ui = { module = "androidx.compose.ui:ui" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core" }
-compose-material3 = { module = "androidx.compose.material3:material3" }
-coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
-paging-runtime = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
-room = { module = "androidx.room:room-ktx", version.ref = "room" }
+coil = { module = "com.github.skydoves:landscapist-coil3", version.ref = "coil" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+paging-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version = "2.5.0-SNAPSHOT" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.0" }
 compose-rules = { module = "io.nlopez.compose.rules:detekt", version = "0.4.4" }
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-jsonSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 kotlin-jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.3" }
-
-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinComposeMultiplatform" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeMultiplatform" }

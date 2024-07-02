@@ -9,4 +9,7 @@
 /.idea
 */build
 */release
+/.kotlin
+/iosApp/iosApp.xcodeproj/project.xcworkspace
+/iosApp/iosApp.xcodeproj/xcuserdata
 **/ApiKey.kt
