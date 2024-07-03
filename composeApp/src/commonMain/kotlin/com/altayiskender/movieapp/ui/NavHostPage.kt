@@ -22,6 +22,10 @@ import com.altayiskender.movieapp.ui.details.DetailPage
 import com.altayiskender.movieapp.ui.details.DetailViewModel
 import com.altayiskender.movieapp.ui.people.PeoplePage
 import com.altayiskender.movieapp.ui.people.PeopleViewModel
+import movieapp.composeapp.generated.resources.Res
+import movieapp.composeapp.generated.resources.bookmarks
+import movieapp.composeapp.generated.resources.popular
+import org.jetbrains.compose.resources.StringResource
 import org.koin.compose.koinInject
 
 @Composable
@@ -30,9 +34,9 @@ fun NavHostPage() {
     var bottomNavigationIndex by rememberSaveable { mutableIntStateOf(0) }
     NavHost(
         navController = navController,
-        startDestination = NavigationPage.BottomNavigationPage.routeName
+        startDestination = NavigationRoute.BottomNavigationPage.routeName
     ) {
-        composable(NavigationPage.BottomNavigationPage.routeName) {
+        composable(NavigationRoute.BottomNavigationPage.routeName) {
             BottomNavigationPage(
                 navController = navController,
                 bottomNavigationIndex = bottomNavigationIndex,
@@ -40,9 +44,9 @@ fun NavHostPage() {
             )
         }
         composable(
-            route = NavigationPage.MovieDetail.routeWithArgument,
+            route = NavigationRoute.MovieDetail.routeWithArgument,
             arguments = listOf(
-                navArgument(NavigationPage.MovieDetail.id) { type = NavType.LongType },
+                navArgument(NavigationRoute.MovieDetail.id) { type = NavType.LongType },
             )
         ) {
             val getMovieDetailUseCase: GetMovieDetailUseCase = koinInject()
@@ -64,9 +68,9 @@ fun NavHostPage() {
             )
         }
         composable(
-            route = NavigationPage.PeopleDetail.routeWithArgument,
+            route = NavigationRoute.PeopleDetail.routeWithArgument,
             arguments = listOf(
-                navArgument(NavigationPage.PeopleDetail.id) { type = NavType.LongType },
+                navArgument(NavigationRoute.PeopleDetail.id) { type = NavType.LongType },
             )
         ) {
             val getPersonDetailUseCase: GetPersonDetailUseCase = koinInject()
@@ -84,18 +88,24 @@ fun NavHostPage() {
     }
 }
 
-sealed class NavigationPage(val routeName: String) {
+sealed class NavigationRoute(open val routeName: String) {
 
-    data object BottomNavigationPage : NavigationPage("BottomNavigationPage")
-    data object Popular : NavigationPage("Popular")
-    data object Bookmarks : NavigationPage("Bookmarks")
+    sealed class BottomNavigationRoute(
+        override val routeName: String,
+        val label: StringResource
+    ) : NavigationRoute(routeName) {
+        data object Popular : BottomNavigationRoute("Popular", Res.string.popular)
+        data object Bookmarks : BottomNavigationRoute("Bookmarks", Res.string.bookmarks)
+    }
 
-    data object MovieDetail : NavigationPage("MovieDetail") {
+    data object BottomNavigationPage : NavigationRoute("BottomNavigationPage")
+
+    data object MovieDetail : NavigationRoute("MovieDetail") {
         const val routeWithArgument: String = "MovieDetail/{movieId}"
         const val id: String = "movieId"
     }
 
-    data object PeopleDetail : NavigationPage("PeopleDetail") {
+    data object PeopleDetail : NavigationRoute("PeopleDetail") {
         const val routeWithArgument: String = "PeopleDetail/{peopleId}"
         const val id: String = "peopleId"
     }

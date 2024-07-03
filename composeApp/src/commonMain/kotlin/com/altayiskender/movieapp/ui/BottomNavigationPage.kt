@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.altayiskender.movieapp.ui.bookmarks.BookmarksPage
 import com.altayiskender.movieapp.ui.popular.PopularPage
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -29,7 +30,10 @@ fun BottomNavigationPage(
     onBottomNavigation: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val navBarEntries = listOf(NavigationPage.Popular, NavigationPage.Bookmarks)
+    val navBarEntries = listOf(
+        NavigationRoute.BottomNavigationRoute.Popular,
+        NavigationRoute.BottomNavigationRoute.Bookmarks
+    )
     val icons = listOf(Icons.Filled.Star, Icons.Filled.Favorite)
     val bottomNavController = rememberNavController().apply {
         addOnDestinationChangedListener { _, destination, _ ->
@@ -43,13 +47,13 @@ fun BottomNavigationPage(
 
     Scaffold(
         modifier = modifier,
-        topBar = { PosterAppBar(navBarEntries[bottomNavigationIndex].routeName) },
+        topBar = { PosterAppBar(stringResource(navBarEntries[bottomNavigationIndex].label)) },
         bottomBar = {
             NavigationBar {
                 navBarEntries.forEachIndexed { index, entry ->
                     NavigationBarItem(
                         icon = { Icon(icons[index], null) },
-                        label = { Text(entry.routeName) },
+                        label = { Text(stringResource(entry.label)) },
                         selected = bottomNavigationIndex == index,
                         onClick = {
                             bottomNavController.navigate(entry.routeName) {
@@ -73,16 +77,16 @@ fun BottomNavigationPage(
         content = {
             NavHost(
                 bottomNavController,
-                startDestination = NavigationPage.Popular.routeName,
+                startDestination = NavigationRoute.BottomNavigationRoute.Popular.routeName,
                 modifier = Modifier.padding(it)
             ) {
                 composable(
-                    NavigationPage.Popular.routeName
+                    NavigationRoute.BottomNavigationRoute.Popular.routeName
                 ) {
                     PopularPage(navController = navController, viewModel = koinViewModel())
                 }
                 composable(
-                    NavigationPage.Bookmarks.routeName
+                    NavigationRoute.BottomNavigationRoute.Bookmarks.routeName
                 ) {
                     BookmarksPage(navController = navController, viewModel = koinViewModel())
                 }

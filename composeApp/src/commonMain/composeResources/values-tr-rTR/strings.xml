@@ -1,6 +1,8 @@
 <resources>
-    <string name="Birthday">Doğum tarihi</string>
-    <string name="Birthplace">Doğum yeri</string>
+    <string name="popular">Popüler</string>
+    <string name="bookmarks">Beğenilenler</string>
+    <string name="birthday">Doğum tarihi</string>
+    <string name="birthplace">Doğum yeri</string>
     <string name="rating">Değerlendirme</string>
     <string name="release_date">Çıkış tarihi</string>
     <string name="runtime">Film süresi</string>

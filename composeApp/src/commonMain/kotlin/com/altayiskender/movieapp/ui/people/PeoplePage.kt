@@ -41,15 +41,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.altayiskender.movieapp.domain.models.PeopleResponse
-import com.altayiskender.movieapp.ui.NavigationPage
+import com.altayiskender.movieapp.ui.NavigationRoute
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
-import movieapp.composeapp.generated.resources.Birthday
-import movieapp.composeapp.generated.resources.Birthplace
 import movieapp.composeapp.generated.resources.Res
+import movieapp.composeapp.generated.resources.birthday
+import movieapp.composeapp.generated.resources.birthplace
 import movieapp.composeapp.generated.resources.cast
 import movieapp.composeapp.generated.resources.crew
 import movieapp.composeapp.generated.resources.ic_person_placeholder
@@ -122,7 +122,7 @@ fun PersonDetailBody(
 ) {
 
     val onClickCredit: (id: Long) -> Unit = { id ->
-        navController.navigate("${NavigationPage.MovieDetail.routeName}/$id")
+        navController.navigate("${NavigationRoute.MovieDetail.routeName}/$id")
     }
 
     Column(
@@ -203,7 +203,7 @@ private fun PersonInfoRow(
         if (!person.birthday.isNullOrBlank()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = stringResource(resource = Res.string.Birthday),
+                    text = stringResource(resource = Res.string.birthday),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(text = person.birthday, fontWeight = FontWeight.Bold)
@@ -212,7 +212,7 @@ private fun PersonInfoRow(
         if (!person.placeOfBirth.isNullOrBlank()) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = stringResource(resource = Res.string.Birthplace),
+                    text = stringResource(resource = Res.string.birthplace),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(

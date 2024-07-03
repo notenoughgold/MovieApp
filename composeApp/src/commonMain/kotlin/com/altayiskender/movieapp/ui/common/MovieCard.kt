@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
 import com.altayiskender.movieapp.domain.models.Movie
-import com.altayiskender.movieapp.ui.NavigationPage
+import com.altayiskender.movieapp.ui.NavigationRoute
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
@@ -20,7 +20,7 @@ fun PopularMovieItem(
 ) {
     Surface(
         modifier = modifier,
-        onClick = { navController.navigate("${NavigationPage.MovieDetail.routeName}/${movie.id}") }
+        onClick = { navController.navigate("${NavigationRoute.MovieDetail.routeName}/${movie.id}") }
     ) {
         CoilImage(
             modifier = Modifier.fillMaxWidth(),
