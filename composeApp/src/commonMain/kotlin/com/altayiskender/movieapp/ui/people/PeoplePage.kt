@@ -45,11 +45,15 @@ import com.altayiskender.movieapp.ui.NavigationPage
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
+import com.skydoves.landscapist.components.rememberImageComponent
+import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
 import movieapp.composeapp.generated.resources.Birthday
 import movieapp.composeapp.generated.resources.Birthplace
 import movieapp.composeapp.generated.resources.Res
 import movieapp.composeapp.generated.resources.cast
 import movieapp.composeapp.generated.resources.crew
+import movieapp.composeapp.generated.resources.ic_person_placeholder
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -134,6 +138,10 @@ fun PersonDetailBody(
                     contentScale = ContentScale.Crop,
                     contentDescription = person.name,
                 ),
+                component = rememberImageComponent {
+                    +PlaceholderPlugin.Loading(painterResource(resource = Res.drawable.ic_person_placeholder))
+                    +PlaceholderPlugin.Failure(painterResource(resource = Res.drawable.ic_person_placeholder))
+                },
                 modifier = Modifier
                     .clip(CircleShape)
                     .height(150.dp)
@@ -252,6 +260,10 @@ private fun CreditItem(
                     contentDescription = credit.name,
                     contentScale = ContentScale.Crop,
                 ),
+                component = rememberImageComponent {
+                    +PlaceholderPlugin.Loading(painterResource(resource = Res.drawable.ic_person_placeholder))
+                    +PlaceholderPlugin.Failure(painterResource(resource = Res.drawable.ic_person_placeholder))
+                },
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
                     .aspectRatio(ratio = 0.67f)

@@ -19,6 +19,11 @@ import androidx.compose.ui.unit.dp
 import com.altayiskender.movieapp.utils.getPosterUrl
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
+import com.skydoves.landscapist.components.rememberImageComponent
+import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
+import movieapp.composeapp.generated.resources.Res
+import movieapp.composeapp.generated.resources.ic_person_placeholder
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun PersonItem(
@@ -40,6 +45,10 @@ fun PersonItem(
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                 ),
+                component = rememberImageComponent {
+                    +PlaceholderPlugin.Loading(painterResource(resource = Res.drawable.ic_person_placeholder))
+                    +PlaceholderPlugin.Failure(painterResource(resource = Res.drawable.ic_person_placeholder))
+                },
                 modifier = Modifier
                     .clip(CircleShape)
                     .height(80.dp)
