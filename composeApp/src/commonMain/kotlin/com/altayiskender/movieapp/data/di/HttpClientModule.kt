@@ -1,5 +1,6 @@
 package com.altayiskender.movieapp.data.di
 
+import androidx.compose.ui.text.intl.Locale
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -27,7 +28,7 @@ val httpClientModule = module {
                     host = HOST
                     path(PATH)
                     parameters.append(API_KEY_NAME, API_KEY)
-                    parameters.append(LANGUAGE, "en-US") // TODO: get locale
+                    parameters.append(LANGUAGE, Locale.current.language)
                 }
             }
             install(ContentNegotiation) {
