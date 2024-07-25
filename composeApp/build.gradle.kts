@@ -28,6 +28,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            linkerOpts.add("-lsqlite3")
         }
     }
 
@@ -59,7 +60,6 @@ kotlin {
                 implementation(libs.landscapist.placeholder)
 
                 implementation(libs.room.runtime)
-                implementation(libs.sqlite.bundled)
             }
 
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
