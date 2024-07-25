@@ -60,6 +60,8 @@ kotlin {
                 implementation(libs.landscapist.placeholder)
 
                 implementation(libs.room.runtime)
+
+                implementation(libs.napier)
             }
 
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
