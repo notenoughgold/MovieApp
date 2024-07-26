@@ -26,64 +26,68 @@ import movieapp.composeapp.generated.resources.Res
 import movieapp.composeapp.generated.resources.bookmarks
 import movieapp.composeapp.generated.resources.popular
 import org.jetbrains.compose.resources.StringResource
+import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 
 @Composable
 fun NavHostPage() {
-    val navController: NavHostController = rememberNavController()
-    var bottomNavigationIndex by rememberSaveable { mutableIntStateOf(0) }
-    NavHost(
-        navController = navController,
-        startDestination = NavigationRoute.BottomNavigationPage.routeName
-    ) {
-        composable(NavigationRoute.BottomNavigationPage.routeName) {
-            BottomNavigationPage(
-                navController = navController,
-                bottomNavigationIndex = bottomNavigationIndex,
-                onBottomNavigation = { bottomNavigationIndex = it }
-            )
-        }
-        composable(
-            route = NavigationRoute.MovieDetail.routeWithArgument,
-            arguments = listOf(
-                navArgument(NavigationRoute.MovieDetail.id) { type = NavType.LongType },
-            )
+    KoinContext {
+        val navController: NavHostController = rememberNavController()
+        var bottomNavigationIndex by rememberSaveable { mutableIntStateOf(0) }
+
+        NavHost(
+            navController = navController,
+            startDestination = NavigationRoute.BottomNavigationPage.routeName
         ) {
-            val getMovieDetailUseCase: GetMovieDetailUseCase = koinInject()
-            val insertBookmarkUseCase: InsertBookmarkUseCase = koinInject()
-            val deleteBookmarkUseCase: DeleteBookmarkUseCase = koinInject()
-            val getBookmarkStatusUseCase: GetBookmarkStatusUseCase = koinInject()
-            val viewModel = viewModel {
-                DetailViewModel(
-                    stateHandle = createSavedStateHandle(),
-                    getMovieDetailUseCase = getMovieDetailUseCase,
-                    insertBookmarkUseCase = insertBookmarkUseCase,
-                    deleteBookmarkUseCase = deleteBookmarkUseCase,
-                    getBookmarkStatusUseCase = getBookmarkStatusUseCase
+            composable(NavigationRoute.BottomNavigationPage.routeName) {
+                BottomNavigationPage(
+                    navController = navController,
+                    bottomNavigationIndex = bottomNavigationIndex,
+                    onBottomNavigation = { bottomNavigationIndex = it }
                 )
             }
-            DetailPage(
-                viewModel = viewModel,
-                navController = navController
-            )
-        }
-        composable(
-            route = NavigationRoute.PeopleDetail.routeWithArgument,
-            arguments = listOf(
-                navArgument(NavigationRoute.PeopleDetail.id) { type = NavType.LongType },
-            )
-        ) {
-            val getPersonDetailUseCase: GetPersonDetailUseCase = koinInject()
-            val viewModel = viewModel {
-                PeopleViewModel(
-                    stateHandle = createSavedStateHandle(),
-                    getPersonDetailUseCase = getPersonDetailUseCase
+            composable(
+                route = NavigationRoute.MovieDetail.routeWithArgument,
+                arguments = listOf(
+                    navArgument(NavigationRoute.MovieDetail.id) { type = NavType.LongType },
+                )
+            ) {
+                val getMovieDetailUseCase: GetMovieDetailUseCase = koinInject()
+                val insertBookmarkUseCase: InsertBookmarkUseCase = koinInject()
+                val deleteBookmarkUseCase: DeleteBookmarkUseCase = koinInject()
+                val getBookmarkStatusUseCase: GetBookmarkStatusUseCase = koinInject()
+                val viewModel = viewModel {
+                    DetailViewModel(
+                        stateHandle = createSavedStateHandle(),
+                        getMovieDetailUseCase = getMovieDetailUseCase,
+                        insertBookmarkUseCase = insertBookmarkUseCase,
+                        deleteBookmarkUseCase = deleteBookmarkUseCase,
+                        getBookmarkStatusUseCase = getBookmarkStatusUseCase
+                    )
+                }
+                DetailPage(
+                    viewModel = viewModel,
+                    navController = navController
                 )
             }
-            PeoplePage(
-                viewModel = viewModel,
-                navController = navController
-            )
+            composable(
+                route = NavigationRoute.PeopleDetail.routeWithArgument,
+                arguments = listOf(
+                    navArgument(NavigationRoute.PeopleDetail.id) { type = NavType.LongType },
+                )
+            ) {
+                val getPersonDetailUseCase: GetPersonDetailUseCase = koinInject()
+                val viewModel = viewModel {
+                    PeopleViewModel(
+                        stateHandle = createSavedStateHandle(),
+                        getPersonDetailUseCase = getPersonDetailUseCase
+                    )
+                }
+                PeoplePage(
+                    viewModel = viewModel,
+                    navController = navController
+                )
+            }
         }
     }
 }
