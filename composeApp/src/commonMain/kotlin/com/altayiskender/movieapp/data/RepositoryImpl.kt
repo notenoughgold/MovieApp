@@ -36,4 +36,10 @@ class RepositoryImpl(
     // delete a movie from bookmarks db.
     override suspend fun deleteBookmarkedMovie(bookmark: Movie) =
         localDataSource.deleteBookmarkedMovie(bookmark)
+
+    override suspend fun getMoviesByKeyword(keyword: String, page: Int): Result<MoviesResponse> {
+        return runCatching {
+            remoteDataSource.getMoviesByKeyword(keyword, page)
+        }
+    }
 }

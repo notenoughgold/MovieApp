@@ -25,6 +25,7 @@ import com.altayiskender.movieapp.ui.people.PeopleViewModel
 import movieapp.composeapp.generated.resources.Res
 import movieapp.composeapp.generated.resources.bookmarks
 import movieapp.composeapp.generated.resources.popular
+import movieapp.composeapp.generated.resources.search
 import org.jetbrains.compose.resources.StringResource
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
@@ -99,6 +100,7 @@ sealed class NavigationRoute(open val routeName: String) {
         val label: StringResource
     ) : NavigationRoute(routeName) {
         data object Popular : BottomNavigationRoute("Popular", Res.string.popular)
+        data object Search : BottomNavigationRoute("Search", Res.string.search)
         data object Bookmarks : BottomNavigationRoute("Bookmarks", Res.string.bookmarks)
     }
 

@@ -19,9 +19,9 @@ import com.altayiskender.movieapp.ui.common.PopularMovieItem
 
 @Composable
 fun PopularPage(
+    viewModel: PopularViewModel,
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: PopularViewModel,
 ) {
     val lazyMovieItems: LazyPagingItems<Movie> = viewModel.movies.collectAsLazyPagingItems()
     val isLoading by viewModel.isLoading
@@ -55,6 +55,3 @@ fun PopularPage(
         }
     }
 }
-
-
-

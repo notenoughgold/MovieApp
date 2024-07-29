@@ -32,4 +32,13 @@ class RemoteDataSourceImpl(private val httpClient: HttpClient) : RemoteDataSourc
         }.body()
     }
 
+    override suspend fun getMoviesByKeyword(keyword: String, page: Int): MoviesResponse {
+        return httpClient.get {
+            url(path = "search/movie")
+            parameter("include_adult", false)
+            parameter("page", page)
+            parameter("query", keyword)
+        }.body()
+    }
+
 }

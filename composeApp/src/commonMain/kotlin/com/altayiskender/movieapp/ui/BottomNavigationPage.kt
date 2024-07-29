@@ -3,6 +3,7 @@ package com.altayiskender.movieapp.ui
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.altayiskender.movieapp.ui.bookmarks.BookmarksPage
 import com.altayiskender.movieapp.ui.popular.PopularPage
+import com.altayiskender.movieapp.ui.search.SearchPage
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -32,9 +34,10 @@ fun BottomNavigationPage(
 ) {
     val navBarEntries = listOf(
         NavigationRoute.BottomNavigationRoute.Popular,
+        NavigationRoute.BottomNavigationRoute.Search,
         NavigationRoute.BottomNavigationRoute.Bookmarks
     )
-    val icons = listOf(Icons.Filled.Star, Icons.Filled.Favorite)
+    val icons = listOf(Icons.Filled.Star, Icons.Filled.Search, Icons.Filled.Favorite)
     val bottomNavController = rememberNavController().apply {
         addOnDestinationChangedListener { _, destination, _ ->
             onBottomNavigation(
@@ -84,6 +87,11 @@ fun BottomNavigationPage(
                     NavigationRoute.BottomNavigationRoute.Popular.routeName
                 ) {
                     PopularPage(navController = navController, viewModel = koinViewModel())
+                }
+                composable(
+                    NavigationRoute.BottomNavigationRoute.Search.routeName
+                ) {
+                    SearchPage(navController = navController, viewModel = koinViewModel())
                 }
                 composable(
                     NavigationRoute.BottomNavigationRoute.Bookmarks.routeName

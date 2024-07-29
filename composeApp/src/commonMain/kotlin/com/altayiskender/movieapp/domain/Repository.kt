@@ -27,4 +27,7 @@ interface Repository {
 
     // delete a movie from bookmarks db.
     suspend fun deleteBookmarkedMovie(bookmark: Movie)
+
+    // Get a list of movies by keyword.
+    suspend fun getMoviesByKeyword(keyword: String, page: Int): Result<MoviesResponse>
 }

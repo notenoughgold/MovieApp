@@ -14,4 +14,6 @@ interface RemoteDataSource {
 
     // Search details for the given people.
     suspend fun getPeopleDetails(id: Long): PeopleResponse
+
+    suspend fun getMoviesByKeyword(keyword: String, page: Int): MoviesResponse
 }
