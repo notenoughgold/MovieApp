@@ -14,7 +14,7 @@ class PeopleViewModel(
     private val getPersonDetailUseCase: GetPersonDetailUseCase
 ) : ViewModel() {
 
-    private val peopleId: Long = checkNotNull(stateHandle[NavigationRoute.PeopleDetail.id])
+    private val peopleId: Long = checkNotNull(stateHandle[NavigationRoute.ParametricRoute.PeopleDetail.argumentName])
 
     val peopleState = mutableStateOf<PeopleResponse?>(null)
     val isLoading = mutableStateOf(false)

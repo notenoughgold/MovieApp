@@ -41,9 +41,9 @@ fun NavHostPage() {
                 )
             }
             composable(
-                route = NavigationRoute.MovieDetail.routeWithArgument,
+                route = NavigationRoute.ParametricRoute.MovieDetail.routeName,
                 arguments = listOf(
-                    navArgument(NavigationRoute.MovieDetail.id) { type = NavType.LongType },
+                    navArgument(NavigationRoute.ParametricRoute.MovieDetail.argumentName) { type = NavType.LongType },
                 )
             ) {
                 DetailPage(
@@ -52,9 +52,9 @@ fun NavHostPage() {
                 )
             }
             composable(
-                route = NavigationRoute.PeopleDetail.routeWithArgument,
+                route = NavigationRoute.ParametricRoute.PeopleDetail.routeName,
                 arguments = listOf(
-                    navArgument(NavigationRoute.PeopleDetail.id) { type = NavType.LongType },
+                    navArgument(NavigationRoute.ParametricRoute.PeopleDetail.argumentName) { type = NavType.LongType },
                 )
             ) {
                 PeoplePage(
@@ -79,13 +79,24 @@ sealed class NavigationRoute(open val routeName: String) {
 
     data object BottomNavigationPage : NavigationRoute("BottomNavigationPage")
 
-    data object MovieDetail : NavigationRoute("MovieDetail") {
-        const val routeWithArgument: String = "MovieDetail/{movieId}"
-        const val id: String = "movieId"
+    sealed class ParametricRoute(
+        override val routeName: String,
+        val routeRoot: String,
+        val argumentName: String,
+    ) : NavigationRoute(routeName) {
+
+        data object MovieDetail : ParametricRoute(
+            routeName = "MovieDetail/{movieId}",
+            routeRoot = "MovieDetail",
+            argumentName = "movieId"
+        )
+
+        data object PeopleDetail : ParametricRoute(
+            routeName = "PeopleDetail/{peopleId}",
+            routeRoot = "PeopleDetail",
+            argumentName = "peopleId"
+        )
+
     }
 
-    data object PeopleDetail : NavigationRoute("PeopleDetail") {
-        const val routeWithArgument: String = "PeopleDetail/{peopleId}"
-        const val id: String = "peopleId"
-    }
 }

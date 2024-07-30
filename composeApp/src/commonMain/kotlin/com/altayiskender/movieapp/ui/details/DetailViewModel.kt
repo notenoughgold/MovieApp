@@ -23,7 +23,7 @@ class DetailViewModel(
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase
 ) : ViewModel() {
 
-    private val movieId: Long = checkNotNull(stateHandle[NavigationRoute.MovieDetail.id])
+    private val movieId: Long = checkNotNull(stateHandle[NavigationRoute.ParametricRoute.MovieDetail.argumentName])
 
     var movieState = mutableStateOf<Movie?>(null)
 

@@ -20,7 +20,7 @@ fun PopularMovieItem(
 ) {
     Surface(
         modifier = modifier,
-        onClick = { navController.navigate("${NavigationRoute.MovieDetail.routeName}/${movie.id}") }
+        onClick = { navController.navigate("${NavigationRoute.ParametricRoute.MovieDetail.routeRoot}/${movie.id}") }
     ) {
         CoilImage(
             modifier = Modifier.fillMaxWidth(),

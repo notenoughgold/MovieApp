@@ -122,7 +122,7 @@ fun PersonDetailBody(
 ) {
 
     val onClickCredit: (id: Long) -> Unit = { id ->
-        navController.navigate("${NavigationRoute.MovieDetail.routeName}/$id")
+        navController.navigate("${NavigationRoute.ParametricRoute.MovieDetail.routeRoot}/$id")
     }
 
     Column(

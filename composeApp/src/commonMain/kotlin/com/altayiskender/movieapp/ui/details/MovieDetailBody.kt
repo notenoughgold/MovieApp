@@ -85,7 +85,7 @@ private fun PersonnelLazyRow(
     modifier: Modifier = Modifier
 ) {
     fun onClickPerson(id: Long) {
-        navController.navigate("${NavigationRoute.PeopleDetail.routeName}/${id}")
+        navController.navigate("${NavigationRoute.ParametricRoute.PeopleDetail.routeRoot}/${id}")
     }
 
     LazyRow(
