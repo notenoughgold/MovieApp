@@ -9,10 +9,12 @@ import com.altayiskender.movieapp.domain.usecases.GetPersonDetailUseCase
 import com.altayiskender.movieapp.domain.usecases.GetPopularMoviesUseCase
 import com.altayiskender.movieapp.domain.usecases.InsertBookmarkUseCase
 import com.altayiskender.movieapp.ui.bookmarks.BookmarksViewModel
+import com.altayiskender.movieapp.ui.details.DetailViewModel
+import com.altayiskender.movieapp.ui.people.PeopleViewModel
 import com.altayiskender.movieapp.ui.popular.PopularViewModel
 import com.altayiskender.movieapp.ui.search.SearchViewModel
-import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -27,4 +29,6 @@ val viewModelModule = module {
     viewModelOf(::PopularViewModel)
     viewModelOf(::BookmarksViewModel)
     viewModelOf(::SearchViewModel)
+    viewModelOf(::DetailViewModel)
+    viewModelOf(::PeopleViewModel)
 }

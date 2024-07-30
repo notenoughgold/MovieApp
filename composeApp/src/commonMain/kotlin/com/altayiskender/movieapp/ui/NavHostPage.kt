@@ -5,19 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.altayiskender.movieapp.domain.usecases.DeleteBookmarkUseCase
-import com.altayiskender.movieapp.domain.usecases.GetBookmarkStatusUseCase
-import com.altayiskender.movieapp.domain.usecases.GetMovieDetailUseCase
-import com.altayiskender.movieapp.domain.usecases.GetPersonDetailUseCase
-import com.altayiskender.movieapp.domain.usecases.InsertBookmarkUseCase
 import com.altayiskender.movieapp.ui.details.DetailPage
 import com.altayiskender.movieapp.ui.details.DetailViewModel
 import com.altayiskender.movieapp.ui.people.PeoplePage
@@ -28,7 +21,7 @@ import movieapp.composeapp.generated.resources.popular
 import movieapp.composeapp.generated.resources.search
 import org.jetbrains.compose.resources.StringResource
 import org.koin.compose.KoinContext
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NavHostPage() {
@@ -53,21 +46,8 @@ fun NavHostPage() {
                     navArgument(NavigationRoute.MovieDetail.id) { type = NavType.LongType },
                 )
             ) {
-                val getMovieDetailUseCase: GetMovieDetailUseCase = koinInject()
-                val insertBookmarkUseCase: InsertBookmarkUseCase = koinInject()
-                val deleteBookmarkUseCase: DeleteBookmarkUseCase = koinInject()
-                val getBookmarkStatusUseCase: GetBookmarkStatusUseCase = koinInject()
-                val viewModel = viewModel {
-                    DetailViewModel(
-                        stateHandle = createSavedStateHandle(),
-                        getMovieDetailUseCase = getMovieDetailUseCase,
-                        insertBookmarkUseCase = insertBookmarkUseCase,
-                        deleteBookmarkUseCase = deleteBookmarkUseCase,
-                        getBookmarkStatusUseCase = getBookmarkStatusUseCase
-                    )
-                }
                 DetailPage(
-                    viewModel = viewModel,
+                    viewModel = koinViewModel<DetailViewModel>(),
                     navController = navController
                 )
             }
@@ -77,15 +57,8 @@ fun NavHostPage() {
                     navArgument(NavigationRoute.PeopleDetail.id) { type = NavType.LongType },
                 )
             ) {
-                val getPersonDetailUseCase: GetPersonDetailUseCase = koinInject()
-                val viewModel = viewModel {
-                    PeopleViewModel(
-                        stateHandle = createSavedStateHandle(),
-                        getPersonDetailUseCase = getPersonDetailUseCase
-                    )
-                }
                 PeoplePage(
-                    viewModel = viewModel,
+                    viewModel = koinViewModel<PeopleViewModel>(),
                     navController = navController
                 )
             }

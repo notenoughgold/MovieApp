@@ -7,8 +7,7 @@ navigationCompose = "2.7.0-alpha07"
 paging = "3.3.0-alpha02-0.5.1"
 room = "2.7.0-alpha05"
 ktor = "2.3.12"
-koin = "3.6.0-Beta4"
-koinComposeMultiplatform = "1.2.0-Beta4"
+koin = "4.0.0-RC1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -38,6 +37,6 @@ ktor-jsonSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", v
 kotlin-jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.3" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinComposeMultiplatform" }
-koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeMultiplatform" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 napier = { module = "io.github.aakira:napier", version = "2.7.1" }
