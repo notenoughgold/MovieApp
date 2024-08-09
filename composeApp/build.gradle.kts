@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     alias(libs.plugins.android.application)
@@ -63,8 +62,6 @@ kotlin {
 
                 implementation(libs.napier)
             }
-
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
 
         androidMain.dependencies {
@@ -133,11 +130,8 @@ detekt {
 }
 
 dependencies {
-    add("kspCommonMainMetadata", libs.room.compiler)
-}
-
-tasks.withType<KotlinCompilationTask<*>>().configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
 }
