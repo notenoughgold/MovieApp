@@ -55,8 +55,8 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.koin.compose.viewmodel)
 
-                implementation(libs.landscapist)
-                implementation(libs.landscapist.placeholder)
+                implementation(libs.coil)
+                implementation(libs.coil.ktor2)
 
                 implementation(libs.room.runtime)
 

@@ -8,6 +8,7 @@ paging = "3.3.0-alpha02-0.5.1"
 room = "2.7.0-alpha06"
 ktor = "2.3.12"
 koin = "4.0.0-RC1"
+coil = "3.0.0-alpha10"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -20,8 +21,8 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
-landscapist = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landscapist" }
-landscapist-placeholder = { module = "com.github.skydoves:landscapist-placeholder", version.ref = "landscapist" }
+coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-ktor2 = { module = "io.coil-kt.coil3:coil-network-ktor2", version.ref = "coil" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 paging-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }

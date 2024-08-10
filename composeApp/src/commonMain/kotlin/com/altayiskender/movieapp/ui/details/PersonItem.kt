@@ -16,11 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.altayiskender.movieapp.utils.getPosterUrl
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
-import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
 import movieapp.composeapp.generated.resources.Res
 import movieapp.composeapp.generated.resources.ic_person_placeholder
 import org.jetbrains.compose.resources.painterResource
@@ -39,16 +36,13 @@ fun PersonItem(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CoilImage(
-                imageModel = { getPosterUrl(person.profilePath) },
-                imageOptions = ImageOptions(
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                ),
-                component = rememberImageComponent {
-                    +PlaceholderPlugin.Loading(painterResource(resource = Res.drawable.ic_person_placeholder))
-                    +PlaceholderPlugin.Failure(painterResource(resource = Res.drawable.ic_person_placeholder))
-                },
+            AsyncImage(
+                model = getPosterUrl(person.profilePath),
+                contentScale = ContentScale.Crop,
+                contentDescription = person.name,
+                fallback = painterResource(resource = Res.drawable.ic_person_placeholder),
+                error = painterResource(resource = Res.drawable.ic_person_placeholder),
+                placeholder = painterResource(resource = Res.drawable.ic_person_placeholder),
                 modifier = Modifier
                     .clip(CircleShape)
                     .height(80.dp)

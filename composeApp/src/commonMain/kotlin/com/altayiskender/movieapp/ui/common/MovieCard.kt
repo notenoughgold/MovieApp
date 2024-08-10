@@ -6,11 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import com.altayiskender.movieapp.domain.models.Movie
 import com.altayiskender.movieapp.ui.NavigationRoute
 import com.altayiskender.movieapp.utils.getPosterUrl
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil3.CoilImage
 
 @Composable
 fun PopularMovieItem(
@@ -22,13 +21,11 @@ fun PopularMovieItem(
         modifier = modifier,
         onClick = { navController.navigate("${NavigationRoute.ParametricRoute.MovieDetail.routeRoot}/${movie.id}") }
     ) {
-        CoilImage(
+        AsyncImage(
             modifier = Modifier.fillMaxWidth(),
-            imageModel = { getPosterUrl(movie.posterPath) },
-            imageOptions = ImageOptions(
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth
-            ),
+            model = getPosterUrl(movie.posterPath),
+            contentDescription = movie.title,
+            contentScale = ContentScale.FillWidth
         )
     }
 }

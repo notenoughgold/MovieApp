@@ -28,10 +28,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import com.altayiskender.movieapp.domain.models.Movie
 import com.altayiskender.movieapp.utils.getBackdropUrl
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil3.CoilImage
 
 @Composable
 fun DetailPage(
@@ -70,13 +69,11 @@ private fun ScaffoldWithBackground(
             .fillMaxSize()
     ) {
         movie?.backdropPath?.let {
-            CoilImage(
+            AsyncImage(
                 modifier = Modifier.fillMaxSize(),
-                imageModel = { getBackdropUrl(it) },
-                imageOptions = ImageOptions(
-                    contentDescription = null,
-                    contentScale = ContentScale.FillHeight,
-                )
+                model = getBackdropUrl(it),
+                contentDescription = null,
+                contentScale = ContentScale.FillHeight
             )
         }
 

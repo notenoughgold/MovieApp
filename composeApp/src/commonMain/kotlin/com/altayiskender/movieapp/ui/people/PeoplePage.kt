@@ -40,13 +40,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import com.altayiskender.movieapp.domain.models.PeopleResponse
 import com.altayiskender.movieapp.ui.NavigationRoute
 import com.altayiskender.movieapp.utils.getPosterUrl
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil3.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
-import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
 import movieapp.composeapp.generated.resources.Res
 import movieapp.composeapp.generated.resources.birthday
 import movieapp.composeapp.generated.resources.birthplace
@@ -132,16 +129,13 @@ fun PersonDetailBody(
     ) {
         Row {
             Spacer(modifier = Modifier.weight(1f))
-            CoilImage(
-                imageModel = { getPosterUrl(person.profilePath) },
-                imageOptions = ImageOptions(
-                    contentScale = ContentScale.Crop,
-                    contentDescription = person.name,
-                ),
-                component = rememberImageComponent {
-                    +PlaceholderPlugin.Loading(painterResource(resource = Res.drawable.ic_person_placeholder))
-                    +PlaceholderPlugin.Failure(painterResource(resource = Res.drawable.ic_person_placeholder))
-                },
+            AsyncImage(
+                model = getPosterUrl(person.profilePath),
+                contentScale = ContentScale.Crop,
+                contentDescription = person.name,
+                fallback = painterResource(resource = Res.drawable.ic_person_placeholder),
+                error = painterResource(resource = Res.drawable.ic_person_placeholder),
+                placeholder = painterResource(resource = Res.drawable.ic_person_placeholder),
                 modifier = Modifier
                     .clip(CircleShape)
                     .height(150.dp)
@@ -254,20 +248,17 @@ private fun CreditItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.width(100.dp)
         ) {
-            CoilImage(
-                imageModel = { getPosterUrl(credit.url) },
-                imageOptions = ImageOptions(
-                    contentDescription = credit.name,
-                    contentScale = ContentScale.Crop,
-                ),
-                component = rememberImageComponent {
-                    +PlaceholderPlugin.Loading(painterResource(resource = Res.drawable.ic_person_placeholder))
-                    +PlaceholderPlugin.Failure(painterResource(resource = Res.drawable.ic_person_placeholder))
-                },
+            AsyncImage(
+                model = getPosterUrl(credit.url),
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
                     .aspectRatio(ratio = 0.67f)
                     .padding(bottom = 4.dp),
+                fallback = painterResource(resource = Res.drawable.ic_person_placeholder),
+                error = painterResource(resource = Res.drawable.ic_person_placeholder),
+                placeholder = painterResource(resource = Res.drawable.ic_person_placeholder),
+                contentDescription = credit.name,
+                contentScale = ContentScale.Crop,
             )
             if (!credit.name.isNullOrBlank()) {
                 SingleLineSmallText(credit.name)
