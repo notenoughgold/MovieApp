@@ -8,7 +8,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.altayiskender.movieapp.domain.models.Movie
-import com.altayiskender.movieapp.ui.NavigationRoute
+import com.altayiskender.movieapp.ui.MovieDetailRoute
 import com.altayiskender.movieapp.utils.getPosterUrl
 
 @Composable
@@ -19,7 +19,7 @@ fun PopularMovieItem(
 ) {
     Surface(
         modifier = modifier,
-        onClick = { navController.navigate("${NavigationRoute.ParametricRoute.MovieDetail.routeRoot}/${movie.id}") }
+        onClick = { navController.navigate(MovieDetailRoute(movie.id)) }
     ) {
         AsyncImage(
             modifier = Modifier.fillMaxWidth(),

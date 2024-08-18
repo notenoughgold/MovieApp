@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.altayiskender.movieapp.domain.models.Genre
 import com.altayiskender.movieapp.domain.models.Movie
-import com.altayiskender.movieapp.ui.NavigationRoute
+import com.altayiskender.movieapp.ui.PeopleDetailRoute
 import movieapp.composeapp.generated.resources.Res
 import movieapp.composeapp.generated.resources.cast
 import movieapp.composeapp.generated.resources.crew
@@ -85,7 +85,7 @@ private fun PersonnelLazyRow(
     modifier: Modifier = Modifier
 ) {
     fun onClickPerson(id: Long) {
-        navController.navigate("${NavigationRoute.ParametricRoute.PeopleDetail.routeRoot}/${id}")
+        navController.navigate(PeopleDetailRoute(id))
     }
 
     LazyRow(

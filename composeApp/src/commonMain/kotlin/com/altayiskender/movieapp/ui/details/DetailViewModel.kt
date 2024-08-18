@@ -9,7 +9,6 @@ import com.altayiskender.movieapp.domain.usecases.DeleteBookmarkUseCase
 import com.altayiskender.movieapp.domain.usecases.GetBookmarkStatusUseCase
 import com.altayiskender.movieapp.domain.usecases.GetMovieDetailUseCase
 import com.altayiskender.movieapp.domain.usecases.InsertBookmarkUseCase
-import com.altayiskender.movieapp.ui.NavigationRoute
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -17,13 +16,12 @@ import kotlinx.coroutines.withContext
 
 class DetailViewModel(
     stateHandle: SavedStateHandle,
+    movieId: Long,
     private val getMovieDetailUseCase: GetMovieDetailUseCase,
     getBookmarkStatusUseCase: GetBookmarkStatusUseCase,
     private val insertBookmarkUseCase: InsertBookmarkUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase
 ) : ViewModel() {
-
-    private val movieId: Long = checkNotNull(stateHandle[NavigationRoute.ParametricRoute.MovieDetail.argumentName])
 
     var movieState = mutableStateOf<Movie?>(null)
 

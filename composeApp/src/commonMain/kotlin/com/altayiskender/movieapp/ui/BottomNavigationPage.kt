@@ -13,7 +13,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -22,6 +24,11 @@ import androidx.navigation.compose.rememberNavController
 import com.altayiskender.movieapp.ui.bookmarks.BookmarksPage
 import com.altayiskender.movieapp.ui.popular.PopularPage
 import com.altayiskender.movieapp.ui.search.SearchPage
+import movieapp.composeapp.generated.resources.Res
+import movieapp.composeapp.generated.resources.bookmarks
+import movieapp.composeapp.generated.resources.popular
+import movieapp.composeapp.generated.resources.search
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -32,17 +39,19 @@ fun BottomNavigationPage(
     onBottomNavigation: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val navBarEntries = listOf(
-        NavigationRoute.BottomNavigationRoute.Popular,
-        NavigationRoute.BottomNavigationRoute.Search,
-        NavigationRoute.BottomNavigationRoute.Bookmarks
-    )
-    val icons = listOf(Icons.Filled.Star, Icons.Filled.Search, Icons.Filled.Favorite)
+    val bottomNavigationModels = remember {
+        listOf(
+            BottomNavigationModel(HomeBottomNavigationRoute.Popular, Res.string.popular, Icons.Default.Star),
+            BottomNavigationModel(HomeBottomNavigationRoute.Search, Res.string.search, Icons.Default.Search),
+            BottomNavigationModel(HomeBottomNavigationRoute.Bookmarks, Res.string.bookmarks, Icons.Default.Favorite),
+        )
+    }
+
     val bottomNavController = rememberNavController().apply {
         addOnDestinationChangedListener { _, destination, _ ->
             onBottomNavigation(
-                navBarEntries.indexOfFirst {
-                    destination.route == it.routeName
+                bottomNavigationModels.indexOfFirst {
+                    destination.route == it.route::class.qualifiedName
                 }
             )
         }
@@ -50,16 +59,16 @@ fun BottomNavigationPage(
 
     Scaffold(
         modifier = modifier,
-        topBar = { PosterAppBar(stringResource(navBarEntries[bottomNavigationIndex].label)) },
+        topBar = { PosterAppBar(stringResource(bottomNavigationModels[bottomNavigationIndex].label)) },
         bottomBar = {
             NavigationBar {
-                navBarEntries.forEachIndexed { index, entry ->
+                bottomNavigationModels.forEachIndexed { index, entry ->
                     NavigationBarItem(
-                        icon = { Icon(icons[index], null) },
+                        icon = { Icon(entry.icon, stringResource(entry.label)) },
                         label = { Text(stringResource(entry.label)) },
                         selected = bottomNavigationIndex == index,
                         onClick = {
-                            bottomNavController.navigate(entry.routeName) {
+                            bottomNavController.navigate(entry.route) {
                                 // Pop up to the start destination of the graph to
                                 // avoid building up a large stack of destinations
                                 // on the back stack as users select items
@@ -80,22 +89,16 @@ fun BottomNavigationPage(
         content = {
             NavHost(
                 bottomNavController,
-                startDestination = NavigationRoute.BottomNavigationRoute.Popular.routeName,
+                startDestination = HomeBottomNavigationRoute.Popular,
                 modifier = Modifier.padding(it)
             ) {
-                composable(
-                    NavigationRoute.BottomNavigationRoute.Popular.routeName
-                ) {
+                composable<HomeBottomNavigationRoute.Popular> {
                     PopularPage(navController = navController, viewModel = koinViewModel())
                 }
-                composable(
-                    NavigationRoute.BottomNavigationRoute.Search.routeName
-                ) {
+                composable<HomeBottomNavigationRoute.Search> {
                     SearchPage(navController = navController, viewModel = koinViewModel())
                 }
-                composable(
-                    NavigationRoute.BottomNavigationRoute.Bookmarks.routeName
-                ) {
+                composable<HomeBottomNavigationRoute.Bookmarks> {
                     BookmarksPage(navController = navController, viewModel = koinViewModel())
                 }
             }
@@ -112,3 +115,9 @@ private fun PosterAppBar(title: String) {
         }
     )
 }
+
+private data class BottomNavigationModel(
+    val route: HomeBottomNavigationRoute,
+    val label: StringResource,
+    val icon: ImageVector
+)

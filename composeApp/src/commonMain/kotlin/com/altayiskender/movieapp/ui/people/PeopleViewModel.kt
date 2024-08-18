@@ -6,21 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.altayiskender.movieapp.domain.models.PeopleResponse
 import com.altayiskender.movieapp.domain.usecases.GetPersonDetailUseCase
-import com.altayiskender.movieapp.ui.NavigationRoute
 import kotlinx.coroutines.launch
 
 class PeopleViewModel(
     stateHandle: SavedStateHandle,
+    personId: Long,
     private val getPersonDetailUseCase: GetPersonDetailUseCase
 ) : ViewModel() {
-
-    private val peopleId: Long = checkNotNull(stateHandle[NavigationRoute.ParametricRoute.PeopleDetail.argumentName])
 
     val peopleState = mutableStateOf<PeopleResponse?>(null)
     val isLoading = mutableStateOf(false)
 
     init {
-        getPeopleDetails(peopleId)
+        getPeopleDetails(personId)
     }
 
     private fun getPeopleDetails(id: Long) {

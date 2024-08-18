@@ -6,22 +6,18 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.altayiskender.movieapp.ui.details.DetailPage
 import com.altayiskender.movieapp.ui.details.DetailViewModel
 import com.altayiskender.movieapp.ui.people.PeoplePage
 import com.altayiskender.movieapp.ui.people.PeopleViewModel
-import movieapp.composeapp.generated.resources.Res
-import movieapp.composeapp.generated.resources.bookmarks
-import movieapp.composeapp.generated.resources.popular
-import movieapp.composeapp.generated.resources.search
-import org.jetbrains.compose.resources.StringResource
+import kotlinx.serialization.Serializable
 import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NavHostPage() {
@@ -31,34 +27,30 @@ fun NavHostPage() {
 
         NavHost(
             navController = navController,
-            startDestination = NavigationRoute.BottomNavigationPage.routeName
+            startDestination = HomeRoute
         ) {
-            composable(NavigationRoute.BottomNavigationPage.routeName) {
+            composable<HomeRoute> {
                 BottomNavigationPage(
                     navController = navController,
                     bottomNavigationIndex = bottomNavigationIndex,
                     onBottomNavigation = { bottomNavigationIndex = it }
                 )
             }
-            composable(
-                route = NavigationRoute.ParametricRoute.MovieDetail.routeName,
-                arguments = listOf(
-                    navArgument(NavigationRoute.ParametricRoute.MovieDetail.argumentName) { type = NavType.LongType },
-                )
-            ) {
+            composable<MovieDetailRoute> {
+                val movieId: Long = it.toRoute<MovieDetailRoute>().movieId
                 DetailPage(
-                    viewModel = koinViewModel<DetailViewModel>(),
+                    viewModel = koinViewModel<DetailViewModel>(
+                        parameters = { parametersOf(movieId) }
+                    ),
                     navController = navController
                 )
             }
-            composable(
-                route = NavigationRoute.ParametricRoute.PeopleDetail.routeName,
-                arguments = listOf(
-                    navArgument(NavigationRoute.ParametricRoute.PeopleDetail.argumentName) { type = NavType.LongType },
-                )
-            ) {
+            composable<PeopleDetailRoute> {
+                val personId = it.toRoute<PeopleDetailRoute>().personId
                 PeoplePage(
-                    viewModel = koinViewModel<PeopleViewModel>(),
+                    viewModel = koinViewModel<PeopleViewModel>(
+                        parameters = { parametersOf(personId) }
+                    ),
                     navController = navController
                 )
             }
@@ -66,37 +58,22 @@ fun NavHostPage() {
     }
 }
 
-sealed class NavigationRoute(open val routeName: String) {
+sealed interface HomeBottomNavigationRoute {
+    @Serializable
+    data object Popular : HomeBottomNavigationRoute
 
-    sealed class BottomNavigationRoute(
-        override val routeName: String,
-        val label: StringResource
-    ) : NavigationRoute(routeName) {
-        data object Popular : BottomNavigationRoute("Popular", Res.string.popular)
-        data object Search : BottomNavigationRoute("Search", Res.string.search)
-        data object Bookmarks : BottomNavigationRoute("Bookmarks", Res.string.bookmarks)
-    }
+    @Serializable
+    data object Search : HomeBottomNavigationRoute
 
-    data object BottomNavigationPage : NavigationRoute("BottomNavigationPage")
-
-    sealed class ParametricRoute(
-        override val routeName: String,
-        val routeRoot: String,
-        val argumentName: String,
-    ) : NavigationRoute(routeName) {
-
-        data object MovieDetail : ParametricRoute(
-            routeName = "MovieDetail/{movieId}",
-            routeRoot = "MovieDetail",
-            argumentName = "movieId"
-        )
-
-        data object PeopleDetail : ParametricRoute(
-            routeName = "PeopleDetail/{peopleId}",
-            routeRoot = "PeopleDetail",
-            argumentName = "peopleId"
-        )
-
-    }
-
+    @Serializable
+    data object Bookmarks : HomeBottomNavigationRoute
 }
+
+@Serializable
+data object HomeRoute
+
+@Serializable
+data class MovieDetailRoute(val movieId: Long)
+
+@Serializable
+data class PeopleDetailRoute(val personId: Long)

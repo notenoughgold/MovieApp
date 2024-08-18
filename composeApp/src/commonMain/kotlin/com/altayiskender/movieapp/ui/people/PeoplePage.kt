@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.altayiskender.movieapp.domain.models.PeopleResponse
-import com.altayiskender.movieapp.ui.NavigationRoute
+import com.altayiskender.movieapp.ui.MovieDetailRoute
 import com.altayiskender.movieapp.utils.getPosterUrl
 import movieapp.composeapp.generated.resources.Res
 import movieapp.composeapp.generated.resources.birthday
@@ -119,7 +119,7 @@ fun PersonDetailBody(
 ) {
 
     val onClickCredit: (id: Long) -> Unit = { id ->
-        navController.navigate("${NavigationRoute.ParametricRoute.MovieDetail.routeRoot}/$id")
+        navController.navigate(MovieDetailRoute(id))
     }
 
     Column(
