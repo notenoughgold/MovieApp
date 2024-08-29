@@ -1,22 +1,25 @@
 [versions]
-activityCompose = "1.9.1"
-androidGradlePlugin = "8.3.2"
-kotlin = "2.0.10"
-navigationCompose = "2.8.0-alpha08"
+activityCompose = "1.9.2"
+androidGradlePlugin = "8.5.2"
+kotlin = "2.0.20"
+navigationCompose = "2.8.0-alpha09"
 paging = "3.3.0-alpha02-0.5.1"
-room = "2.7.0-alpha06"
+room = "2.7.0-alpha07"
 ktor = "2.3.12"
-koin = "4.0.0-RC1"
+koin = "4.0.0-RC2"
 coil = "3.0.0-alpha10"
+versions = "0.51.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.10-1.0.24" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.25" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.7.0-alpha02" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.7.0-beta01" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.6" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
+taskinfo = { id = "org.barfuin.gradle.taskinfo", version = "2.2.0" }
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -26,15 +29,15 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 paging-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.0" }
-compose-rules = { module = "io.nlopez.compose.rules:detekt", version = "0.4.4" }
+lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.1" }
+compose-rules = { module = "io.nlopez.compose.rules:detekt", version = "0.4.10" }
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-jsonSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-kotlin-jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.1" }
+kotlin-jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.2" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
