@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -121,6 +122,11 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+    generateKotlin = true
 }
 
 detekt {
