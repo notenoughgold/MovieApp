@@ -57,7 +57,7 @@ kotlin {
                 implementation(libs.koin.compose.viewmodel)
 
                 implementation(libs.coil)
-                implementation(libs.coil.ktor2)
+                implementation(libs.coil.ktor3)
 
                 implementation(libs.room.runtime)
 
@@ -79,7 +79,7 @@ kotlin {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -88,7 +88,7 @@ android {
     defaultConfig {
         applicationId = "com.altayiskender.movieapp"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

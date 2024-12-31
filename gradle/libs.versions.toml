@@ -1,21 +1,21 @@
 [versions]
-activityCompose = "1.9.2"
-androidGradlePlugin = "8.5.2"
-kotlin = "2.0.20"
-navigationCompose = "2.8.0-alpha10"
+activityCompose = "1.9.3"
+androidGradlePlugin = "8.7.3"
+kotlin = "2.1.0"
+navigationCompose = "2.8.0-alpha11"
 paging = "3.3.0-alpha02-0.5.1"
-room = "2.7.0-alpha08"
-ktor = "2.3.12"
+room = "2.7.0-alpha12"
+ktor = "3.0.3"
 koin = "4.0.0"
-coil = "3.0.0-alpha10"
+coil = "3.0.4"
 versions = "0.51.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.25" }
+ksp = { id = "com.google.devtools.ksp", version = "2.1.0-1.0.29" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.7.0-beta02" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.7.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.7" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 room = { id = "androidx.room", version.ref = "room" }
@@ -25,12 +25,12 @@ taskinfo = { id = "org.barfuin.gradle.taskinfo", version = "2.2.0" }
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
-coil-ktor2 = { module = "io.coil-kt.coil3:coil-network-ktor2", version.ref = "coil" }
+coil-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 paging-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.2" }
+lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.4" }
 compose-rules = { module = "io.nlopez.compose.rules:detekt", version = "0.4.10" }
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
