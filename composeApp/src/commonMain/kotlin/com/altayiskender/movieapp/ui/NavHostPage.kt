@@ -15,45 +15,42 @@ import com.altayiskender.movieapp.ui.details.DetailViewModel
 import com.altayiskender.movieapp.ui.people.PeoplePage
 import com.altayiskender.movieapp.ui.people.PeopleViewModel
 import kotlinx.serialization.Serializable
-import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NavHostPage() {
-    KoinContext {
-        val navController: NavHostController = rememberNavController()
-        var bottomNavigationIndex by rememberSaveable { mutableIntStateOf(0) }
+    val navController: NavHostController = rememberNavController()
+    var bottomNavigationIndex by rememberSaveable { mutableIntStateOf(0) }
 
-        NavHost(
-            navController = navController,
-            startDestination = HomeRoute
-        ) {
-            composable<HomeRoute> {
-                BottomNavigationPage(
-                    navController = navController,
-                    bottomNavigationIndex = bottomNavigationIndex,
-                    onBottomNavigation = { bottomNavigationIndex = it }
-                )
-            }
-            composable<MovieDetailRoute> {
-                val movieId: Long = it.toRoute<MovieDetailRoute>().movieId
-                DetailPage(
-                    viewModel = koinViewModel<DetailViewModel>(
-                        parameters = { parametersOf(movieId) }
-                    ),
-                    navController = navController
-                )
-            }
-            composable<PeopleDetailRoute> {
-                val personId = it.toRoute<PeopleDetailRoute>().personId
-                PeoplePage(
-                    viewModel = koinViewModel<PeopleViewModel>(
-                        parameters = { parametersOf(personId) }
-                    ),
-                    navController = navController
-                )
-            }
+    NavHost(
+        navController = navController,
+        startDestination = HomeRoute
+    ) {
+        composable<HomeRoute> {
+            BottomNavigationPage(
+                navController = navController,
+                bottomNavigationIndex = bottomNavigationIndex,
+                onBottomNavigation = { bottomNavigationIndex = it }
+            )
+        }
+        composable<MovieDetailRoute> {
+            val movieId: Long = it.toRoute<MovieDetailRoute>().movieId
+            DetailPage(
+                viewModel = koinViewModel<DetailViewModel>(
+                    parameters = { parametersOf(movieId) }
+                ),
+                navController = navController
+            )
+        }
+        composable<PeopleDetailRoute> {
+            val personId = it.toRoute<PeopleDetailRoute>().personId
+            PeoplePage(
+                viewModel = koinViewModel<PeopleViewModel>(
+                    parameters = { parametersOf(personId) }
+                ),
+                navController = navController
+            )
         }
     }
 }

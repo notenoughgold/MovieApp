@@ -68,7 +68,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.activity.compose)
-            implementation(libs.koin.android)
             implementation(libs.ktor.okhttp)
         }
 
